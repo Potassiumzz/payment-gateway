@@ -1,0 +1,19 @@
+[tool.ruff]
+line-length = 88
+indent-width = 4
+target-version = "py311"
+select = ["E", "F", "I", "B"]
+ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "tab"
+
+[tool.basedpyright]
+typeCheckingMode = "strict"
+reportUnusedImport = "warning"
+reportUnusedVariable = "warning"
+reportUnknownMemberType = "error"
+reportUntypedFunctionDecorator = "error"
+venvPath = "."
+venv = ".gateway-venv"
