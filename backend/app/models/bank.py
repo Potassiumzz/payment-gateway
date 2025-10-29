@@ -2,10 +2,11 @@ from sqlalchemy import Column, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import relationship
 
 from app.db import Base
+from app.globals.enums import TableName
 
 
 class Bank(Base):
-	__tablename__ = "banks"
+	__tablename__ = TableName.BANKS.value
 
 	id = Column(Integer, primary_key=True, index=True)
 	name = Column(String, unique=True, index=True, nullable=False)
@@ -14,7 +15,7 @@ class Bank(Base):
 
 
 class BankAccount(Base):
-	__tablename__ = "bank_accounts"
+	__tablename__ = TableName.BANK_ACCOUNTS.value
 
 	id = Column(Integer, primary_key=True, index=True)
 	account_number = Column(Integer, unique=True, index=True, nullable=False)

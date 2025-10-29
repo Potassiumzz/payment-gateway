@@ -3,10 +3,11 @@ from fastapi.routing import APIRouter
 from sqlalchemy.orm import Session
 
 from app.db import get_db
+from app.globals.enums import RouterPrefix, RouterTag
 from app.models.bank import Bank
 from app.schemas.bank import BankCreate, BankResponse
 
-router = APIRouter(prefix="/banks", tags=["Banks"])
+router = APIRouter(prefix=RouterPrefix.BANKS.value, tags=[RouterTag.BANKS.value])
 
 
 @router.post("/", response_model=BankResponse)
