@@ -28,3 +28,26 @@ def create_bank(value: BankCreate, db: Session = Depends(get_db)):
 @router.get("/", response_model=list[BankResponse])
 def get_banks_list(db: Session = Depends(get_db)):
 	return db.query(Bank).all()
+
+
+@router.get("/{bank_id}", response_model=BankResponse)
+def get_bank(bank_id: int, db: Session = Depends(get_db)):
+	bank = db.query(Bank).get(bank_id)
+
+	if not bank:
+		raise HTTPException(
+			status_code=404, detail="Provided id does not exist for banks"
+		)
+	return bank
+
+
+@router.delete("/{bank_id}", status_code=204)
+def delete_bank(bank_id: int, db: Session = Depends(get_db)):
+	bank_to_be_deleted = db.query(Bank).filter(Bank.id == bank_id).first()
+
+	if not bank_to_be_deleted:
+		raise HTTPException(status_code=404, detail="Bank not found")
+
+	db.delete(bank_to_be_deleted)
+	db.commit()
+	return
