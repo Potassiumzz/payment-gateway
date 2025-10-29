@@ -23,3 +23,8 @@ def create_bank(value: BankCreate, db: Session = Depends(get_db)):
 	db.commit()
 	db.refresh(bank)
 	return bank
+
+
+@router.get("/", response_model=list[BankResponse])
+def get_banks_list(db: Session = Depends(get_db)):
+	return db.query(Bank).all()
