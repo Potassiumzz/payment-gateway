@@ -52,6 +52,23 @@ def get_bank(bank_id: int, db: Session = Depends(get_db)):
 	return bank
 
 
+@router.put("/{bank_id}")
+def update_bank(bank_id: int, bank: BankCreate, db: Session = Depends(get_db)):
+	bank_to_be_updated = db.query(Bank).filter(Bank.id == bank_id).first()
+
+	if not bank_to_be_updated:
+		raise HTTPException(status_code=404, detail="Bank not found")
+
+	if db.query(Bank).filter(Bank.name == bank.name, Bank.id != bank_id).first():
+		raise HTTPException(status_code=400, detail="Bank name already exists")
+
+	bank_to_be_updated.name = bank.name
+
+	db.commit()
+	db.refresh(bank_to_be_updated)
+	return bank_to_be_updated
+
+
 @router.delete(
 	"/{bank_id}", status_code=204, description=RouteDescriptions.DELETE_BANK.value
 )
