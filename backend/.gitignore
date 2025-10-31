@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# database file
+*.db
+
 # ruff stuffs
 .ruff_cache
 
