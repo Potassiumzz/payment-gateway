@@ -3,10 +3,12 @@ from enum import Enum
 
 class RouterPrefix(str, Enum):
 	BANKS = "/banks"
+	ACCOUNTS = "/accounts"
 
 
 class RouterTag(str, Enum):
 	BANKS = "Banks"
+	ACCOUNTS = "Accounts"
 
 
 class TableName(str, Enum):
