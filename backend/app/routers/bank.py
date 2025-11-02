@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.globals.enums import RouteDescriptions, RouterPrefix, RouterTag
-from app.models.bank import Bank
+from app.models import Bank
 from app.schemas.bank import BankCreate, BankResponse
 
 router = APIRouter(prefix=RouterPrefix.BANKS.value, tags=[RouterTag.BANKS.value])
