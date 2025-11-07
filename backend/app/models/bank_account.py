@@ -1,6 +1,6 @@
 from decimal import Decimal
 
-from sqlalchemy import ForeignKey, Integer, Numeric, String
+from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -22,5 +22,7 @@ class BankAccount(Base):
 	bank_id: Mapped[int] = mapped_column(
 		Integer, ForeignKey("banks.id"), nullable=False
 	)
+
+	is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
 	bank = relationship("Bank", back_populates="accounts")

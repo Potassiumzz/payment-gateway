@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.globals.enums import RouterPrefix, RouterTag
 from app.models import Bank, BankAccount
-from app.schemas.bank_account import AccountCreate
+from app.schemas.bank_account import AccountCreate, AccountUpdate
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
 
@@ -39,6 +39,7 @@ def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 		owner_name=value.owner_name,
 		balance=Decimal("500.00"),
 		bank_id=bank.id,
+		is_active=value.is_active if value.is_active is not None else True,
 	)
 
 	db.add(account)
@@ -58,4 +59,18 @@ def get_account(account_id: int, db: Session = Depends(get_db)):
 	account = db.query(BankAccount).filter(BankAccount.id == account_id).first()
 	if not account:
 		raise HTTPException(status_code=404, detail="Account not found")
+	return account
+
+
+@router.put("/{account_id}")
+def update_account(
+	account_id: int, account_update: AccountUpdate, db: Session = Depends((get_db))
+):
+	account = db.query(BankAccount).filter(BankAccount.id == account_id).first()
+	if not account:
+		raise HTTPException(status_code=404, detail="Account not found")
+
+	if account_update.owner_name:
+		account.owner_name = account.update_owner_name
+
 	return account
