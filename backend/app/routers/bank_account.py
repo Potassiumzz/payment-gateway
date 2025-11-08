@@ -7,7 +7,7 @@ from fastapi.routing import APIRouter
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.globals.enums import RouterPrefix, RouterTag
+from app.globals.enums import ResponseError, RouterPrefix, RouterTag
 from app.models import Bank, BankAccount
 from app.schemas.bank_account import AccountCreate, AccountUpdate
 
@@ -22,7 +22,9 @@ def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 		bank = db.query(Bank).filter(Bank.name == value.bank_name).first()
 
 	if not bank:
-		raise HTTPException(status_code=404, detail="Bank not found")
+		raise HTTPException(
+			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+		)
 
 	# Generate unique account number
 	while True:
@@ -58,7 +60,9 @@ def get_accounts_list(db: Session = Depends(get_db)):
 def get_account(account_id: int, db: Session = Depends(get_db)):
 	account = db.query(BankAccount).filter(BankAccount.id == account_id).first()
 	if not account:
-		raise HTTPException(status_code=404, detail="Account not found")
+		raise HTTPException(
+			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+		)
 	return account
 
 
@@ -68,7 +72,16 @@ def update_account(
 ):
 	account = db.query(BankAccount).filter(BankAccount.id == account_id).first()
 	if not account:
-		raise HTTPException(status_code=404, detail="Account not found")
+		raise HTTPException(
+			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+		)
+
+	if (
+		db.query(BankAccount)
+		.filter(BankAccount.owner_name == account_update.owner_name)
+		.first()
+	):
+		raise HTTPException(status_code=400, detail=ResponseError.RESOURCE_EXISTS.value)
 
 	if account_update.owner_name:
 		account.owner_name = account.update_owner_name

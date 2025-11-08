@@ -16,9 +16,6 @@ class TableName(str, Enum):
 	BANK_ACCOUNTS = "bank_accounts"
 
 
-class RouteDescriptions(str, Enum):
-	CREATE_BANK = "Create a new bank."
-	GET_ALL_BANKS = "Get a list of all banks."
-	GET_BANK = "Get a specific bank by its ID"
-	UPDATE_BANK = "Update an existing bank's name by its ID"
-	DELETE_BANK = "Delete an existing bank by its ID"
+class ResponseError(str, Enum):
+	RESOURCE_NOT_FOUND = "Resource not found"
+	RESOURCE_EXISTS = "Resource already exists"
