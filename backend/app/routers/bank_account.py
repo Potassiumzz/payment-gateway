@@ -9,12 +9,14 @@ from sqlalchemy.orm import Session
 from app.db import get_db
 from app.globals.enums import ResponseError, RouterPrefix, RouterTag
 from app.models import Bank, BankAccount
-from app.schemas.bank_account import AccountCreate, AccountUpdate
+from app.schemas.bank_account import AccountCreate, AccountRespones, AccountUpdate
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
 
 
-@router.post("/")
+@router.post(
+	"/", response_model=AccountRespones, description="Create a new bank account."
+)
 def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 	if value.bank_id:
 		bank = db.query(Bank).filter(Bank.id == value.bank_id).first()
@@ -87,3 +89,21 @@ def update_account(
 		account.owner_name = account.update_owner_name
 
 	return account
+
+
+@router.delete(
+	"/{account_id}",
+	status_code=204,
+	description="Soft delete the account by making the account's status inactive, rather than deleting the account from database.",
+)
+def delete_account(account_id: int, db: Session = Depends((get_db))):
+	account_delete = db.query(BankAccount).filter(BankAccount.id == account_id).first()
+
+	if not account_delete:
+		raise HTTPException(
+			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+		)
+
+	account_delete.is_active = False
+	db.commit()
+	return

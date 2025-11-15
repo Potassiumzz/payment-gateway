@@ -19,5 +19,12 @@ class AccountCreate(BaseModel):
 class AccountUpdate(BaseModel):
 	owner_name: Optional[str] = None
 
+
+class AccountRespones(BaseModel):
+	owner_name: str
+	bank_id: str
+	bank_name: str
+	is_active: bool
+
 	class Config:
 		orm_mode = True
