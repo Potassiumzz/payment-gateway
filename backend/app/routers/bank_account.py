@@ -111,3 +111,21 @@ def delete_account(account_id: int, db: Session = Depends((get_db))):
 	account_delete.is_active = False
 	db.commit()
 	return
+
+
+@router.delete(
+	"/{account_id}/hard",
+	status_code=204,
+	description="Delete the account permanently from the database. Only use this while testing during development.",
+)
+def hard_delete(account_id: int, db: Session = Depends((get_db))):
+	account_delete = db.query(BankAccount).filter(BankAccount.id == account_id).first()
+
+	if not account_delete:
+		raise HTTPException(
+			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+		)
+
+	db.delete(account_delete)
+	db.commit()
+	return
