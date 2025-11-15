@@ -90,7 +90,10 @@ def update_account(
 		raise HTTPException(status_code=400, detail=ResponseError.RESOURCE_EXISTS.value)
 
 	if account_update.owner_name:
-		account.owner_name = account.update_owner_name
+		account.owner_name = account_update.owner_name
+
+	db.commit()
+	db.refresh(account)
 
 	return account
 
