@@ -18,10 +18,7 @@ router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.
 	"/", response_model=AccountRespones, description="Create a new bank account."
 )
 def create_account(value: AccountCreate, db: Session = Depends(get_db)):
-	if value.bank_id:
-		bank = db.query(Bank).filter(Bank.id == value.bank_id).first()
-	else:
-		bank = db.query(Bank).filter(Bank.name == value.bank_name).first()
+	bank = db.query(Bank).filter(Bank.id == value.bank_id).first()
 
 	if not bank:
 		raise HTTPException(
@@ -30,7 +27,7 @@ def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 
 	# Generate unique account number
 	while True:
-		account_number = str(random.randint(10_000_000_000, 99_999_999_999))
+		account_number = random.randint(10_000_000_000, 99_999_999_999)
 		if (
 			not db.query(BankAccount)
 			.filter(BankAccount.account_number == account_number)
@@ -41,16 +38,23 @@ def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 	account = BankAccount(
 		account_number=account_number,
 		owner_name=value.owner_name,
-		balance=Decimal("500.00"),
 		bank_id=bank.id,
-		is_active=value.is_active if value.is_active is not None else True,
+		balance=Decimal("500.00"),
+		is_active=True,
 	)
 
 	db.add(account)
 	db.commit()
 	db.refresh(account)
 
-	return account
+	return {
+		"account_number": account.account_number,
+		"owner_name": account.owner_name,
+		"bank_id": account.bank_id,
+		"bank_name": account.bank.name,
+		"balance": account.balance,
+		"is_active": account.is_active,
+	}
 
 
 @router.get("/")

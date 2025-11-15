@@ -1,19 +1,12 @@
+from decimal import Decimal
 from typing import Optional
 
-from pydantic import BaseModel, model_validator
+from pydantic import BaseModel, Field
 
 
 class AccountCreate(BaseModel):
 	owner_name: str
-	bank_id: Optional[int] = None
-	bank_name: Optional[str] = None
-	is_active: Optional[bool] = True
-
-	@model_validator(mode="after")
-	def validate_account_create_field(self):
-		if not self.bank_name and not self.bank_id:
-			raise ValueError("Either bank_id or bank_name is required")
-		return self
+	bank_id: int
 
 
 class AccountUpdate(BaseModel):
@@ -21,9 +14,11 @@ class AccountUpdate(BaseModel):
 
 
 class AccountRespones(BaseModel):
+	account_number: int
 	owner_name: str
-	bank_id: str
+	bank_id: int
 	bank_name: str
+	balance: Decimal = Field(..., examples=["500.00"])
 	is_active: bool
 
 	class Config:
