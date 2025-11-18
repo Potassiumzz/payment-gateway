@@ -4,7 +4,7 @@ from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
-from app.globals.enums import TableName
+from app.globals.enums import ClassRelation, TableName
 
 
 class BankAccount(Base):
@@ -20,9 +20,9 @@ class BankAccount(Base):
 	owner_name: Mapped[str] = mapped_column(String, nullable=False)
 
 	bank_id: Mapped[int] = mapped_column(
-		Integer, ForeignKey("banks.id"), nullable=False
+		Integer, ForeignKey(f"{TableName.BANKS.value}.id"), nullable=False
 	)
 
 	is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
-	bank = relationship("Bank", back_populates="accounts")
+	bank = relationship(f"{ClassRelation.BANK.value}", back_populates="accounts")

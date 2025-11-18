@@ -11,9 +11,16 @@ class RouterTag(str, Enum):
 	ACCOUNTS = "Accounts"
 
 
+class ClassRelation(str, Enum):
+	BANK = "Bank"
+	BANK_ACCOUNT = "BankAccount"
+	TRANSACTION = "transaction"
+
+
 class TableName(str, Enum):
 	BANKS = "banks"
 	BANK_ACCOUNTS = "bank_accounts"
+	TRANSACTIONS = "transactions"
 
 
 class ResponseError(str, Enum):
