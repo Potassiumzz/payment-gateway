@@ -52,9 +52,9 @@ def get_bank(bank_id: int, db: Session = Depends(get_db)):
 	"/{bank_id}", response_model=BankResponse, description="Update a bank by its ID."
 )
 def update_bank(bank_id: int, bank: BankCreate, db: Session = Depends(get_db)):
-	bank_to_be_updated = db.query(Bank).filter(Bank.id == bank_id).first()
+	bank_update = db.query(Bank).filter(Bank.id == bank_id).first()
 
-	if not bank_to_be_updated:
+	if not bank_update:
 		raise HTTPException(
 			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
 		)
@@ -62,24 +62,24 @@ def update_bank(bank_id: int, bank: BankCreate, db: Session = Depends(get_db)):
 	if db.query(Bank).filter(Bank.name == bank.name, Bank.id != bank_id).first():
 		raise HTTPException(status_code=400, detail=ResponseError.RESOURCE_EXISTS.value)
 
-	bank_to_be_updated.name = bank.name
+	bank_update.name = bank.name
 
 	db.commit()
-	db.refresh(bank_to_be_updated)
-	return bank_to_be_updated
+	db.refresh(bank_update)
+	return bank_update
 
 
 @router.delete(
 	"/{bank_id}", status_code=204, description="Delete an existing bank by its ID"
 )
 def delete_bank(bank_id: int, db: Session = Depends(get_db)):
-	bank_to_be_deleted = db.query(Bank).filter(Bank.id == bank_id).first()
+	bank_delete = db.query(Bank).filter(Bank.id == bank_id).first()
 
-	if not bank_to_be_deleted:
+	if not bank_delete:
 		raise HTTPException(
 			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
 		)
 
-	db.delete(bank_to_be_deleted)
+	db.delete(bank_delete)
 	db.commit()
 	return
