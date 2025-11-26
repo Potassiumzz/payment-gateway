@@ -3,20 +3,26 @@ from enum import Enum
 
 class RouterPrefix(str, Enum):
 	BANKS = "/banks"
+	ACCOUNTS = "/accounts"
 
 
 class RouterTag(str, Enum):
 	BANKS = "Banks"
+	ACCOUNTS = "Accounts"
+
+
+class ClassRelation(str, Enum):
+	BANK = "Bank"
+	BANK_ACCOUNT = "BankAccount"
+	TRANSACTION = "transaction"
 
 
 class TableName(str, Enum):
 	BANKS = "banks"
 	BANK_ACCOUNTS = "bank_accounts"
+	TRANSACTIONS = "transactions"
 
 
-class RouteDescriptions(str, Enum):
-	CREATE_BANK = "Create a new bank."
-	GET_ALL_BANKS = "Get a list of all banks."
-	GET_BANK = "Get a specific bank by its ID"
-	UPDATE_BANK = "Update an existing bank's name by its ID"
-	DELETE_BANK = "Delete an existing bank by its ID"
+class ResponseError(str, Enum):
+	RESOURCE_NOT_FOUND = "Resource not found"
+	RESOURCE_EXISTS = "Resource already exists"
