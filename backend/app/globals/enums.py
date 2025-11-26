@@ -4,11 +4,13 @@ from enum import Enum
 class RouterPrefix(str, Enum):
 	BANKS = "/banks"
 	ACCOUNTS = "/accounts"
+	TRANSACTIONS = "/transactions"
 
 
 class RouterTag(str, Enum):
 	BANKS = "Banks"
 	ACCOUNTS = "Accounts"
+	TRANSACTIONS = "Transactions"
 
 
 class ClassRelation(str, Enum):
@@ -26,3 +28,4 @@ class TableName(str, Enum):
 class ResponseError(str, Enum):
 	RESOURCE_NOT_FOUND = "Resource not found"
 	RESOURCE_EXISTS = "Resource already exists"
+	BAD_REQUEST = "Bad request"
