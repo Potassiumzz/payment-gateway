@@ -19,6 +19,8 @@ class TransactionResponse(BaseModel):
 	receiver_account_number: int
 	receiver_owner_name: str
 	receiver_bank_name: str
+	status: str
+	failure_reason: str | None
 
 	amount_transferred: Decimal = Field(..., examples=["50.00"])
 	timestamp: datetime

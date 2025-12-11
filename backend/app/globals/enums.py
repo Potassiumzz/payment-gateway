@@ -29,3 +29,16 @@ class ResponseError(str, Enum):
 	RESOURCE_NOT_FOUND = "Resource not found"
 	RESOURCE_EXISTS = "Resource already exists"
 	BAD_REQUEST = "Bad request"
+
+
+class TransactionStatus(str, Enum):
+	SUCCESSFUL = "Successful"
+	FAILURE = "Failure"
+	PENDING = "Pending"
+
+
+class TransactionFailureReason(str, Enum):
+	LOW_BALANCE = "LOW_BALANCE"
+	SENDER_NOT_FOUND = "SENDER_NOT_FOUND"
+	RECEIVER_NOT_FOUND = "RECEIVER_NOT_FOUND"
+	SELF_TRANSFER = "SELF_TRANSFER"
