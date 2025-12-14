@@ -1,5 +1,8 @@
+import logging
+
 from fastapi import Depends, HTTPException
 from fastapi.routing import APIRouter
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.db import get_db
@@ -18,6 +21,8 @@ router = APIRouter(
 	prefix=RouterPrefix.TRANSACTIONS.value, tags=[RouterTag.TRANSACTIONS.value]
 )
 
+logger = logging.getLogger(__name__)
+
 
 @router.post(
 	"/",
@@ -25,88 +30,91 @@ router = APIRouter(
 	description="Create a transaction. This represents when a transaction has occured between two accounts successfully.",
 )
 def create_transaction(value: TransactionCreate, db: Session = Depends(get_db)):
-	sender = (
-		db.query(BankAccount)
-		.filter(BankAccount.account_number == value.sender_account_number)
-		.first()
-	)
+	try:
+		with db.begin():
+			sender = (
+				db.query(BankAccount)
+				.filter(BankAccount.account_number == value.sender_account_number)
+				.first()
+			)
 
-	if not sender:
-		raise HTTPException(
-			status_code=404,
-			detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
-		)
+			if not sender:
+				raise HTTPException(
+					status_code=404,
+					detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
+				)
 
-	receiver = (
-		db.query(BankAccount)
-		.filter(BankAccount.account_number == value.receiver_account_number)
-		.first()
-	)
+			receiver = (
+				db.query(BankAccount)
+				.filter(BankAccount.account_number == value.receiver_account_number)
+				.first()
+			)
 
-	if not receiver:
-		raise HTTPException(
-			status_code=404,
-			detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.RECEIVER_NOT_FOUND.value}",
-		)
+			if not receiver:
+				raise HTTPException(
+					status_code=404,
+					detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.RECEIVER_NOT_FOUND.value}",
+				)
 
-	if sender.account_number == receiver.account_number:
-		raise HTTPException(
-			status_code=400,
-			detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
-		)
+			if sender.account_number == receiver.account_number:
+				raise HTTPException(
+					status_code=400,
+					detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
+				)
 
-	transaction = Transaction(
-		sender_account_number=sender.account_number,
-		receiver_account_number=receiver.account_number,
-		amount_transferred=value.amount,
-	)
+			transaction = Transaction(
+				sender_account_number=sender.account_number,
+				receiver_account_number=receiver.account_number,
+				amount_transferred=value.amount,
+			)
 
-	if sender.balance < value.amount:
-		failed_transaction = Transaction(
-			sender_account_number=sender.account_number,
-			receiver_account_number=receiver.account_number,
-			amount_transferred=value.amount,
-			status=TransactionStatus.FAILURE.value,
-			failure_reason={TransactionFailureReason.LOW_BALANCE.value},
-		)
+			if sender.balance < value.amount:
+				failed_transaction = Transaction(
+					sender_account_number=sender.account_number,
+					receiver_account_number=receiver.account_number,
+					amount_transferred=value.amount,
+					status=TransactionStatus.FAILURE.value,
+					failure_reason={TransactionFailureReason.LOW_BALANCE.value},
+				)
 
-		db.add(failed_transaction)
-		db.commit()
-		db.refresh(failed_transaction)
+				db.add(failed_transaction)
 
-		return TransactionResponse(
-			id=failed_transaction.id,
-			sender_account_number=sender.account_number,
-			sender_owner_name=sender.owner_name,
-			sender_bank_name=sender.bank.name,
-			receiver_account_number=receiver.account_number,
-			receiver_owner_name=receiver.owner_name,
-			receiver_bank_name=receiver.bank.name,
-			status=failed_transaction.status,
-			failure_reason=failed_transaction.failure_reason,
-			amount_transferred=failed_transaction.amount_transferred,
-			timestamp=failed_transaction.timestamp,
-		)
+				return TransactionResponse(
+					id=failed_transaction.id,
+					sender_account_number=sender.account_number,
+					sender_owner_name=sender.owner_name,
+					sender_bank_name=sender.bank.name,
+					receiver_account_number=receiver.account_number,
+					receiver_owner_name=receiver.owner_name,
+					receiver_bank_name=receiver.bank.name,
+					status=failed_transaction.status,
+					failure_reason=failed_transaction.failure_reason,
+					amount_transferred=failed_transaction.amount_transferred,
+					timestamp=failed_transaction.timestamp,
+				)
 
-	sender.balance -= value.amount
-	receiver.balance += value.amount
+			sender.balance -= value.amount
+			receiver.balance += value.amount
 
-	db.add(transaction)
-	db.commit()
-	db.refresh(transaction)
+			db.add(transaction)
 
-	return {
-		"id": transaction.id,
-		"sender_account_number": sender.account_number,
-		"sender_owner_name": sender.owner_name,
-		"sender_bank_name": sender.bank.name,
-		"receiver_account_number": receiver.account_number,
-		"receiver_owner_name": receiver.owner_name,
-		"receiver_bank_name": receiver.bank.name,
-		"amount_transferred": transaction.amount_transferred,
-		"status": transaction.status,
-		"timestamp": transaction.timestamp,
-	}
+			return {
+				"id": transaction.id,
+				"sender_account_number": sender.account_number,
+				"sender_owner_name": sender.owner_name,
+				"sender_bank_name": sender.bank.name,
+				"receiver_account_number": receiver.account_number,
+				"receiver_owner_name": receiver.owner_name,
+				"receiver_bank_name": receiver.bank.name,
+				"amount_transferred": transaction.amount_transferred,
+				"status": transaction.status,
+				"timestamp": transaction.timestamp,
+			}
+
+	except SQLAlchemyError:
+		db.rollback()
+		logger.exception("Transaction failed")
+		raise HTTPException(status_code=500, detail="Transaction failed") from None
 
 
 @router.get("/")
