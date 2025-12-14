@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
 from app.db import Base, engine
-from app.routers import bank, bank_account
+from app.routers import bank, bank_account, transaction
 
 app = FastAPI()
 
@@ -10,6 +10,7 @@ Base.metadata.create_all(bind=engine)
 
 app.include_router(bank.router)
 app.include_router(bank_account.router)
+app.include_router(transaction.router)
 
 
 @app.get("/")
