@@ -1,12 +1,12 @@
 from fastapi import FastAPI
 
-from app.db import Base, engine
+# from app.db import Base, engine
 from app.routers import bank, bank_account, transaction
 
 app = FastAPI()
 
 # Create tables
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 app.include_router(bank.router)
 app.include_router(bank_account.router)
