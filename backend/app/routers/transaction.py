@@ -4,6 +4,7 @@ from fastapi import Depends, HTTPException
 from fastapi.routing import APIRouter
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
+from starlette.responses import JSONResponse
 
 from app.db import get_db
 from app.globals.enums import (
@@ -16,6 +17,12 @@ from app.globals.enums import (
 from app.models import BankAccount, Transaction
 from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
+from app.services.idempotency import (
+	get_existing_response,
+	get_idempotency_key,
+	save_response,
+)
+from app.utils.transaction import build_transaction_response
 
 router = APIRouter(
 	prefix=RouterPrefix.TRANSACTIONS.value, tags=[RouterTag.TRANSACTIONS.value]
@@ -29,7 +36,21 @@ logger = logging.getLogger(__name__)
 	response_model=TransactionResponse,
 	description="Create a transaction. This represents when a transaction has occured between two accounts successfully.",
 )
-def create_transaction(value: TransactionCreate, db: Session = Depends(get_db)):
+def create_transaction(
+	value: TransactionCreate,
+	db: Session = Depends(get_db),
+	idempotency_key: str = Depends(get_idempotency_key),
+):
+	endpoint = RouterPrefix.TRANSACTIONS.value
+
+	existing = get_existing_response(db, idempotency_key, endpoint)
+
+	if existing:
+		return JSONResponse(
+			status_code=existing.status_code,
+			content=existing.response_body,
+		)
+
 	try:
 		with db.begin():
 			sender = (
@@ -62,54 +83,40 @@ def create_transaction(value: TransactionCreate, db: Session = Depends(get_db)):
 					detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
 				)
 
+			if sender.balance < value.amount:
+				status = TransactionStatus.FAILURE.value
+				failure_reason = TransactionFailureReason.LOW_BALANCE.value
+			else:
+				status = TransactionStatus.SUCCESSFUL.value
+				failure_reason = None
+
+			if status == TransactionStatus.SUCCESSFUL.value:
+				sender.balance -= value.amount
+				receiver.balance += value.amount
+
 			transaction = Transaction(
 				sender_account_number=sender.account_number,
 				receiver_account_number=receiver.account_number,
 				amount_transferred=value.amount,
+				status=status,
+				failure_reason=failure_reason,
 			)
-
-			if sender.balance < value.amount:
-				failed_transaction = Transaction(
-					sender_account_number=sender.account_number,
-					receiver_account_number=receiver.account_number,
-					amount_transferred=value.amount,
-					status=TransactionStatus.FAILURE.value,
-					failure_reason={TransactionFailureReason.LOW_BALANCE.value},
-				)
-
-				db.add(failed_transaction)
-
-				return TransactionResponse(
-					id=failed_transaction.id,
-					sender_account_number=sender.account_number,
-					sender_owner_name=sender.owner_name,
-					sender_bank_name=sender.bank.name,
-					receiver_account_number=receiver.account_number,
-					receiver_owner_name=receiver.owner_name,
-					receiver_bank_name=receiver.bank.name,
-					status=failed_transaction.status,
-					failure_reason=failed_transaction.failure_reason,
-					amount_transferred=failed_transaction.amount_transferred,
-					timestamp=failed_transaction.timestamp,
-				)
-
-			sender.balance -= value.amount
-			receiver.balance += value.amount
 
 			db.add(transaction)
 
-			return {
-				"id": transaction.id,
-				"sender_account_number": sender.account_number,
-				"sender_owner_name": sender.owner_name,
-				"sender_bank_name": sender.bank.name,
-				"receiver_account_number": receiver.account_number,
-				"receiver_owner_name": receiver.owner_name,
-				"receiver_bank_name": receiver.bank.name,
-				"amount_transferred": transaction.amount_transferred,
-				"status": transaction.status,
-				"timestamp": transaction.timestamp,
-			}
+			response = build_transaction_response(
+				transaction, sender, receiver
+			).model_dump()
+
+			save_response(
+				db=db,
+				key=idempotency_key,
+				endpoint=endpoint,
+				response_body=response,
+				status_code=200,
+			)
+
+		return response
 
 	except SQLAlchemyError:
 		db.rollback()
