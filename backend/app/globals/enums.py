@@ -34,7 +34,6 @@ class ResponseError(str, Enum):
 class TransactionStatus(str, Enum):
 	SUCCESSFUL = "Successful"
 	FAILURE = "Failure"
-	PENDING = "Pending"
 
 
 class TransactionFailureReason(str, Enum):

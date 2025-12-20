@@ -1,10 +1,10 @@
 import logging
 
 from fastapi import Depends, HTTPException
+from fastapi.encoders import jsonable_encoder
 from fastapi.routing import APIRouter
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
-from starlette.responses import JSONResponse
 
 from app.db import get_db
 from app.globals.enums import (
@@ -46,80 +46,78 @@ def create_transaction(
 	existing = get_existing_response(db, idempotency_key, endpoint)
 
 	if existing:
-		return JSONResponse(
-			status_code=existing.status_code,
-			content=existing.response_body,
-		)
+		return existing.response_body
 
 	try:
-		with db.begin():
-			sender = (
-				db.query(BankAccount)
-				.filter(BankAccount.account_number == value.sender_account_number)
-				.first()
+		sender = (
+			db.query(BankAccount)
+			.filter(BankAccount.account_number == value.sender_account_number)
+			.first()
+		)
+
+		if not sender:
+			raise HTTPException(
+				status_code=404,
+				detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
 			)
 
-			if not sender:
-				raise HTTPException(
-					status_code=404,
-					detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
-				)
+		receiver = (
+			db.query(BankAccount)
+			.filter(BankAccount.account_number == value.receiver_account_number)
+			.first()
+		)
 
-			receiver = (
-				db.query(BankAccount)
-				.filter(BankAccount.account_number == value.receiver_account_number)
-				.first()
+		if not receiver:
+			raise HTTPException(
+				status_code=404,
+				detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.RECEIVER_NOT_FOUND.value}",
 			)
 
-			if not receiver:
-				raise HTTPException(
-					status_code=404,
-					detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.RECEIVER_NOT_FOUND.value}",
-				)
-
-			if sender.account_number == receiver.account_number:
-				raise HTTPException(
-					status_code=400,
-					detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
-				)
-
-			if sender.balance < value.amount:
-				status = TransactionStatus.FAILURE.value
-				failure_reason = TransactionFailureReason.LOW_BALANCE.value
-			else:
-				status = TransactionStatus.SUCCESSFUL.value
-				failure_reason = None
-
-			if status == TransactionStatus.SUCCESSFUL.value:
-				sender.balance -= value.amount
-				receiver.balance += value.amount
-
-			transaction = Transaction(
-				sender_account_number=sender.account_number,
-				receiver_account_number=receiver.account_number,
-				amount_transferred=value.amount,
-				status=status,
-				failure_reason=failure_reason,
+		if sender.account_number == receiver.account_number:
+			raise HTTPException(
+				status_code=400,
+				detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
 			)
 
-			db.add(transaction)
+		if sender.balance < value.amount:
+			status = TransactionStatus.FAILURE
+			failure_reason = TransactionFailureReason.LOW_BALANCE.value
+		else:
+			status = TransactionStatus.SUCCESSFUL
+			failure_reason = None
 
-			response = build_transaction_response(
-				transaction, sender, receiver
-			).model_dump()
+		if status is TransactionStatus.SUCCESSFUL:
+			sender.balance -= value.amount
+			receiver.balance += value.amount
 
-			save_response(
-				db=db,
-				key=idempotency_key,
-				endpoint=endpoint,
-				response_body=response,
-				status_code=200,
-			)
+		transaction = Transaction(
+			sender_account_number=sender.account_number,
+			receiver_account_number=receiver.account_number,
+			amount_transferred=value.amount,
+			status=status,
+			failure_reason=failure_reason,
+		)
+
+		db.add(transaction)
+		db.flush()
+		db.commit()
+
+		response = jsonable_encoder(
+			build_transaction_response(transaction, sender, receiver)
+		)
+
+		save_response(
+			db=db,
+			key=idempotency_key,
+			endpoint=endpoint,
+			response_body=response,
+			status=status,
+			failure_reason=failure_reason,
+		)
 
 		return response
 
 	except SQLAlchemyError:
-		db.rollback()
 		logger.exception("Transaction failed")
 		raise HTTPException(status_code=500, detail="Transaction failed") from None
 

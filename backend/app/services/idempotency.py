@@ -3,6 +3,7 @@ from typing import Any
 from fastapi import Header, HTTPException
 from sqlalchemy.orm import Session
 
+from app.globals.enums import TransactionStatus
 from app.models import IdempotencyKey
 
 
@@ -34,12 +35,16 @@ def save_response(
 	key: str,
 	endpoint: str,
 	response_body: dict[str, Any],
-	status_code: int,
+	status: TransactionStatus,
+	failure_reason: str | None,
 ):
 	record = IdempotencyKey(
 		key=key,
 		endpoint=endpoint,
 		response_body=response_body,
-		status_code=status_code,
+		status=status,
+		failure_reason=failure_reason,
 	)
 	db.add(record)
+	db.commit()
+	db.refresh(record)
