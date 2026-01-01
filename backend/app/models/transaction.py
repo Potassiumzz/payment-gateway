@@ -13,6 +13,13 @@ class Transaction(Base):
 
 	id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
 
+	payment_intent_id: Mapped[str] = mapped_column(
+		String,
+		ForeignKey(f"{TableName.PAYMENT_INTENTS.value}.id"),
+		nullable=False,
+		unique=True,
+	)
+
 	sender_account_number: Mapped[int] = mapped_column(
 		Integer,
 		ForeignKey(f"{TableName.BANK_ACCOUNTS.value}.account_number"),
@@ -33,6 +40,10 @@ class Transaction(Base):
 
 	timestamp: Mapped[datetime] = mapped_column(
 		DateTime, default=lambda: datetime.now(UTC), nullable=False
+	)
+
+	payment_intent = relationship(
+		f"{ClassRelation.PAYMENT_INTENT.value}", foreign_keys=[payment_intent_id]
 	)
 
 	sender_account = relationship(

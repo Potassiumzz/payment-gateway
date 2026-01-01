@@ -9,6 +9,9 @@ lint.ignore = ["E501"]
 quote-style = "double"
 indent-style = "tab"
 
+[tool.ruff.lint.per-file-ignores]
+"alembic/*.py" = ["F401"]
+
 [tool.basedpyright]
 typeCheckingMode = "strict"
 reportUnusedImport = "warning"
