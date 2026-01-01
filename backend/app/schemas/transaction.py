@@ -5,9 +5,9 @@ from pydantic import BaseModel, Field
 
 
 class TransactionCreate(BaseModel):
+	payment_intent_id: str
 	sender_account_number: int
 	receiver_account_number: int
-	amount: Decimal = Field(..., gt=0, examples=["120.00"])
 
 
 class TransactionResponse(BaseModel):

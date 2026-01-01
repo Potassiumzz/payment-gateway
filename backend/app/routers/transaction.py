@@ -7,7 +7,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session
 
 from app.db import get_db
+from app.globals.constants import MAX_PAYMENT_INTENT_ATTEMPT
 from app.globals.enums import (
+	PaymentIntentStatus,
 	ResponseError,
 	RouterPrefix,
 	RouterTag,
@@ -15,6 +17,7 @@ from app.globals.enums import (
 	TransactionStatus,
 )
 from app.models import BankAccount, Transaction
+from app.models.payment_intent import PaymentIntent
 from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
 from app.services.idempotency import (
@@ -49,6 +52,24 @@ def create_transaction(
 		return existing.response_body
 
 	try:
+		intent = (
+			db.query(PaymentIntent)
+			.filter(PaymentIntent.id == value.payment_intent_id)
+			.first()
+		)
+
+		if not intent:
+			raise HTTPException(
+				status_code=404,
+				detail=f"{ResponseError.RESOURCE_NOT_FOUND.value}: Intent ID not found",
+			)
+
+		if intent.status != PaymentIntentStatus.REQUIRES_PAYMENT:
+			raise HTTPException(
+				status_code=400,
+				detail=f"{ResponseError.BAD_REQUEST.value}: Invalid intent state",
+			)
+
 		sender = (
 			db.query(BankAccount)
 			.filter(BankAccount.account_number == value.sender_account_number)
@@ -79,7 +100,9 @@ def create_transaction(
 				detail=f"{ResponseError.BAD_REQUEST.value} {TransactionFailureReason.SELF_TRANSFER.value}",
 			)
 
-		if sender.balance < value.amount:
+		amount = intent.amount
+
+		if sender.balance < amount:
 			status = TransactionStatus.FAILURE
 			failure_reason = TransactionFailureReason.LOW_BALANCE.value
 		else:
@@ -87,20 +110,25 @@ def create_transaction(
 			failure_reason = None
 
 		if status is TransactionStatus.SUCCESSFUL:
-			sender.balance -= value.amount
-			receiver.balance += value.amount
+			sender.balance -= amount
+			receiver.balance += amount
+			intent.status = PaymentIntentStatus.SUCCEEDED
+
+		if intent.attempt_count >= MAX_PAYMENT_INTENT_ATTEMPT:
+			intent.status = PaymentIntentStatus.FAILED
+
+		intent.attempt_count += 1
 
 		transaction = Transaction(
 			sender_account_number=sender.account_number,
 			receiver_account_number=receiver.account_number,
-			amount_transferred=value.amount,
+			amount_transferred=amount,
 			status=status,
 			failure_reason=failure_reason,
 		)
 
 		db.add(transaction)
 		db.flush()
-		db.commit()
 
 		response = jsonable_encoder(
 			build_transaction_response(transaction, sender, receiver)
@@ -115,6 +143,7 @@ def create_transaction(
 			failure_reason=failure_reason,
 		)
 
+		db.commit()
 		return response
 
 	except SQLAlchemyError:

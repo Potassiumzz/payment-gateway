@@ -1,5 +1,6 @@
 from .bank import BankCreate, BankResponse
 from .bank_account import AccountCreate
+from .payment_intent import PaymentIntentCreate, PaymentIntentResponse
 from .transaction import TransactionCreate, TransactionResponse
 
 __all__ = [
@@ -8,4 +9,6 @@ __all__ = [
 	"AccountCreate",
 	"TransactionCreate",
 	"TransactionResponse",
+	"PaymentIntentCreate",
+	"PaymentIntentResponse",
 ]

@@ -4,12 +4,12 @@ from sqlalchemy import JSON, DateTime, Enum, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
-from app.globals.enums import TransactionStatus
+from app.globals.enums import TableName, TransactionStatus
 from app.schemas import TransactionResponse
 
 
 class IdempotencyKey(Base):
-	__tablename__ = "idempotency_keys"
+	__tablename__ = TableName.IDEMPOTENCY_KEYS.value
 
 	key: Mapped[str] = mapped_column(String, primary_key=True)
 	endpoint: Mapped[str] = mapped_column(String, nullable=False)
