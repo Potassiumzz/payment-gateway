@@ -1,7 +1,7 @@
 from decimal import Decimal
 from typing import Annotated, Optional
 
-from pydantic import BaseModel, Field, StringConstraints
+from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
 Pin = Annotated[
 	str,
@@ -36,4 +36,4 @@ class AccountRespones(BaseModel):
 	is_active: bool
 
 	class Config:
-		orm_mode = True
+		model_config = ConfigDict(from_attributes=True)

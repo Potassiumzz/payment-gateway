@@ -1,7 +1,7 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class TransactionCreate(BaseModel):
@@ -27,4 +27,4 @@ class TransactionResponse(BaseModel):
 	timestamp: datetime
 
 	class Config:
-		orm_mode = True
+		model_config = ConfigDict(from_attributes=True)
