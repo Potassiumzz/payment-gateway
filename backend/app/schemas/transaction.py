@@ -8,6 +8,7 @@ class TransactionCreate(BaseModel):
 	payment_intent_id: str
 	sender_account_number: int
 	receiver_account_number: int
+	security_pin: str
 
 
 class TransactionResponse(BaseModel):

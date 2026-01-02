@@ -25,6 +25,7 @@ from app.services.idempotency import (
 	get_idempotency_key,
 	save_response,
 )
+from app.utils.security_pin import validate_account_pin
 from app.utils.transaction import build_transaction_response
 
 router = APIRouter(
@@ -81,6 +82,8 @@ def create_transaction(
 				status_code=404,
 				detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
 			)
+
+		validate_account_pin(db=db, account=sender, pin=value.security_pin)
 
 		receiver = (
 			db.query(BankAccount)

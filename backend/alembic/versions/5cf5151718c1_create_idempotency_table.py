@@ -1,7 +1,7 @@
 """create idempotency table
 
 Revision ID: 5cf5151718c1
-Revises: 294be7b3b7d0
+Revises: 28222b4bf183
 Create Date: 2025-12-19 21:19:28.507791
 
 """
@@ -14,7 +14,7 @@ from alembic import op
 
 # revision identifiers, used by Alembic.
 revision: str = "5cf5151718c1"
-down_revision: Union[str, Sequence[str], None] = "294be7b3b7d0"
+down_revision: Union[str, Sequence[str], None] = "28222b4bf183"
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 

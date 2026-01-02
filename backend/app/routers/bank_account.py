@@ -8,8 +8,9 @@ from sqlalchemy.orm import Session
 
 from app.db import get_db
 from app.globals.enums import ResponseError, RouterPrefix, RouterTag
-from app.models import Bank, BankAccount
+from app.models import AccountPin, Bank, BankAccount
 from app.schemas.bank_account import AccountCreate, AccountRespones, AccountUpdate
+from app.utils.security_pin import hash_pin
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
 
@@ -35,16 +36,32 @@ def create_account(value: AccountCreate, db: Session = Depends(get_db)):
 		):
 			break
 
-	account = BankAccount(
-		account_number=account_number,
-		owner_name=value.owner_name,
-		bank_id=bank.id,
-		balance=Decimal("500.00"),
-		is_active=True,
-	)
+	try:
+		account = BankAccount(
+			account_number=account_number,
+			owner_name=value.owner_name,
+			bank_id=bank.id,
+			balance=Decimal("500.00"),
+			is_active=True,
+		)
 
-	db.add(account)
-	db.commit()
+		db.add(account)
+		db.flush()
+		db.commit()
+
+		account_pin = AccountPin(
+			bank_account_id=account.id,
+			pin_hash=hash_pin(value.pin),
+			failed_attempts=0,
+			locked_until=None,
+		)
+
+		db.add(account_pin)
+		db.commit()
+	except Exception:
+		db.rollback()
+		raise
+
 	db.refresh(account)
 
 	return {

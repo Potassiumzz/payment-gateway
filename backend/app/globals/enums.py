@@ -6,6 +6,7 @@ class RouterPrefix(str, Enum):
 	ACCOUNTS = "/accounts"
 	TRANSACTIONS = "/transactions"
 	PAYMENT_INTENTS = "/payment_intents"
+	ACCOUNT_PIN = "/pin"
 
 
 class RouterTag(str, Enum):
@@ -13,6 +14,7 @@ class RouterTag(str, Enum):
 	ACCOUNTS = "Accounts"
 	TRANSACTIONS = "Transactions"
 	PAYMENT_INTENTS = "Payment Intents"
+	ACCOUNT_PIN = "Pin Validation"
 
 
 class ClassRelation(str, Enum):
@@ -20,14 +22,16 @@ class ClassRelation(str, Enum):
 	BANK_ACCOUNT = "BankAccount"
 	TRANSACTION = "Transaction"
 	PAYMENT_INTENT = "PaymentIntent"
+	ACCOUNT_PIN = "AccountPin"
 
 
 class TableName(str, Enum):
 	BANKS = "banks"
 	BANK_ACCOUNTS = "bank_accounts"
 	TRANSACTIONS = "transactions"
-	IDEMPOTENCY_KEYS = "idempontency_keys"
+	IDEMPOTENCY_KEYS = "idempotency_keys"
 	PAYMENT_INTENTS = "payment_intents"
+	ACCOUNT_PINS = "account_pins"
 
 
 class ResponseError(str, Enum):

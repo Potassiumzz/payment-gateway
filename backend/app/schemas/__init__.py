@@ -1,3 +1,4 @@
+from .account_pin import AccountPinValidationResponse, ValidatePinValues
 from .bank import BankCreate, BankResponse
 from .bank_account import AccountCreate
 from .payment_intent import PaymentIntentCreate, PaymentIntentResponse
@@ -11,4 +12,6 @@ __all__ = [
 	"TransactionResponse",
 	"PaymentIntentCreate",
 	"PaymentIntentResponse",
+	"AccountPinValidationResponse",
+	"ValidatePinValues",
 ]

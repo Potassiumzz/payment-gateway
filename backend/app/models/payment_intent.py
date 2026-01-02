@@ -1,4 +1,3 @@
-import uuid
 from datetime import UTC, datetime
 from decimal import Decimal
 
@@ -7,10 +6,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
 from app.globals.enums import PaymentIntentStatus, TableName
-
-
-def generate_intent_id() -> str:
-	return f"k_{uuid.uuid4().hex}"
+from app.utils.utils import generate_intent_id
 
 
 class PaymentIntent(Base):
