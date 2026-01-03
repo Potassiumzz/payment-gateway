@@ -17,7 +17,6 @@ class Transaction(Base):
 		String,
 		ForeignKey(f"{TableName.PAYMENT_INTENTS.value}.id"),
 		nullable=False,
-		unique=True,
 	)
 
 	sender_account_number: Mapped[int] = mapped_column(

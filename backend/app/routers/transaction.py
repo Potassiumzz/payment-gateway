@@ -25,6 +25,7 @@ from app.services.idempotency import (
 	get_idempotency_key,
 	save_response,
 )
+from app.utils.security_pin import validate_account_pin
 from app.utils.transaction import build_transaction_response
 
 router = APIRouter(
@@ -82,6 +83,8 @@ def create_transaction(
 				detail=f"{ResponseError.RESOURCE_NOT_FOUND.value} {TransactionFailureReason.SENDER_NOT_FOUND.value}",
 			)
 
+		validate_account_pin(db=db, account=sender, pin=value.security_pin)
+
 		receiver = (
 			db.query(BankAccount)
 			.filter(BankAccount.account_number == value.receiver_account_number)
@@ -120,6 +123,7 @@ def create_transaction(
 		intent.attempt_count += 1
 
 		transaction = Transaction(
+			payment_intent_id=intent.id,
 			sender_account_number=sender.account_number,
 			receiver_account_number=receiver.account_number,
 			amount_transferred=amount,

@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.db import get_db
-from app.globals.enums import PaymentIntentStatus, RouterPrefix
+from app.globals.enums import PaymentIntentStatus, RouterPrefix, RouterTag
 from app.models.payment_intent import PaymentIntent
 from app.schemas import PaymentIntentCreate
 from app.schemas.payment_intent import PaymentIntentResponse
 
 router = APIRouter(
-	prefix=RouterPrefix.PAYMENT_INTENTS.value, tags=[RouterPrefix.PAYMENT_INTENTS.value]
+	prefix=RouterPrefix.PAYMENT_INTENTS.value, tags=[RouterTag.PAYMENT_INTENTS.value]
 )
 
 
