@@ -11,7 +11,7 @@ class PaymentIntentCreate(BaseModel):
 
 class PaymentIntentResponse(BaseModel):
 	id: str
-	amount: Decimal
+	amount: Decimal = Field(..., examples=["20.00"])
 	status: PaymentIntentStatus
 
 	class Config:

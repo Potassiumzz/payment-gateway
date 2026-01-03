@@ -123,6 +123,7 @@ def create_transaction(
 		intent.attempt_count += 1
 
 		transaction = Transaction(
+			payment_intent_id=intent.id,
 			sender_account_number=sender.account_number,
 			receiver_account_number=receiver.account_number,
 			amount_transferred=amount,
