@@ -16,7 +16,7 @@ router = APIRouter(
 @router.post(
 	"/",
 	response_model=AccountPinValidationResponse,
-	description="Validate the pin of the bank account during payment. This is only supposed to be a simulation of a real system, and this route is supposed to be an API to the real bank system which then verifies the pin. Since we do not have a real bank's API, we will just simulate it.",
+	description="Only a testing route for now to validate the pin of the bank account during payment. This is only supposed to be a simulation of a real system, and this route is supposed to be an API to the real bank system which then verifies the pin. Since we do not have a real bank's API, we will just simulate it.",
 )
 def validate_pin_endpoint(value: ValidatePinValues, db: Session = Depends(get_db)):
 	account = (

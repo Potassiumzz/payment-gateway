@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from app.models import AccountPin, BankAccount
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 MAX_ATTEMPTS = 3
 LOCK_TIME = timedelta(minutes=15)
 
