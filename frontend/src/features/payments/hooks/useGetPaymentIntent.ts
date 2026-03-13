@@ -5,6 +5,7 @@ import { PaymentIntentResponse } from "@/types/paymentIntent";
 export function useGetPaymentIntent(intentId: string) {
   const { data, error, isLoading } = useQuery<PaymentIntentResponse>(
     `${PAYMENT_INTENTS_ENDPOINT}${intentId}`,
+    "intent_detail",
   );
 
   return { intentDetail: data, error, isLoading };
