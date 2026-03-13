@@ -1,5 +1,6 @@
 "use client";
 
+import { CHECKOUT_ROUTE } from "@/constants/routes";
 import { useCreatePaymentIntent } from "@/features/payments/hooks/useCreatePaymentIntent";
 import { useRouter } from "next/navigation"
 import React from "react";
@@ -14,7 +15,7 @@ export default function SimulateMerchantPage() {
 
     try {
       const { data } = await createIntent(Number(intentAmount));
-      router.push(`/checkout/${data.id}`)
+      router.push(`${CHECKOUT_ROUTE}${data.id}`)
     } catch (err) {
       console.error("Error creating intent:", err);
     }
