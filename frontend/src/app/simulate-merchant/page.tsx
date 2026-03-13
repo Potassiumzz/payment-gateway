@@ -1,6 +1,6 @@
 "use client";
 
-import { useCreatePaymentIntent } from "@/hooks/api/useCreatePaymentIntent";
+import { useCreatePaymentIntent } from "@/features/payments/hooks/useCreatePaymentIntent";
 import { useRouter } from "next/navigation"
 import React from "react";
 
@@ -13,8 +13,7 @@ export default function SimulateMerchantPage() {
     e.preventDefault();
 
     try {
-      const data = await createIntent(Number(intentAmount));
-      console.log("Payment Intent ID:", data.id);
+      const { data } = await createIntent(Number(intentAmount));
       router.push(`/checkout/${data.id}`)
     } catch (err) {
       console.error("Error creating intent:", err);
@@ -33,8 +32,9 @@ export default function SimulateMerchantPage() {
             onChange={(e) => setIntentAmount(e.target.value)}
           />
         </div>
-        <button type="submit">Create payment intent</button>
+        <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create payment intent"}</button>
       </form>
+      {error && <p>Error: {error}</p>}
     </div>
   )
 }

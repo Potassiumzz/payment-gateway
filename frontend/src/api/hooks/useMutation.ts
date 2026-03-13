@@ -19,23 +19,21 @@ export function useMutation<TInput, TResult>() {
     setError(null);
 
     try {
-      let result;
-      if (method === "post") {
-        result = await api.post<TResult>(url, input);
-      } else if (method === "put") {
-        result = await api.put<TResult>(url, input);
-      } else if (method === "patch") {
-        result = await api.patch<TResult>(url, input);
-      } else if (method === "delete") {
-        result = await api.delete<TResult>(url, { data: input }); // axios.delete uses `data` for body
-      } else {
-        throw new Error(`Unsupported method: ${method}`);
+      switch (method) {
+        case "post":
+          return await api.post<TResult>(url, input);
+        case "put":
+          return await api.put<TResult>(url, input);
+        case "patch":
+          return await api.patch<TResult>(url, input);
+        case "delete":
+          return await api.delete<TResult>(url, { data: input }); // axios.delete uses `data` for body
+        default:
+          throw new Error(`Unsupported method: ${method}`);
       }
-
-      return result.data;
     } catch (err: unknown) {
       if (err instanceof AxiosError) setError(err.message);
-      else setError("Unknown error");
+      else setError("An unknown error occured. Please try again later.");
       throw err;
     } finally {
       setIsLoading(false);

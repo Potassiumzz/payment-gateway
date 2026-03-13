@@ -1,4 +1,4 @@
-import { useMutation } from "./useMutation";
+import { useMutation } from "@/api/hooks/useMutation";
 import { PAYMENT_INTENTS_ENDPOINT } from "@/constants/endpoints";
 
 interface PaymentIntentResponse {
