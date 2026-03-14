@@ -1,6 +1,6 @@
 "use client";
 
-import { queryCache, queryKeyType } from "@/cache/queryCache";
+import { getCache, queryKeyType, setCache } from "@/cache/queryCache";
 import { api } from "@/client/config";
 import { AxiosError } from "axios";
 import React from "react";
@@ -18,9 +18,10 @@ export function useQuery<TResult>(url: string, queryKey: queryKeyType) {
       setError(null);
 
       try {
-        if (queryCache.get(queryKey)) return queryCache.get(queryKey);
+        const cachedData = getCache<TResult>(queryKey);
+        if (cachedData) return setData(cachedData);
         const res = await api.get<TResult>(url);
-        queryCache.set(queryKey, res);
+        setCache<TResult>(queryKey, res.data);
         setData(res.data);
         return res;
       } catch (err: unknown) {
