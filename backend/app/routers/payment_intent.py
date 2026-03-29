@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from app.db import get_db
@@ -32,3 +32,21 @@ def create_payment_intent(value: PaymentIntentCreate, db: Session = Depends(get_
 		amount=intent.amount,
 		status=intent.status,
 	)
+
+
+@router.get(
+	"/{intent_id}",
+	response_model=PaymentIntentResponse,
+	description="Get payment intent detail. The payment intent consists of the actual amount to be paid, the status of the intent, and the id.",
+)
+def get_payment_intent(intent_id: str, db: Session = Depends(get_db)):
+	intent = db.query(PaymentIntent).filter(PaymentIntent.id == intent_id).first()
+
+	if not intent:
+		raise HTTPException(status_code=404, detail="Payment intent not found")
+
+	return {
+		"id": intent.id,
+		"amount": intent.amount,
+		"status": intent.status,
+	}

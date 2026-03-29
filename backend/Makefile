@@ -1,6 +1,14 @@
+VENV=.venv
+PYTHON=$(VENV)/bin/python
+UVICORN=$(VENV)/bin/uvicorn
+RUFF=$(VENV)/bin/ruff
+
 run:
-	uvicorn --reload --port 8888 --host 0.0.0.0 app.main:app
+	$(UVICORN) --reload --port 8888 --host 0.0.0.0 app.main:app
 
 ruff:
-	ruff check --fix
-	ruff format
+	$(RUFF) check --fix
+	$(RUFF) format
+
+install:
+	$(PYTHON) -m pip install -r requirements.txt
