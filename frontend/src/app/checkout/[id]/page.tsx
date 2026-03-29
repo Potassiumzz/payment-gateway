@@ -9,7 +9,7 @@ export default function CheckoutPage() {
   const { intentDetail, error, isLoading } = useGetPaymentIntent(intentId);
 
   if (isLoading) return <div>Loading payment details...</div>;
-  if (error) return <div>Payment intent not found</div>;
+  if (error) return <div>{error}</div>;
 
   console.log(intentDetail)
 
