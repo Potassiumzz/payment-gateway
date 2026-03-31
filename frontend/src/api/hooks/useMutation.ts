@@ -6,22 +6,30 @@ import React from "react";
 
 type APIMethods = "post" | "put" | "patch" | "delete";
 
+interface IMutateOptions<TInput> {
+  url: string;
+  input: TInput;
+  config?: {
+    headers: object;
+  };
+  method?: APIMethods;
+}
+
 export function useMutation<TInput, TResult>() {
   const [error, setError] = React.useState<string | null>(null);
   const [isLoading, setIsLoading] = React.useState(false);
 
-  const mutate = async (
-    url: string,
-    input: TInput,
-    method: APIMethods = "post",
-  ) => {
+  async function mutate(mutateOptions: IMutateOptions<TInput>) {
+    const { url, input, method = "post", config } = mutateOptions;
     setIsLoading(true);
     setError(null);
 
     try {
       switch (method) {
         case "post":
-          return await api.post<TResult>(url, input);
+          return await api.post<TResult>(url, input, {
+            headers: config?.headers,
+          });
         case "put":
           return await api.put<TResult>(url, input);
         case "patch":
@@ -38,7 +46,7 @@ export function useMutation<TInput, TResult>() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return { mutate, error, isLoading };
 }
