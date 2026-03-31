@@ -1,16 +1,19 @@
 import { useMutation } from "@/api/hooks/useMutation";
 import { PAYMENT_INTENTS_ENDPOINT } from "@/constants/endpoints";
-import { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
+import {
+  PaymentIntentPayload,
+  PaymentIntentResponse,
+} from "@/features/payments/types/paymentIntent";
 
 export function useCreatePaymentIntent() {
   const { mutate, error, isLoading } = useMutation<
-    { amount: number },
+    PaymentIntentPayload,
     PaymentIntentResponse
   >();
 
   return {
-    createIntent: (amount: number) =>
-      mutate(PAYMENT_INTENTS_ENDPOINT, { amount }),
+    createIntent: (data: PaymentIntentPayload) =>
+      mutate({ url: PAYMENT_INTENTS_ENDPOINT, input: data }),
     error,
     isLoading,
   };

@@ -2,19 +2,24 @@
 
 import { CHECKOUT_ROUTE } from "@/constants/routes";
 import { useCreatePaymentIntent } from "@/features/payments/hooks/useCreatePaymentIntent";
+import { PaymentIntentPayload } from "@/features/payments/types/paymentIntent";
 import { useRouter } from "next/navigation"
 import React from "react";
 
 export default function SimulateMerchantPage() {
   const router = useRouter();
-  const [intentAmount, setIntentAmount] = React.useState<string>("");
+  const [intent, setIntent] = React.useState<PaymentIntentPayload>({
+    amount: 0,
+  });
   const { createIntent, error, isLoading } = useCreatePaymentIntent();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    if (intent.amount <= 0) return;
+
     try {
-      const { data } = await createIntent(Number(intentAmount));
+      const { data } = await createIntent(intent);
       router.push(`${CHECKOUT_ROUTE}${data.id}`)
     } catch (err) {
       console.error("Error creating intent:", err);
@@ -30,7 +35,7 @@ export default function SimulateMerchantPage() {
             type="number"
             id="amount"
             className="border"
-            onChange={(e) => setIntentAmount(e.target.value)}
+            onChange={(e) => setIntent({ amount: Number(e.target.value) })}
           />
         </div>
         <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : "Create payment intent"}</button>
