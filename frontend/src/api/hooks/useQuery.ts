@@ -44,13 +44,14 @@ export function useQuery<TResult>(url: string, queryKey: QueryKeyType) {
       const { data: result } = await res;
 
       setData(result);
-      setIsLoading(false);
       setError(null);
     } catch (err: unknown) {
       retryFetching();
 
       if (err instanceof AxiosError) setError(err.message);
       else setError("An unknown error occured. Please try again later.");
+    } finally {
+      if (!error) setIsLoading(false);
     }
   }
 
