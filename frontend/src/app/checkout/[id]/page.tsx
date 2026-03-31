@@ -2,7 +2,7 @@
 
 import { useGetPaymentIntent } from "@/features/payments/hooks/useGetPaymentIntent";
 import { useParams } from "next/navigation";
-import CheckoutForm from "../components/checkoutForm";
+import CheckoutForm from "@/app/checkout/components/checkoutForm";
 
 export default function CheckoutPage() {
   const params = useParams();

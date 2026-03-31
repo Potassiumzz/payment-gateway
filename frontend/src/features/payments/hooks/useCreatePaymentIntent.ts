@@ -1,6 +1,6 @@
 import { useMutation } from "@/api/hooks/useMutation";
 import { PAYMENT_INTENTS_ENDPOINT } from "@/constants/endpoints";
-import { PaymentIntentResponse } from "@/types/paymentIntent";
+import { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 
 export function useCreatePaymentIntent() {
   const { mutate, error, isLoading } = useMutation<

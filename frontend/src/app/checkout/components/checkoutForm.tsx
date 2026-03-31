@@ -1,4 +1,4 @@
-import { PaymentIntentResponse } from "@/types/paymentIntent";
+import { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 
 type CheckoutFormProps = {
   intentDetail: PaymentIntentResponse;
