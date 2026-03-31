@@ -7,13 +7,22 @@ import { TRANSACTIONS_ENDPOINT } from "@/constants/endpoints";
 
 export function useCreateTransaction() {
   const { mutate, error, isLoading } = useMutation<
-    { data: CreateTransactionPayload },
+    CreateTransactionPayload,
     TransactionResponse
   >();
 
+  const createTransactionRequestHeader = {
+    "Idempotency-Key": crypto.randomUUID(),
+  };
+
   return {
-    createTransaction: (data: CreateTransactionPayload) =>
-      mutate(TRANSACTIONS_ENDPOINT, { data }),
+    createTransaction: (data: CreateTransactionPayload) => {
+      mutate({
+        url: TRANSACTIONS_ENDPOINT,
+        input: data,
+        config: { headers: createTransactionRequestHeader },
+      });
+    },
     error,
     isLoading,
   };

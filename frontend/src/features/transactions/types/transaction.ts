@@ -1,3 +1,10 @@
+export interface CreateTransactionPayload {
+  payment_intent_id: string;
+  sender_account_number: number;
+  receiver_account_number: number;
+  security_pin: string;
+}
+
 export interface TransactionResponse {
   id: number;
   sender_account_number: number;
@@ -9,11 +16,4 @@ export interface TransactionResponse {
   failure_reason: string;
   amount_transferred: string;
   timestamp: Date;
-}
-
-export interface CreateTransactionPayload {
-  payment_intent_id: string;
-  sender_account_number: number;
-  receiver_account_number: number;
-  security_pin: string;
 }
