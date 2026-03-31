@@ -2,6 +2,7 @@
 
 import { useGetPaymentIntent } from "@/features/payments/hooks/useGetPaymentIntent";
 import { useParams } from "next/navigation";
+import CheckoutForm from "../components/checkoutForm";
 
 export default function CheckoutPage() {
   const params = useParams();
@@ -9,9 +10,17 @@ export default function CheckoutPage() {
   const { intentDetail, error, isLoading } = useGetPaymentIntent(intentId);
 
   if (isLoading) return <div>Loading payment details...</div>;
-  if (error) return <div>{error}</div>;
+  if (error || !intentDetail) return <div>{error}</div>;
 
   console.log(intentDetail)
 
-  return <div>Checkout for intent: {intentId}</div>;
+  return (
+    <div>
+      <h1>Checkout</h1>
+      <dl>
+        <dt>Total Amount: {intentDetail.amount}</dt>
+      </dl>
+      <CheckoutForm intentDetail={intentDetail} />
+    </div>
+  );
 }
