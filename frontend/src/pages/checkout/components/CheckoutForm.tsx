@@ -1,8 +1,8 @@
 "use client";
 
-import { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
+import type { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTransaction";
-import { CreateTransactionPayload } from "@/features/transactions/types/transaction";
+import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
 import React from "react";
 
 type CheckoutFormProps = {
@@ -48,7 +48,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 
   const { createTransaction, isLoading, error } = useCreateTransaction();
 
-  function handlePaySubmit(e: React.FormEvent<HTMLFormElement>) {
+  function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     createTransaction(values);
     console.log("paid");

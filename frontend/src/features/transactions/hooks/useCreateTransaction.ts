@@ -1,5 +1,5 @@
 import { useMutation } from "@/api/hooks/useMutation";
-import {
+import type {
   CreateTransactionPayload,
   TransactionResponse,
 } from "@/features/transactions/types/transaction";

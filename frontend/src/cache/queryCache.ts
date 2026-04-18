@@ -1,5 +1,5 @@
 import { QUERY_KEYS } from "@/cache/queryKeys";
-import { AxiosResponse } from "axios";
+import { type AxiosResponse } from "axios";
 
 export type QueryKeyType = keyof typeof QUERY_KEYS;
 

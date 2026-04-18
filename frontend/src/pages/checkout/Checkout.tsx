@@ -1,8 +1,6 @@
-"use client";
-
 import { useGetPaymentIntent } from "@/features/payments/hooks/useGetPaymentIntent";
-import { useParams } from "next/navigation";
-import CheckoutForm from "@/app/checkout/components/checkoutForm";
+import CheckoutForm from "@/pages/checkout/components/CheckoutForm";
+import { useParams } from "react-router-dom";
 
 export default function CheckoutPage() {
   const params = useParams();

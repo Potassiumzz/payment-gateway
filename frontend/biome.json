@@ -7,7 +7,7 @@
 	},
 	"files": {
 		"ignoreUnknown": true,
-		"includes": ["src", "!node_modules", "!.next", "!dist", "!build"]
+		"includes": ["src", "!node_modules", "!dist", "!build"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -24,7 +24,6 @@
 			}
 		},
 		"domains": {
-			"next": "recommended",
 			"react": "recommended"
 		}
 	},

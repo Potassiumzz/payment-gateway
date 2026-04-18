@@ -1,5 +1,3 @@
-"use client";
-
 import { api } from "@/client/config";
 import { AxiosError } from "axios";
 import React from "react";

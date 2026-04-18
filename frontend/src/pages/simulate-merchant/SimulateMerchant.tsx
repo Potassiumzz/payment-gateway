@@ -1,26 +1,24 @@
-"use client";
-
+import React from "react";
 import { CHECKOUT_ROUTE } from "@/constants/routes";
 import { useCreatePaymentIntent } from "@/features/payments/hooks/useCreatePaymentIntent";
-import { PaymentIntentPayload } from "@/features/payments/types/paymentIntent";
-import { useRouter } from "next/navigation"
-import React from "react";
+import type { PaymentIntentPayload } from "@/features/payments/types/paymentIntent";
+import { useNavigate } from "react-router-dom";
 
 export default function SimulateMerchantPage() {
-  const router = useRouter();
+  const router = useNavigate();
   const [intent, setIntent] = React.useState<PaymentIntentPayload>({
     amount: 0,
   });
   const { createIntent, error, isLoading } = useCreatePaymentIntent();
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
 
     if (intent.amount <= 0) return;
 
     try {
       const { data } = await createIntent(intent);
-      router.push(`${CHECKOUT_ROUTE}${data.id}`)
+      router(`${CHECKOUT_ROUTE}${data.id}`)
     } catch (err) {
       console.error("Error creating intent:", err);
     }

@@ -6,7 +6,7 @@ const defaultHeaders = {
 };
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 5000,
   headers: defaultHeaders,
 });

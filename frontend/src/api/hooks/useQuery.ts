@@ -3,7 +3,7 @@
 import {
   getCache,
   invalidateCache,
-  QueryKeyType,
+  type QueryKeyType,
   setCache,
 } from "@/cache/queryCache";
 import { api } from "@/client/config";
