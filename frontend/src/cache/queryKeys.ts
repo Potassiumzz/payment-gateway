@@ -1,3 +1,3 @@
 export const QUERY_KEYS = {
-  intent_detail: "INTENT_DETAIL",
+	intent_detail: "INTENT_DETAIL",
 };

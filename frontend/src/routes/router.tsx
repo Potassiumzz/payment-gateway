@@ -5,16 +5,16 @@ import SimulateMerchantPage from "@/pages/simulate-merchant/SimulateMerchant";
 import { createBrowserRouter } from "react-router-dom";
 
 export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home/>
-  },
-  {
-    path: SIMULATE_MERCHANT_ROUTE,
-    element: <SimulateMerchantPage/>
-  },
-  {
-    path: `${CHECKOUT_ROUTE}:id`,
-    element: <CheckoutPage/>
-  }
-])
+	{
+		path: "/",
+		element: <Home />,
+	},
+	{
+		path: SIMULATE_MERCHANT_ROUTE,
+		element: <SimulateMerchantPage />,
+	},
+	{
+		path: `${CHECKOUT_ROUTE}:id`,
+		element: <CheckoutPage />,
+	},
+]);

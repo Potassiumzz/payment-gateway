@@ -1,9 +1,9 @@
 export interface PaymentIntentPayload {
-  amount: number;
+	amount: number;
 }
 
 export interface PaymentIntentResponse {
-  id: string;
-  amount: string;
-  status: string;
+	id: string;
+	amount: string;
+	status: string;
 }

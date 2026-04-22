@@ -1,19 +1,19 @@
 export interface CreateTransactionPayload {
-  payment_intent_id: string;
-  sender_account_number: number;
-  receiver_account_number: number;
-  security_pin: string;
+	payment_intent_id: string;
+	sender_account_number: number;
+	receiver_account_number: number;
+	security_pin: string;
 }
 
 export interface TransactionResponse {
-  id: number;
-  sender_account_number: number;
-  sender_bank_name: string;
-  receiver_account_number: number;
-  receiver_owner_name: string;
-  receiver_bank_name: string;
-  status: string;
-  failure_reason: string;
-  amount_transferred: string;
-  timestamp: Date;
+	id: number;
+	sender_account_number: number;
+	sender_bank_name: string;
+	receiver_account_number: number;
+	receiver_owner_name: string;
+	receiver_bank_name: string;
+	status: string;
+	failure_reason: string;
+	amount_transferred: string;
+	timestamp: Date;
 }
