@@ -1,18 +1,17 @@
-"use client";
-
 import {
   getCache,
   invalidateCache,
   type QueryKeyType,
   setCache,
 } from "@/cache/queryCache";
-import { api } from "@/client/config";
 import {
   INITIAL_FETCH_TIME_MS,
   MAX_REFETCH_ATTEMPTS,
 } from "@/constants/config";
 import { AxiosError } from "axios";
 import React from "react";
+import { API } from "@/api/config/config";
+import type { Endpoint } from "@/api/config/types";
 
 /**
  * Hook to fetch the data.
@@ -22,8 +21,8 @@ import React from "react";
  * @param queryKey - A unique key for different `url` that was hit.
  * Stores data based on the provided `url` and makes caching more efficient.
  */
-export function useQuery<TResult>(url: string, queryKey: QueryKeyType) {
-  const [data, setData] = React.useState<TResult | null>(null);
+export function useQuery<TResult>(url: Endpoint, queryKey: QueryKeyType) {
+  const [data, setData] = React.useState<TResult | null | unknown>(null);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
   const [refetchAttemptsState, setRefetchAttemptsState] =
@@ -37,11 +36,11 @@ export function useQuery<TResult>(url: string, queryKey: QueryKeyType) {
 
     try {
       const cachedData = await getCache<TResult>(queryKey);
-      if (cachedData) return setData(cachedData.data);
+      if (cachedData) return setData(cachedData);
 
-      const res = api.get<TResult>(url);
+      const res = API<any, TResult>({method: "GET", endpoint: url});
       setCache<TResult>(queryKey, res);
-      const { data: result } = await res;
+      const result = await res;
 
       setData(result);
       setError(null);

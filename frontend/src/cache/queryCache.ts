@@ -1,5 +1,4 @@
 import { QUERY_KEYS } from "@/cache/queryKeys";
-import { type AxiosResponse } from "axios";
 
 export type QueryKeyType = keyof typeof QUERY_KEYS;
 
@@ -13,7 +12,7 @@ const queryCache = new Map();
  */
 export function setCache<TResult>(
   queryKey: QueryKeyType,
-  data: Promise<AxiosResponse<TResult>>,
+  data: Promise<TResult | unknown>,
 ): void {
   queryCache.set(queryKey, data);
 }
@@ -25,7 +24,7 @@ export function setCache<TResult>(
  */
 export function getCache<TResult>(
   queryKey: QueryKeyType,
-): Promise<AxiosResponse<TResult> | undefined> {
+): Promise<TResult | undefined> {
   return queryCache.get(queryKey);
 }
 

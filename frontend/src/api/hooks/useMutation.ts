@@ -1,16 +1,17 @@
-import { api } from "@/client/config";
 import { AxiosError } from "axios";
 import React from "react";
-
-type APIMethods = "post" | "put" | "patch" | "delete";
+import { API } from "@/api/config/config";
+import type { APIMethods, Endpoint } from "@/api/config/types";
 
 interface IMutateOptions<TInput> {
-  url: string;
+  url: Endpoint;
   input: TInput;
   config?: {
-    headers: object;
+    headers: {
+      [key: string]: string;
+    }
   };
-  method?: APIMethods;
+  method?: Exclude<APIMethods, "GET">;
 }
 
 export function useMutation<TInput, TResult>() {
@@ -18,22 +19,30 @@ export function useMutation<TInput, TResult>() {
   const [isLoading, setIsLoading] = React.useState(false);
 
   async function mutate(mutateOptions: IMutateOptions<TInput>) {
-    const { url, input, method = "post", config } = mutateOptions;
+    const { url, input, method = "POST", config } = mutateOptions;
     setIsLoading(true);
     setError(null);
 
     try {
       switch (method) {
-        case "post":
-          return await api.post<TResult>(url, input, {
+        case "POST":
+          return await API<TInput, TResult>({
+            method: 'POST', 
+            endpoint: url, 
+            input: input, 
             headers: config?.headers,
-          });
-        case "put":
-          return await api.put<TResult>(url, input);
-        case "patch":
-          return await api.patch<TResult>(url, input);
-        case "delete":
-          return await api.delete<TResult>(url, { data: input }); // axios.delete uses `data` for body
+        })
+        case "PUT":
+          return await API<TInput, TResult>({
+            method: 'PUT', 
+            endpoint: url, 
+            input: input,
+        })
+        case "DELETE":
+          return await API<TInput, TResult>({
+            method: 'GET', 
+            endpoint: url,
+        })
         default:
           throw new Error(`Unsupported method: ${method}`);
       }

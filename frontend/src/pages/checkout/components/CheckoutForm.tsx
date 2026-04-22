@@ -1,5 +1,3 @@
-"use client";
-
 import type { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTransaction";
 import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
