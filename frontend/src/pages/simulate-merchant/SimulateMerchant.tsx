@@ -17,7 +17,7 @@ export default function SimulateMerchantPage() {
 		if (intent.amount <= 0) return;
 
 		try {
-			const { data } = await createIntent(intent);
+			const data = await createIntent(intent);
 			router(`${CHECKOUT_ROUTE}${data.id}`);
 		} catch (err) {
 			console.error("Error creating intent:", err);

@@ -44,7 +44,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 
-	const { createTransaction, isLoading, error } = useCreateTransaction();
+	const { createTransaction } = useCreateTransaction();
 
 	function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();

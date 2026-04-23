@@ -8,7 +8,7 @@ export async function API<TInput, TResult>({
 	input,
 	headers,
 	id = "",
-}: IAPI<TInput>): Promise<TResult | unknown> {
+}: IAPI<TInput>): Promise<TResult> {
 	if (headers) {
 		const headerKey = Object.keys(headers);
 		const headerValue = Object.values(headers);
@@ -29,6 +29,6 @@ export async function API<TInput, TResult>({
 		return await res.json();
 	} catch (err) {
 		console.log(err);
-		return err;
+		throw err;
 	}
 }

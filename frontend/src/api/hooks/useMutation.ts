@@ -1,4 +1,3 @@
-import { AxiosError } from "axios";
 import React from "react";
 import { API } from "@/api/config/config";
 import type { APIMethods, Endpoint } from "@/api/config/types";
@@ -47,7 +46,7 @@ export function useMutation<TInput, TResult>() {
 					throw new Error(`Unsupported method: ${method}`);
 			}
 		} catch (err: unknown) {
-			if (err instanceof AxiosError) setError(err.message);
+			if (err instanceof Error) setError(err.message);
 			else setError("An unknown error occured. Please try again later.");
 			throw err;
 		} finally {

@@ -1,6 +1,5 @@
 import { getCache, invalidateCache, type QueryKeyType, setCache } from "@/cache/queryCache";
 import { INITIAL_FETCH_TIME_MS, MAX_REFETCH_ATTEMPTS } from "@/constants/config";
-import { AxiosError } from "axios";
 import React from "react";
 import { API } from "@/api/config/config";
 import type { Endpoint } from "@/api/config/types";
@@ -26,7 +25,7 @@ interface IQueryOptions {
  * Stores data based on the provided `url` and makes caching more efficient.
  */
 export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) {
-	const [data, setData] = React.useState<TResult | null | unknown>(null);
+	const [data, setData] = React.useState<TResult | null>(null);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
 	const [refetchAttemptsState, setRefetchAttemptsState] = React.useState<number>(0);
@@ -50,7 +49,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 		} catch (err: unknown) {
 			retryFetching();
 
-			if (err instanceof AxiosError) setError(err.message);
+			if (err instanceof Error) setError(err.message);
 			else setError("An unknown error occured. Please try again later.");
 		} finally {
 			if (!error) setIsLoading(false);
