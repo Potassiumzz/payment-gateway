@@ -1,5 +1,6 @@
 import type { IAPI } from "@/api/config/types";
 
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 const apiHeaders = new Headers();
 
 export async function API<TInput, TResult>({
@@ -15,13 +16,16 @@ export async function API<TInput, TResult>({
 		apiHeaders.set(headerKey[0], headerValue[0]);
 	}
 
-	apiHeaders.append("Content-Type", "application/json");
+	apiHeaders.set("Content-Type", "application/json");
+
+	let options = {};
+	if (method !== "GET") options = { body: JSON.stringify({ ...input }) };
 
 	try {
-		const res = await fetch(`${endpoint}${id}`, {
+		const res = await fetch(`${BASE_URL}${endpoint}${id}`, {
 			method: method,
 			headers: apiHeaders,
-			body: JSON.stringify({ input }),
+			...options,
 		});
 		if (!res.ok) {
 			throw new Error(`Response status: ${res.status}`);
