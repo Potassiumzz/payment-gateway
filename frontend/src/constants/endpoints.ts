@@ -1,2 +1,4 @@
-export const PAYMENT_INTENTS_ENDPOINT = "/payment_intents/";
-export const TRANSACTIONS_ENDPOINT = "/transactions/";
+export const BACKEND_ENDPOINTS = {
+	PAYMENT_INTENTS_ENDPOINT: "/payment_intents/",
+	TRANSACTIONS_ENDPOINT: "/transactions/",
+} as const;

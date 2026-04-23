@@ -1,6 +1,7 @@
-import type { API_CONFIG } from "@/api/config/config";
+import type { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 
 export type APIMethods = "GET" | "POST" | "PUT" | "DELETE";
+export type Endpoint = (typeof BACKEND_ENDPOINTS)[keyof typeof BACKEND_ENDPOINTS];
 
 export interface IAPI<T> {
 	method: APIMethods;
@@ -9,6 +10,5 @@ export interface IAPI<T> {
 	headers?: {
 		[key: string]: string;
 	};
+	id?: string;
 }
-
-export type Endpoint = keyof typeof API_CONFIG;

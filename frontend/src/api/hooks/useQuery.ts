@@ -5,15 +5,27 @@ import React from "react";
 import { API } from "@/api/config/config";
 import type { Endpoint } from "@/api/config/types";
 
+interface IQueryOptions {
+	url: Endpoint;
+	id?: string;
+	queryKey: QueryKeyType;
+	config?: {
+		headers: {
+			[key: string]: string;
+		};
+	};
+}
 /**
  * Hook to fetch the data.
  * Uses caching implementation as per the requirement of this project.
  *
- * @param url - API endpoint to hit or fetch the data from
+ * @param url - API endpoint to hit or fetch the data from.
  * @param queryKey - A unique key for different `url` that was hit.
+ * @param id - ID to fetch specific data if needed - optional.
+ * @param config - Custom header config options while fetching - optional.
  * Stores data based on the provided `url` and makes caching more efficient.
  */
-export function useQuery<TResult>(url: Endpoint, queryKey: QueryKeyType) {
+export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) {
 	const [data, setData] = React.useState<TResult | null | unknown>(null);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
@@ -29,7 +41,7 @@ export function useQuery<TResult>(url: Endpoint, queryKey: QueryKeyType) {
 			const cachedData = await getCache<TResult>(queryKey);
 			if (cachedData) return setData(cachedData);
 
-			const res = API<any, TResult>({ method: "GET", endpoint: url });
+			const res = API<any, TResult>({ method: "GET", endpoint: url, headers: config?.headers, id });
 			setCache<TResult>(queryKey, res);
 			const result = await res;
 

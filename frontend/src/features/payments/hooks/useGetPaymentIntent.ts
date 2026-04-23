@@ -1,12 +1,13 @@
 import { useQuery } from "@/api/hooks/useQuery";
-import { PAYMENT_INTENTS_ENDPOINT } from "@/constants/endpoints";
+import { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 import type { PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 
 export function useGetPaymentIntent(intentId: string) {
-	const { data, error, isLoading } = useQuery<PaymentIntentResponse>(
-		`${PAYMENT_INTENTS_ENDPOINT}${intentId}`,
-		"intent_detail",
-	);
+	const { data, error, isLoading } = useQuery<PaymentIntentResponse>({
+		url: BACKEND_ENDPOINTS.PAYMENT_INTENTS_ENDPOINT,
+		queryKey: "intent_detail",
+		id: intentId,
+	});
 
 	return { intentDetail: data, error, isLoading };
 }

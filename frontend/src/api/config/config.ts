@@ -1,10 +1,5 @@
 import type { IAPI } from "@/api/config/types";
 
-export const API_CONFIG = {
-	"/payment_intents": ["GET", "POST"],
-	"/transactions/": ["GET", "POST"],
-} as const;
-
 const apiHeaders = new Headers();
 
 export async function API<TInput, TResult>({
@@ -12,6 +7,7 @@ export async function API<TInput, TResult>({
 	endpoint,
 	input,
 	headers,
+	id = "",
 }: IAPI<TInput>): Promise<TResult | unknown> {
 	if (headers) {
 		const headerKey = Object.keys(headers);
@@ -22,7 +18,7 @@ export async function API<TInput, TResult>({
 	apiHeaders.append("Content-Type", "application/json");
 
 	try {
-		const res = await fetch(`${endpoint}`, {
+		const res = await fetch(`${endpoint}${id}`, {
 			method: method,
 			headers: apiHeaders,
 			body: JSON.stringify({ input }),

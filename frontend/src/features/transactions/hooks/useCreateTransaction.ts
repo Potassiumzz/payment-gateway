@@ -3,8 +3,8 @@ import type {
 	CreateTransactionPayload,
 	TransactionResponse,
 } from "@/features/transactions/types/transaction";
-import { TRANSACTIONS_ENDPOINT } from "@/constants/endpoints";
 import { LOCAL_STORAGE_KEYS } from "@/constants/keys";
+import { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 
 export function useCreateTransaction() {
 	const { mutate, error, isLoading } = useMutation<CreateTransactionPayload, TransactionResponse>();
@@ -28,7 +28,7 @@ export function useCreateTransaction() {
 			}
 
 			mutate({
-				url: TRANSACTIONS_ENDPOINT,
+				url: BACKEND_ENDPOINTS.TRANSACTIONS_ENDPOINT,
 				input: data,
 				config: { headers: createTransactionRequestHeader },
 			});
