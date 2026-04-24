@@ -44,7 +44,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 
-	const { createTransaction } = useCreateTransaction();
+	const { createTransaction, error } = useCreateTransaction();
 
 	function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -57,21 +57,26 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	}, []);
 
 	return (
-		<form onSubmit={handlePaySubmit}>
-			{checkoutFormFields.map((field) => {
-				return (
-					<div key={field.id}>
-						<label>{field.label}</label>
-						<input
-							type={field.inputType}
-							placeholder={field.placeholder}
-							name={field.name}
-							onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
-						/>
-					</div>
-				);
-			})}
-			<button type="submit">Pay {intentDetail.amount}</button>
-		</form>
+    <div className="space-y-2">
+      <form onSubmit={handlePaySubmit}>
+        {checkoutFormFields.map((field) => {
+          return (
+            <div key={field.id}>
+              <label>{field.label}</label>
+              <input
+                type={field.inputType}
+                placeholder={field.placeholder}
+                name={field.name}
+                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+              />
+            </div>
+          );
+        })}
+        <button type="submit">Pay {intentDetail.amount}</button>
+      </form>
+      <div>
+        <div>{error}</div>
+      </div>
+    </div>
 	);
 }

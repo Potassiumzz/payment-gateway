@@ -19,7 +19,7 @@ export function setCache<TResult>(queryKey: QueryKeyType, data: Promise<TResult 
  *
  * Returns the stored promise if it exists, otherwise undefined.
  */
-export function getCache<TResult>(queryKey: QueryKeyType): Promise<TResult | undefined> {
+export function getCache<TResult>(queryKey: QueryKeyType | string): Promise<TResult | undefined> {
 	return queryCache.get(queryKey);
 }
 

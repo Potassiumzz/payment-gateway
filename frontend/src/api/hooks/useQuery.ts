@@ -32,12 +32,13 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 
 	let refetchTime = INITIAL_FETCH_TIME_MS;
 	let refetchAttempts = 0;
+	const queryString = id ? `${queryKey}-${id}` : queryKey;
 
 	async function fetchData(): Promise<void> {
 		setIsLoading(true);
 
 		try {
-			const cachedData = await getCache<TResult>(queryKey);
+			const cachedData = await getCache<TResult>(queryString);
 			if (cachedData) return setData(cachedData);
 
 			const res = API<any, TResult>({ method: "GET", endpoint: url, headers: config?.headers, id });

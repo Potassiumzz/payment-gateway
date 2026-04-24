@@ -3,7 +3,6 @@ import type {
 	CreateTransactionPayload,
 	TransactionResponse,
 } from "@/features/transactions/types/transaction";
-import { LOCAL_STORAGE_KEYS } from "@/constants/keys";
 import { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 
 export function useCreateTransaction() {
@@ -15,16 +14,14 @@ export function useCreateTransaction() {
 				"Idempotency-Key": "",
 			};
 
-			const idempotencyKey = localStorage.getItem(LOCAL_STORAGE_KEYS.idempotencyKey);
+			const idempotencyKey = localStorage.getItem(data.payment_intent_id);
+			console.log(data.payment_intent_id);
 
 			if (idempotencyKey) {
 				createTransactionRequestHeader["Idempotency-Key"] = idempotencyKey;
 			} else {
 				createTransactionRequestHeader["Idempotency-Key"] = crypto.randomUUID();
-				localStorage.setItem(
-					LOCAL_STORAGE_KEYS.idempotencyKey,
-					`${createTransactionRequestHeader["Idempotency-Key"]}`,
-				);
+				localStorage.setItem(data.payment_intent_id, `${createTransactionRequestHeader["Idempotency-Key"]}`);
 			}
 
 			mutate({
