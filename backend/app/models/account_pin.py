@@ -16,9 +16,11 @@ class AccountPin(Base):
 	)
 	pin_hash: Mapped[str] = mapped_column(String, nullable=False)
 	failed_attempts: Mapped[int] = mapped_column(Integer, default=0)
-	locked_until: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+	locked_until: Mapped[datetime | None] = mapped_column(
+		DateTime(timezone=True), nullable=True
+	)
 	created_at: Mapped[datetime] = mapped_column(
-		DateTime, default=lambda: datetime.now(UTC), nullable=False
+		DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
 	)
 
 	bank_account = relationship(
