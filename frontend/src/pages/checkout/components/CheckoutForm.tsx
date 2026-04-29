@@ -2,41 +2,13 @@ import type { PaymentIntentResponse } from "@/features/payments/types/paymentInt
 import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTransaction";
 import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
 import React from "react";
+import { checkoutFormFields } from "@/pages/checkout/data/formFields";
 
 type CheckoutFormProps = {
 	intentDetail: PaymentIntentResponse;
 };
-export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
-	const checkoutFormFields = [
-		{
-			id: "1",
-			label: "Account Number",
-			inputType: "number",
-			placeholder: "Your account number",
-			name: "sender_account_number",
-		},
-		{
-			id: "2",
-			label: "Receiver Account Number",
-			inputType: "number",
-			placeholder: "Receiver's account number",
-			name: "receiver_account_number",
-		},
-		// {
-		//   id: "3",
-		//   label: "Email",
-		//   inputType: "email",
-		//   placeholder: "email@example.com"
-		// },
-		{
-			id: "4",
-			label: "Security pin",
-			inputType: "password",
-			placeholder: "Your security pin",
-			name: "security_pin",
-		},
-	];
 
+export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	const [values, setValues] = React.useState({
 		payment_intent_id: "",
 		sender_account_number: 0,
@@ -44,7 +16,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 
-	const { createTransaction, error } = useCreateTransaction();
+	const { createTransaction, error, isLoading } = useCreateTransaction();
 
 	function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
@@ -68,11 +40,12 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
                 placeholder={field.placeholder}
                 name={field.name}
                 onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
+                disabled={isLoading}
               />
             </div>
           );
         })}
-        <button type="submit">Pay {intentDetail.amount}</button>
+        <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : `Pay ${intentDetail.amount}`}</button>
       </form>
       <div>
         <div>{error}</div>
