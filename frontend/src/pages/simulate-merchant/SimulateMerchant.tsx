@@ -1,5 +1,5 @@
 import React from "react";
-import { CHECKOUT_ROUTE } from "@/constants/routes";
+import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { useCreatePaymentIntent } from "@/features/payments/hooks/useCreatePaymentIntent";
 import type { PaymentIntentPayload } from "@/features/payments/types/paymentIntent";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,7 @@ export default function SimulateMerchantPage() {
 
 		try {
 			const data = await createIntent(intent);
-			router(`${CHECKOUT_ROUTE}${data.id}`);
+			router(`${NAVIGATION_ROUTES.CHECKOUT_ROUTE}${data.id}`);
 		} catch (err) {
 			console.error("Error creating intent:", err);
 		}

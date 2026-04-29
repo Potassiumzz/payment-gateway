@@ -3,12 +3,16 @@ import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTra
 import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
 import React from "react";
 import { checkoutFormFields } from "@/pages/checkout/data/formFields";
+import { useNavigate } from "react-router-dom";
+import { NAVIGATION_ROUTES } from "@/constants/routes";
 
 type CheckoutFormProps = {
 	intentDetail: PaymentIntentResponse;
 };
 
 export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
+  const navigate = useNavigate();
+
 	const [values, setValues] = React.useState({
 		payment_intent_id: "",
 		sender_account_number: 0,
@@ -21,7 +25,8 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		createTransaction(values);
-		console.log("paid");
+
+    if(!error && !isLoading) return navigate(NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE);
 	}
 
 	React.useEffect(() => {

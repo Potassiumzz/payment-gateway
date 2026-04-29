@@ -1,2 +1,5 @@
-export const CHECKOUT_ROUTE = "/checkout/";
-export const SIMULATE_MERCHANT_ROUTE = "/simulate-merchant/";
+export const NAVIGATION_ROUTES = {
+	CHECKOUT_ROUTE: "/checkout/",
+	SIMULATE_MERCHANT_ROUTE: "/simulate-merchant/",
+	PAYMENT_SUCCESS_ROUTE: "/payment-success/",
+};
