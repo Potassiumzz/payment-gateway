@@ -1,13 +1,13 @@
 import os
 
 from dotenv import load_dotenv
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi_offline import FastAPIOffline
 
 # from app.db import Base, engine
 from app.routers import account_pin, bank, bank_account, payment_intent, transaction
 
-app = FastAPI()
+app = FastAPIOffline()
 load_dotenv()
 
 frontend_url = os.getenv("FRONTEND_URL", "").split(",")
