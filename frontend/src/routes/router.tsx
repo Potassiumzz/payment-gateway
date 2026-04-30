@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
 		element: <CheckoutPage />,
 	},
 	{
-		path: `${NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE}`,
+		path: `${NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE}:id`,
 		element: <PaymentSuccessPage />,
 	},
 ]);

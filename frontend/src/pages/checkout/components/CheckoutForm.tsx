@@ -22,11 +22,15 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 
 	const { createTransaction, error, isLoading } = useCreateTransaction();
 
-	function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
+	async function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
-		createTransaction(values);
 
-    if(!error && !isLoading) return navigate(NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE);
+		try {
+      const res = await createTransaction(values);
+      if (!error && !isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE}${res.id}`);
+    } catch(err) {
+      console.log(err);
+    }
 	}
 
 	React.useEffect(() => {

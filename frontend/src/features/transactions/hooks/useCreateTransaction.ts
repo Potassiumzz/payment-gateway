@@ -9,13 +9,12 @@ export function useCreateTransaction() {
 	const { mutate, error, isLoading } = useMutation<CreateTransactionPayload, TransactionResponse>();
 
 	return {
-		createTransaction: (data: CreateTransactionPayload) => {
+		createTransaction: async (data: CreateTransactionPayload): Promise<TransactionResponse> => {
 			const createTransactionRequestHeader = {
 				"Idempotency-Key": "",
 			};
 
 			const idempotencyKey = localStorage.getItem(data.payment_intent_id);
-			console.log(data.payment_intent_id);
 
 			if (idempotencyKey) {
 				createTransactionRequestHeader["Idempotency-Key"] = idempotencyKey;
@@ -24,7 +23,7 @@ export function useCreateTransaction() {
 				localStorage.setItem(data.payment_intent_id, `${createTransactionRequestHeader["Idempotency-Key"]}`);
 			}
 
-			mutate({
+			return await mutate({
 				url: BACKEND_ENDPOINTS.TRANSACTIONS_ENDPOINT,
 				input: data,
 				config: { headers: createTransactionRequestHeader },

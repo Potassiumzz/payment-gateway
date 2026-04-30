@@ -30,4 +30,5 @@ export function getCache<TResult>(queryKey: QueryKeyType | string): Promise<TRes
  */
 export function invalidateCache(queryKey: QueryKeyType): void {
 	queryCache.set(queryKey, null);
+	console.log(queryCache);
 }
