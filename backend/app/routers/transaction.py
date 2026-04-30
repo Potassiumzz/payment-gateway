@@ -160,23 +160,23 @@ def get_all_transactions(db: Session = Depends(get_db)):
 	return db.query(Transaction).all()
 
 
-@router.get(
-	"/{account_number}",
-	description="Get transaction(s) by account ID. It can be used to show the transactions related to an account.",
-)
-def get_transaction_by_account(account_id: int, db: Session = Depends(get_db)):
-	account = (
-		db.query(BankAccount).filter(BankAccount.account_number == account_id).first()
-	)
-
-	if not account:
-		raise HTTPException(
-			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
-		)
-
-	return account
-
-
+# @router.get(
+# 	"/{account_number}",
+# 	description="Get transaction(s) by account ID. It can be used to show the transactions related to an account.",
+# )
+# def get_transaction_by_account(account_id: int, db: Session = Depends(get_db)):
+# 	account = (
+# 		db.query(BankAccount).filter(BankAccount.account_number == account_id).first()
+# 	)
+#
+# 	if not account:
+# 		raise HTTPException(
+# 			status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value
+# 		)
+#
+# 	return account
+#
+#
 @router.get(
 	"/{transaction_id}",
 	description="Get transaction(s) by transaction ID. It can be used to find a transaction's details.",
