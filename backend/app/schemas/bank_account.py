@@ -27,7 +27,7 @@ class AccountUpdate(BaseModel):
 	owner_name: Optional[str] = None
 
 
-class AccountRespones(BaseModel):
+class AccountResponse(BaseModel):
 	account_number: int
 	owner_name: str
 	bank_id: int

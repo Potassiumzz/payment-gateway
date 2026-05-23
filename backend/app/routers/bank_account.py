@@ -4,19 +4,19 @@ from fastapi.routing import APIRouter
 from app.dependencies.bank_account import BankAccountDependencies
 from app.globals.enums import RouterPrefix, RouterTag
 from app.models import BankAccount
-from app.schemas.bank_account import AccountCreate, AccountRespones, AccountUpdate
+from app.schemas.bank_account import AccountCreate, AccountResponse, AccountUpdate
 from app.services.bank_account import BankAccountService
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
 
 
 @router.post(
-	"/", response_model=AccountRespones, description="Create a new bank account."
+	"/", response_model=AccountResponse, description="Create a new bank account."
 )
 def create_account(
 	value: AccountCreate,
 	service: BankAccountService = Depends(BankAccountDependencies.get_service),
-) -> BankAccount:
+) -> AccountResponse:
 	return service.create(value)
 
 
@@ -25,7 +25,7 @@ def update_account(
 	id: int,
 	account: AccountUpdate,
 	service: BankAccountService = Depends(BankAccountDependencies.get_service),
-) -> BankAccount:
+) -> AccountResponse:
 	return service.update(id, account)
 
 
@@ -56,12 +56,12 @@ def hard_delete(
 @router.get("/")
 def get_accounts_list(
 	service: BankAccountService = Depends(BankAccountDependencies.get_service),
-) -> list[BankAccount]:
+) -> list[AccountResponse]:
 	return service.get_all()
 
 
 @router.get("/{id}")
 def get_account(
 	id: int, service: BankAccountService = Depends(BankAccountDependencies.get_service)
-) -> BankAccount:
+) -> AccountResponse:
 	return service.get_by_id(id)
