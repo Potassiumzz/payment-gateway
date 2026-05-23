@@ -1,0 +1,38 @@
+from sqlalchemy.orm import Session
+
+from app.models import BankAccount
+from app.utils.utils import raise_404_error
+
+
+class BankAccountRepository:
+	def __init__(self, db: Session) -> None:
+		self.db = db
+
+	def get_all_ac_numbers(self) -> list[int]:
+		return self.db.query(BankAccount.account_number).scalar().all()
+
+	def create(self, account: BankAccount) -> BankAccount:
+		self.db.add(account)
+		self.db.commit()
+		self.db.refresh(account)
+		return account
+
+	def update(self, account: BankAccount) -> BankAccount:
+		self.db.commit()
+		self.db.refresh(account)
+		return account
+
+	def delete(self) -> None:
+		self.db.commit()
+		return
+
+	def hard_delete(self, id: int) -> None:
+		self.db.delete(id)
+		self.db.commit()
+		return
+
+	def get_all(self) -> list[BankAccount]:
+		return self.db.query(BankAccount).all()
+
+	def get_by_id(self, id: int) -> BankAccount:
+		return self.db.query(BankAccount).get(id) or raise_404_error()
