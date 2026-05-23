@@ -3,16 +3,21 @@ from decimal import Decimal
 from app.models import BankAccount
 from app.repository.bank_account import BankAccountRepository
 from app.schemas.bank_account import AccountCreate, AccountUpdate
+from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
 from app.utils.utils import raise_400_error, raise_404_error
 
 
 class BankAccountService:
 	def __init__(
-		self, repository: BankAccountRepository, bank_service: BankService
+		self,
+		repository: BankAccountRepository,
+		bank_service: BankService,
+		pin_service: AccountPinService,
 	) -> None:
 		self.repository = repository
 		self.bank_service = bank_service
+		self.pin_service = pin_service
 
 	def __generate_ac_number(self, value: AccountCreate) -> int:
 		existing_nums = self.repository.get_all_ac_numbers()
@@ -37,7 +42,9 @@ class BankAccountService:
 			is_active=True,
 		)
 
-		return self.repository.create(account)
+		self.repository.create(account)
+		self.pin_service.create(account, value)
+		return account
 
 	def update(self, id: int, value: AccountUpdate) -> BankAccount:
 		account = self.repository.get_by_id(id)
