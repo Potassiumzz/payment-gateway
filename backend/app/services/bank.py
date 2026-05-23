@@ -1,8 +1,5 @@
 from typing import List
 
-from fastapi import HTTPException
-
-from app.globals.enums import ResponseError
 from app.models.bank import Bank
 from app.repository.bank import BankRepository
 from app.schemas.bank import BankCreate
@@ -15,9 +12,7 @@ class BankService:
 
 	def create(self, value: BankCreate) -> Bank:
 		if self.repository.exists_by_name(value.name):
-			raise HTTPException(
-				status_code=400, detail=ResponseError.RESOURCE_EXISTS.value
-			)
+			raise_400_error()
 
 		return self.repository.create(value)
 
