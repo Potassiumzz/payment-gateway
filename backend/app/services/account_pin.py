@@ -3,6 +3,7 @@ from datetime import UTC, datetime
 from app.models import AccountPin
 from app.models.bank_account import BankAccount
 from app.repository.account_pin import AccountPinRepository
+from app.schemas.account_pin import ValidatePinValues
 from app.schemas.bank_account import AccountCreate
 from app.utils.security_pin import LOCK_TIME, MAX_ATTEMPTS, hash_pin, verify_pin
 from app.utils.utils import raise_401_error, raise_403_error, raise_404_error
@@ -53,3 +54,6 @@ class AccountPinService:
 		pin_record.failed_attempts = 0
 		pin_record.locked_until = None
 		return self.repository.update(pin_record)
+
+	def validate_pin_endpoint(self, value: ValidatePinValues, account: BankAccount):
+		self.validate_account_pin(account, value.pin)
