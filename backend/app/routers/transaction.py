@@ -10,9 +10,6 @@ from app.globals.enums import (
 )
 from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
-from app.services.idempotency import (
-	get_idempotency_key,
-)
 from app.services.transaction import TransactionService
 
 router = APIRouter(
@@ -29,7 +26,7 @@ logger = logging.getLogger(__name__)
 )
 def create_transaction(
 	value: TransactionCreate,
-	idempotency_key: str = Depends(get_idempotency_key),
+	idempotency_key: str,
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
 ):
 	return service.create(value, idempotency_key)
