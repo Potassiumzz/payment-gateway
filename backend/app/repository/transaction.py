@@ -1,6 +1,5 @@
 from sqlalchemy.orm import Session
 
-from app.models.idempotency import IdempotencyKey
 from app.models.transaction import Transaction
 
 
@@ -24,17 +23,3 @@ class TransactionRepository:
 
 	def get_by_id(self, id: int) -> Transaction:
 		return self.db.query(Transaction).filter(Transaction.id == id).first()
-
-	def get_existing_response(
-		self,
-		key: str,
-		endpoint: str,
-	):
-		return (
-			self.db.query(IdempotencyKey)
-			.filter(
-				IdempotencyKey.key == key,
-				IdempotencyKey.endpoint == endpoint,
-			)
-			.first()
-		)

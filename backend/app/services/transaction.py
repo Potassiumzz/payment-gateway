@@ -1,6 +1,5 @@
 import logging
 
-from fastapi import Depends
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.globals.constants import MAX_PAYMENT_INTENT_ATTEMPT
@@ -15,7 +14,7 @@ from app.repository.transaction import TransactionRepository
 from app.schemas.transaction import TransactionCreate
 from app.services.account_pin import AccountPinService
 from app.services.bank_account import BankAccountService
-from app.services.idempotency import get_idempotency_key
+from app.services.idempotency import IdempotencyService
 from app.services.payment_intent import PaymentIntentService
 from app.utils.utils import raise_400_error, raise_404_error, raise_500_error
 
@@ -29,20 +28,24 @@ class TransactionService:
 		intent_service: PaymentIntentService,
 		account_service: BankAccountService,
 		pin_service: AccountPinService,
+		idempotency_service: IdempotencyService,
 	) -> None:
 		self.repository = repository
 		self.intent_service = intent_service
 		self.account_service = account_service
 		self.pin_service = pin_service
+		self.idempotency_service = idempotency_service
 
 	def create(
 		self,
 		value: TransactionCreate,
-		idempotency_key: str = Depends(get_idempotency_key),
+		idempotency_key: str,
 	) -> Transaction | None:
 		endpoint = RouterPrefix.TRANSACTIONS.value
 
-		existing = self.repository.get_existing_response(idempotency_key, endpoint)
+		existing = self.idempotency_service.get_existing_response(
+			idempotency_key, endpoint
+		)
 
 		if existing:
 			return existing.response_body
