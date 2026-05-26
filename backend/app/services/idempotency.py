@@ -15,21 +15,6 @@ def get_idempotency_key(idempotency_key: str | None = Header(None)):
 	return idempotency_key
 
 
-def get_existing_response(
-	db: Session,
-	key: str,
-	endpoint: str,
-):
-	return (
-		db.query(IdempotencyKey)
-		.filter(
-			IdempotencyKey.key == key,
-			IdempotencyKey.endpoint == endpoint,
-		)
-		.first()
-	)
-
-
 def save_response(
 	db: Session,
 	key: str,

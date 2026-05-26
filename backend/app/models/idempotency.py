@@ -5,7 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db import Base
 from app.globals.enums import TableName, TransactionStatus
-from app.schemas import TransactionResponse
+from app.models.transaction import Transaction
 
 
 class IdempotencyKey(Base):
@@ -13,7 +13,7 @@ class IdempotencyKey(Base):
 
 	key: Mapped[str] = mapped_column(String, primary_key=True)
 	endpoint: Mapped[str] = mapped_column(String, nullable=False)
-	response_body: Mapped[TransactionResponse] = mapped_column(JSON, nullable=False)
+	response_body: Mapped[Transaction] = mapped_column(JSON, nullable=False)
 	status: Mapped[TransactionStatus] = mapped_column(
 		Enum(TransactionStatus, name="transaction_status"), nullable=False
 	)

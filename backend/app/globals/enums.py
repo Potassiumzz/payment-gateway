@@ -39,6 +39,7 @@ class ResponseError(str, Enum):
 	RESOURCE_EXISTS = "Resource already exists"
 	BAD_REQUEST = "Bad request"
 	UNAUTHORISED = "Unauthorised"
+	SERVER_ERROR = "Server error"
 
 
 class TransactionStatus(str, Enum):
