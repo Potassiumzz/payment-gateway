@@ -23,3 +23,7 @@ def raise_403_error(message: str):
 
 def raise_404_error():
 	raise HTTPException(status_code=404, detail=ResponseError.RESOURCE_NOT_FOUND.value)
+
+
+def raise_500_error():
+	raise HTTPException(status_code=500, detail=ResponseError.SERVER_ERROR.value)
