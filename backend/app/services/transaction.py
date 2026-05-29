@@ -9,14 +9,17 @@ from app.globals.enums import (
 	TransactionFailureReason,
 	TransactionStatus,
 )
+from app.models.idempotency import IdempotencyKey
 from app.models.transaction import Transaction
 from app.repository.transaction import TransactionRepository
+from app.schemas import TransactionResponse
 from app.schemas.transaction import TransactionCreate
 from app.services.account_pin import AccountPinService
 from app.services.bank_account import BankAccountService
 from app.services.idempotency import IdempotencyService
 from app.services.payment_intent import PaymentIntentService
 from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
+from app.utils.transaction import build_transaction_response
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +43,7 @@ class TransactionService:
 		self,
 		value: TransactionCreate,
 		idempotency_key: str,
-	) -> Transaction | None:
+	) -> TransactionResponse | None:
 		endpoint = RouterPrefix.TRANSACTIONS.value
 
 		existing = self.idempotency_service.get_existing_response(
@@ -103,7 +106,22 @@ class TransactionService:
 				failure_reason=failure_reason,
 			)
 
-			return self.repository.create(transaction)
+			self.repository.create(transaction)
+
+			transaction_response = build_transaction_response(
+				transaction, sender, receiver
+			)
+
+			idempotency = IdempotencyKey(
+				key=idempotency_key,
+				endpoint=endpoint,
+				response_body=transaction_response,
+				status=status,
+				failure_reason=failure_reason,
+			)
+			self.idempotency_service.save_response(idempotency)
+
+			return transaction_response
 		except SQLAlchemyError:
 			logger.exception("Transaction failed")
 			raise_500_error("Transaction failed because of some issue in the server.")
