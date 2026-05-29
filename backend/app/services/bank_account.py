@@ -79,3 +79,6 @@ class BankAccountService:
 
 	def get_by_id(self, id: int) -> BankAccount:
 		return self.repository.get_by_id(id)
+
+	def get_by_ac_number(self, ac_number: int) -> BankAccount:
+		return self.repository.get_by_ac_number(ac_number)

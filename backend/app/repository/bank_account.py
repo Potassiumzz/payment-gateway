@@ -51,3 +51,13 @@ class BankAccountRepository:
 		if account is None:
 			raise_404_error()
 		return account
+
+	def get_by_ac_number(self, ac_number: int) -> BankAccount:
+		account = (
+			self.db.query(BankAccount)
+			.filter(BankAccount.account_number == ac_number)
+			.first()
+		)
+		if account is None:
+			raise_404_error()
+		return account
