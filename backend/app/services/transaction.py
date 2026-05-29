@@ -54,21 +54,23 @@ class TransactionService:
 			intent = self.intent_service.get_intent_details(value.payment_intent_id)
 
 			if not intent:
-				raise_404_error()
+				raise_404_error("Payment intent not found.")
 
 			if intent.status != PaymentIntentStatus.REQUIRES_PAYMENT:
-				raise_404_error()
+				raise_400_error()
 
-			sender = self.account_service.get_by_id(value.sender_account_number)
+			sender = self.account_service.get_by_ac_number(value.sender_account_number)
 
 			if not sender:
-				raise_404_error()
+				raise_404_error("Sender's account not found.")
 
 			self.pin_service.validate_account_pin(sender, value.security_pin)
 
-			receiver = self.account_service.get_by_id(value.receiver_account_number)
+			receiver = self.account_service.get_by_ac_number(
+				value.receiver_account_number
+			)
 			if not receiver:
-				raise_404_error()
+				raise_404_error("Receiver's account not found.")
 
 			if sender.account_number == receiver.account_number:
 				raise_400_error()
