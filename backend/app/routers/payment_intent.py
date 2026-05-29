@@ -20,7 +20,7 @@ def create_payment_intent(
 	value: PaymentIntentCreate,
 	service: PaymentIntentService = Depends(PaymentIntentDependencies.get_service),
 ):
-	service.create(value)
+	return service.create(value)
 
 
 @router.get(
