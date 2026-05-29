@@ -3,6 +3,8 @@ from typing import Annotated, Optional
 
 from pydantic import BaseModel, ConfigDict, Field, StringConstraints
 
+from app.schemas import BankResponse
+
 Pin = Annotated[
 	str,
 	StringConstraints(
@@ -30,10 +32,9 @@ class AccountUpdate(BaseModel):
 class AccountResponse(BaseModel):
 	account_number: int
 	owner_name: str
-	bank_id: int
-	bank_name: str
 	balance: Decimal = Field(..., examples=["500.00"])
 	is_active: bool
+	bank: BankResponse
 
 	class Config:
 		model_config = ConfigDict(from_attributes=True)
