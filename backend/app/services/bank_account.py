@@ -1,3 +1,4 @@
+import logging
 from decimal import Decimal
 
 from app.models import BankAccount
@@ -6,6 +7,8 @@ from app.schemas.bank_account import AccountCreate, AccountUpdate
 from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
 from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
+
+logger = logging.getLogger(__name__)
 
 
 class BankAccountService:
@@ -30,7 +33,7 @@ class BankAccountService:
 		bank = self.bank_service.get_by_id(value.bank_id)
 
 		if not bank:
-			raise_400_error()
+			raise_400_error("Bank does not exist.")
 
 		ac_num = self.__generate_ac_number(value.bank_id)
 
@@ -48,7 +51,8 @@ class BankAccountService:
 			self.repository.commit()
 		except Exception:
 			self.repository.rollback()
-			raise_500_error()
+			logger.exception("Failed to create bank account.")
+			raise_500_error("Failed to create bank account.")
 		return account
 
 	def update(self, id: int, value: AccountUpdate) -> BankAccount:

@@ -104,7 +104,7 @@ class TransactionService:
 			return self.repository.create(transaction)
 		except SQLAlchemyError:
 			logger.exception("Transaction failed")
-			raise_500_error()
+			raise_500_error("Transaction failed because of some issue in the server.")
 
 	def delete(self, id: int) -> None:
 		return self.repository.delete(id)

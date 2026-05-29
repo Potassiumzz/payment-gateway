@@ -12,7 +12,7 @@ class BankService:
 
 	def create(self, value: BankCreate) -> Bank:
 		if self.repository.exists_by_name(value.name):
-			raise_400_error()
+			raise_400_error(f"Bank by {value.name} name already exists.")
 
 		return self.repository.create(value)
 
@@ -23,7 +23,7 @@ class BankService:
 			raise_404_error()
 
 		if self.repository.exists_by_name(value.name):
-			raise_400_error()
+			raise_400_error(f"Bank by {value.name} name already exists.")
 
 		bank.name = value.name
 
