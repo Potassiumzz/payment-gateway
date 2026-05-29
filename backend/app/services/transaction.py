@@ -102,7 +102,7 @@ class TransactionService:
 				sender_account_number=sender.account_number,
 				receiver_account_number=receiver.account_number,
 				amount_transferred=amount,
-				status=status,
+				status=status.value,
 				failure_reason=failure_reason,
 			)
 
@@ -115,8 +115,8 @@ class TransactionService:
 			idempotency = IdempotencyKey(
 				key=idempotency_key,
 				endpoint=endpoint,
-				response_body=transaction_response,
-				status=status,
+				response_body=transaction_response.model_dump(mode="json"),
+				status=status.value,
 				failure_reason=failure_reason,
 			)
 			self.idempotency_service.save_response(idempotency)
