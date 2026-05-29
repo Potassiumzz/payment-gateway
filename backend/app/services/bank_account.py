@@ -44,6 +44,7 @@ class BankAccountService:
 
 		self.repository.create(account)
 		self.pin_service.create(account, value)
+		self.repository.commit()
 		return account
 
 	def update(self, id: int, value: AccountUpdate) -> BankAccount:

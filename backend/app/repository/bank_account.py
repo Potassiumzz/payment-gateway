@@ -1,3 +1,4 @@
+from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models import BankAccount
@@ -8,6 +9,9 @@ class BankAccountRepository:
 	def __init__(self, db: Session) -> None:
 		self.db = db
 
+	def commit(self) -> None:
+		self.db.commit()
+
 	def get_max_ac_number(self, bank_id: int) -> int | None:
 		return (
 			self.db.query(func.max(BankAccount.account_number))
@@ -17,7 +21,8 @@ class BankAccountRepository:
 
 	def create(self, account: BankAccount) -> BankAccount:
 		self.db.add(account)
-		self.db.commit()
+		# self.db.commit()
+		self.db.flush()
 		self.db.refresh(account)
 		return account
 
