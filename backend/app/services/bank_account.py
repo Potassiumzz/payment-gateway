@@ -5,7 +5,7 @@ from app.repository.bank_account import BankAccountRepository
 from app.schemas.bank_account import AccountCreate, AccountUpdate
 from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
-from app.utils.utils import raise_400_error, raise_404_error
+from app.utils.utils import raise_400_error, raise_404_error, raise_500_error
 
 
 class BankAccountService:
@@ -42,9 +42,13 @@ class BankAccountService:
 			is_active=True,
 		)
 
-		self.repository.create(account)
-		self.pin_service.create(account, value)
-		self.repository.commit()
+		try:
+			self.repository.create(account)
+			self.pin_service.create(account, value)
+			self.repository.commit()
+		except Exception:
+			self.repository.rollback()
+			raise_500_error()
 		return account
 
 	def update(self, id: int, value: AccountUpdate) -> BankAccount:

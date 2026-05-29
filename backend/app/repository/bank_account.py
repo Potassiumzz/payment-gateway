@@ -12,6 +12,9 @@ class BankAccountRepository:
 	def commit(self) -> None:
 		self.db.commit()
 
+	def rollback(self) -> None:
+		self.db.rollback()
+
 	def get_max_ac_number(self, bank_id: int) -> int | None:
 		return (
 			self.db.query(func.max(BankAccount.account_number))
