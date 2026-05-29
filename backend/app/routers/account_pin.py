@@ -24,5 +24,5 @@ def validate_pin_endpoint(
 	account_service: BankAccountService = Depends(BankAccountDependencies.get_service),
 ):
 	account = account_service.get_by_id(value.account_number)
-	pin_service.validate_pin_endpoint(value, account)
+	pin_service.validate_account_pin(account, value.pin)
 	return {"response_code": 0, "response_msg": "PIN valid"}
