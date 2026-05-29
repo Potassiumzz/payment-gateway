@@ -2,7 +2,7 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.models import BankAccount
-from app.utils.utils import raise_404_error
+from app.utils.http_errors import raise_404_error
 
 
 class BankAccountRepository:
@@ -47,4 +47,7 @@ class BankAccountRepository:
 		return self.db.query(BankAccount).all()
 
 	def get_by_id(self, id: int) -> BankAccount:
-		return self.db.query(BankAccount).get(id) or raise_404_error()
+		account = self.db.query(BankAccount).get(id)
+		if account is None:
+			raise_404_error()
+		return account

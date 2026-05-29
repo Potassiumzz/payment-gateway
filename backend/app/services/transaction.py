@@ -16,7 +16,7 @@ from app.services.account_pin import AccountPinService
 from app.services.bank_account import BankAccountService
 from app.services.idempotency import IdempotencyService
 from app.services.payment_intent import PaymentIntentService
-from app.utils.utils import raise_400_error, raise_404_error, raise_500_error
+from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
 
 logger = logging.getLogger(__name__)
 

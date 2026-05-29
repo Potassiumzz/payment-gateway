@@ -5,8 +5,8 @@ from app.models.bank_account import BankAccount
 from app.repository.account_pin import AccountPinRepository
 from app.schemas.account_pin import ValidatePinValues
 from app.schemas.bank_account import AccountCreate
+from app.utils.http_errors import raise_401_error, raise_403_error, raise_404_error
 from app.utils.security_pin import LOCK_TIME, MAX_ATTEMPTS, hash_pin, verify_pin
-from app.utils.utils import raise_401_error, raise_403_error, raise_404_error
 
 
 class AccountPinService:

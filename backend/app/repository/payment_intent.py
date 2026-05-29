@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.payment_intent import PaymentIntent
-from app.utils.utils import raise_404_error
+from app.utils.http_errors import raise_404_error
 
 
 class PaymentIntentRepository:
@@ -15,7 +15,9 @@ class PaymentIntentRepository:
 		return intent
 
 	def get_intent_details(self, id: str) -> PaymentIntent:
-		return (
+		intent_detail = (
 			self.db.query(PaymentIntent).filter(PaymentIntent.id == id).first()
-			or raise_404_error()
 		)
+		if not intent_detail:
+			raise_404_error()
+		return intent_detail

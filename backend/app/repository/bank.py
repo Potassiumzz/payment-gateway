@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from app.models.bank import Bank
 from app.schemas.bank import BankCreate
-from app.utils.utils import raise_404_error
+from app.utils.http_errors import raise_404_error
 
 
 class BankRepository:
@@ -32,7 +32,10 @@ class BankRepository:
 		return self.db.query(Bank).all()
 
 	def get_by_id(self, bank_id: int) -> Bank:
-		return self.db.query(Bank).get(bank_id) or raise_404_error()
+		bank = self.db.query(Bank).get(bank_id)
+		if not bank:
+			raise_404_error()
+		return bank
 
 	def exists_by_name(self, name: str) -> bool:
 		return self.db.query(Bank).filter(Bank.name == name).first() is not None

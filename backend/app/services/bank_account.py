@@ -5,7 +5,7 @@ from app.repository.bank_account import BankAccountRepository
 from app.schemas.bank_account import AccountCreate, AccountUpdate
 from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
-from app.utils.utils import raise_400_error, raise_404_error, raise_500_error
+from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
 
 
 class BankAccountService:

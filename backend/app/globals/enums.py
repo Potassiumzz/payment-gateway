@@ -40,6 +40,7 @@ class ResponseError(str, Enum):
 	BAD_REQUEST = "Bad request"
 	UNAUTHORISED = "Unauthorised"
 	SERVER_ERROR = "Server error"
+	FORBIDDEN = "Forbidden"
 
 
 class TransactionStatus(str, Enum):

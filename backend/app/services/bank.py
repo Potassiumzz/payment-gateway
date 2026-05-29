@@ -3,7 +3,7 @@ from typing import List
 from app.models.bank import Bank
 from app.repository.bank import BankRepository
 from app.schemas.bank import BankCreate
-from app.utils.utils import raise_400_error, raise_404_error
+from app.utils.http_errors import raise_400_error, raise_404_error
 
 
 class BankService:
