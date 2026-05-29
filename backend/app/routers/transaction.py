@@ -11,6 +11,7 @@ from app.globals.enums import (
 from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
 from app.services.transaction import TransactionService
+from app.utils.transaction import build_transaction_response
 
 router = APIRouter(
 	prefix=RouterPrefix.TRANSACTIONS.value, tags=[RouterTag.TRANSACTIONS.value]
@@ -32,11 +33,24 @@ def create_transaction(
 	return service.create(value, idempotency_key)
 
 
-@router.get("/", response_model=TransactionResponse)
+@router.get("/", response_model=list[TransactionResponse])
 def get_all_transactions(
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
 ):
-	return service.get_all()
+	transactions = service.get_all()
+
+	responses: list[TransactionResponse] = []
+
+	for t in transactions:
+		sender = t.sender_account
+		receiver = t.receiver_account
+
+		if sender is None or receiver is None:
+			continue
+
+		responses.append(build_transaction_response(t, sender, receiver))
+
+	return responses
 
 
 @router.get(
