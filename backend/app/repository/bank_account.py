@@ -8,8 +8,12 @@ class BankAccountRepository:
 	def __init__(self, db: Session) -> None:
 		self.db = db
 
-	def get_all_ac_numbers(self) -> list[int]:
-		return self.db.query(BankAccount.account_number).scalar().all()
+	def get_max_ac_number(self, bank_id: int) -> int | None:
+		return (
+			self.db.query(func.max(BankAccount.account_number))
+			.filter(BankAccount.bank_id == bank_id)
+			.scalar()
+		)
 
 	def create(self, account: BankAccount) -> BankAccount:
 		self.db.add(account)

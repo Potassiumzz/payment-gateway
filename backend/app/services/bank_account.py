@@ -19,12 +19,12 @@ class BankAccountService:
 		self.bank_service = bank_service
 		self.pin_service = pin_service
 
-	def __generate_ac_number(self, value: AccountCreate) -> int:
-		existing_nums = self.repository.get_all_ac_numbers()
-		initial_num = int(str(value.bank_id)[:1])
-		other_nums = existing_nums[-1] + 1
-		ac_num = str(initial_num + other_nums)
-		return int(ac_num)
+	def __generate_ac_number(self, bank_id: int) -> int:
+		max_num = self.repository.get_max_ac_number(bank_id)
+		if not max_num:
+			return int(f"{bank_id}00001")
+
+		return max_num + 1
 
 	def create(self, value: AccountCreate) -> BankAccount:
 		bank = self.bank_service.get_by_id(value.bank_id)
@@ -32,7 +32,7 @@ class BankAccountService:
 		if not bank:
 			raise_400_error()
 
-		ac_num = self.__generate_ac_number(value)
+		ac_num = self.__generate_ac_number(value.bank_id)
 
 		account = BankAccount(
 			account_number=ac_num,
