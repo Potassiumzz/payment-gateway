@@ -62,7 +62,10 @@ def get_transaction_by_id(
 	transaction_id: int,
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
 ):
-	return service.get_by_id(transaction_id)
+	transaction = service.get_by_id(transaction_id)
+	return build_transaction_response(
+		transaction, transaction.sender_account, transaction.receiver_account
+	)
 
 
 @router.delete(
