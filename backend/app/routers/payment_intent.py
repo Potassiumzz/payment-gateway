@@ -32,4 +32,4 @@ def get_payment_intent(
 	intent_id: str,
 	service: PaymentIntentService = Depends(PaymentIntentDependencies.get_service),
 ):
-	service.get_intent_details(intent_id)
+	return service.get_intent_details(intent_id)
