@@ -6,9 +6,10 @@ type LabelProps = {
   hint?: string;       // subtle right-side hint text
   required?: boolean;
   className?: string;
+  hintClassName?: string;
 };
 
-export function Label({ htmlFor, children, hint, required, className }: LabelProps) {
+export function Label({ htmlFor, children, hint, required, className, hintClassName }: LabelProps) {
   return (
     <div className="flex items-center justify-between">
       <label
@@ -22,7 +23,7 @@ export function Label({ htmlFor, children, hint, required, className }: LabelPro
         {required && <span className="text-primary ml-1">*</span>}
       </label>
       {hint && (
-        <span className="font-mono text-[11px] text-text-muted">{hint}</span>
+        <span className={cn("font-mono text-[11px] text-text-muted", hintClassName)}>{hint}</span>
       )}
     </div>
   );
