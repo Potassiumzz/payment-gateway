@@ -9,13 +9,38 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { FieldError } from "@/components/ui/FieldError";
 import { Button } from "@/components/ui/Button";
+import { MAX_AMOUNT_VALUE } from "@/constants/config";
 
 export default function SimulateMerchantPage() {
 	const router = useNavigate();
 	const [intent, setIntent] = React.useState<PaymentIntentPayload>({
 		amount: 0,
 	});
+  const [maxAmountError, setMaxAmountError] = React.useState("");
+
 	const { createIntent, error, isLoading } = useCreatePaymentIntent();
+
+
+function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const value = e.target.value;
+
+  // Allow clearing the field
+  if (value === "") {
+    setIntent({ amount: 0 });
+    setMaxAmountError("");
+    return;
+  }
+
+  const amount = Number(value);
+
+  if (amount > MAX_AMOUNT_VALUE) {
+    setMaxAmountError(`Maximum amount to create payment intent is $${MAX_AMOUNT_VALUE.toLocaleString()}`);
+    return;
+  }
+
+  setMaxAmountError("");
+  setIntent({ amount });
+}
 
 	async function handleSubmit(e: React.SubmitEvent) {
 		e.preventDefault();
@@ -75,13 +100,15 @@ export default function SimulateMerchantPage() {
                   type="number"
                   placeholder="0.00"
                   prefix="$"
-                  min={0.01}
-                  step={0.01}
-                  onChange={(e) => setIntent({ amount: Number(e.target.value) })}
+                  min={1}
+                  step={1}
+                  max={MAX_AMOUNT_VALUE}
+                  value={intent.amount <= 0 ? "" : intent.amount}
+                  onChange={(e) =>  handleChange(e)}
                 />
               </div>
 
-              <FieldError message={error} />
+              <FieldError message={maxAmountError || error} />
 
               <Button
                 type="submit"
