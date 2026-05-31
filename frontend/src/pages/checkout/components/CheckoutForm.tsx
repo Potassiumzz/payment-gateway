@@ -5,6 +5,11 @@ import React from "react";
 import { checkoutFormFields } from "@/pages/checkout/data/formFields";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
+import { Card, CardContent, CardHeader } from "@/components/ui/Card";
+import { Label } from "@/components/ui/Label";
+import { Input } from "@/components/ui/Input";
+import { FieldError } from "@/components/ui/FieldError";
+import { Button } from "@/components/ui/Button";
 
 type CheckoutFormProps = {
 	intentDetail: PaymentIntentResponse;
@@ -14,7 +19,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   const navigate = useNavigate();
 
 	const [values, setValues] = React.useState({
-		payment_intent_id: "",
+		payment_intent_id: intentDetail.amount,
 		sender_account_number: 0,
 		receiver_account_number: 0,
 		security_pin: "",
@@ -33,32 +38,49 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
     }
 	}
 
-	React.useEffect(() => {
-		setValues({ ...values, payment_intent_id: intentDetail.id });
-	}, []);
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setValues((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  }
 
-	return (
-    <div className="space-y-2">
-      <form onSubmit={handlePaySubmit}>
-        {checkoutFormFields.map((field) => {
-          return (
-            <div key={field.id}>
-              <label>{field.label}</label>
-              <input
+  return (
+    <Card>
+      <CardHeader
+        title="Payment Details"
+        description="Enter your account credentials to complete the transaction"
+        badge={
+          <div className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
+            <span className="font-sans text-[2px] text-text-muted uppercase tracking-widest">
+              sandbox
+            </span>
+          </div>
+        }
+      />
+      <CardContent>
+        <form onSubmit={handlePaySubmit} className="space-y-5">
+          {checkoutFormFields.map((field) => (
+            <div key={field.id} className="space-y-2">
+              <Label htmlFor={field.id}>{field.label}</Label>
+              <Input
+                id={field.id}
                 type={field.inputType}
                 placeholder={field.placeholder}
                 name={field.name}
-                onChange={(e) => setValues({ ...values, [e.target.name]: e.target.value })}
                 disabled={isLoading}
+                onChange={handleChange}
               />
             </div>
-          );
-        })}
-        <button type="submit" disabled={isLoading}>{isLoading ? "Loading..." : `Pay ${intentDetail.amount}`}</button>
-      </form>
-      <div>
-        <div>{error}</div>
-      </div>
-    </div>
-	);
+          ))}
+          <FieldError message={error} />
+          <Button
+            type="submit"
+            isLoading={isLoading}
+            className="w-full"
+          >
+            Pay ${parseFloat(intentDetail.amount).toFixed(2)}
+          </Button>
+        </form>
+      </CardContent>
+    </Card>
+  );
 }

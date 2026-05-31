@@ -1,7 +1,7 @@
 export const checkoutFormFields = [
 	{
 		id: "1",
-		label: "Account Number",
+		label: "Sender Account Number",
 		inputType: "number",
 		placeholder: "Your account number",
 		name: "sender_account_number",
