@@ -13,6 +13,7 @@ type InputProps = {
 	min?: number;
 	step?: number;
   name?: string;
+  max?: number;
 };
 
 export function Input({
@@ -27,7 +28,8 @@ export function Input({
 	value,
 	min,
 	step,
-  name
+  name,
+  max
 }: InputProps) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
@@ -53,6 +55,7 @@ export function Input({
 				onChange={onChange}
 				onKeyDown={handleKeyDown}
         name={name}
+        max={max}
 				className={cn(
 					"w-full bg-background border border-border font-mono text-sm text-text-primary",
 					"placeholder:text-text-muted rounded-sm py-2.5 transition-colors",
