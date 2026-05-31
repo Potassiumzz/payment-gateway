@@ -1,3 +1,4 @@
+from app.globals.constants import MAX_AMOUNT
 from app.globals.enums import PaymentIntentStatus
 from app.models.payment_intent import PaymentIntent
 from app.repository.payment_intent import PaymentIntentRepository
@@ -9,6 +10,9 @@ class PaymentIntentService:
 		self.repository = repository
 
 	def create(self, value: PaymentIntentCreate) -> PaymentIntent:
+		if value.amount > MAX_AMOUNT:
+			raise ValueError("Amount exceeds maximum allowed value.")
+
 		intent = PaymentIntent(
 			amount=value.amount,
 			status=PaymentIntentStatus.REQUIRES_PAYMENT,

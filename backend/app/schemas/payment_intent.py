@@ -2,11 +2,12 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.globals.constants import MAX_AMOUNT
 from app.globals.enums import PaymentIntentStatus
 
 
 class PaymentIntentCreate(BaseModel):
-	amount: Decimal = Field(..., gt=0, examples=["20.00"])
+	amount: Decimal = Field(..., gt=0, le=MAX_AMOUNT, examples=["20.00"])
 
 
 class PaymentIntentResponse(BaseModel):
