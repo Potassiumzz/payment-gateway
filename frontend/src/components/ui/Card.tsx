@@ -36,7 +36,7 @@ export function CardHeader({ title, description, badge, className }: CardHeaderP
       <div>
         <h2 className="font-mono text-sm font-semibold text-text-primary">{title}</h2>
         {description && (
-          <p className="font-mono text-xs text-text-muted mt-0.5">{description}</p>
+          <p className="font-mono text-xs text-text-primary/60 mt-0.5">{description}</p>
         )}
       </div>
       {badge && <div>{badge}</div>}
