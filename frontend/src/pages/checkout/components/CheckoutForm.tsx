@@ -19,7 +19,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   const navigate = useNavigate();
 
 	const [values, setValues] = React.useState({
-		payment_intent_id: intentDetail.amount,
+		payment_intent_id: intentDetail.id,
 		sender_account_number: 0,
 		receiver_account_number: 0,
 		security_pin: "",
