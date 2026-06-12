@@ -12,6 +12,7 @@ from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
 from app.services.transaction import TransactionService
 from app.utils.transaction import build_transaction_response
+from app.utils.utils import get_idempotency_key
 
 router = APIRouter(
 	prefix=RouterPrefix.TRANSACTIONS.value, tags=[RouterTag.TRANSACTIONS.value]
@@ -27,7 +28,7 @@ logger = logging.getLogger(__name__)
 )
 def create_transaction(
 	value: TransactionCreate,
-	idempotency_key: str,
+	idempotency_key: str = Depends(get_idempotency_key),
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
 ):
 	return service.create(value, idempotency_key)
