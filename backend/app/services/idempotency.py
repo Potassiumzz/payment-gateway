@@ -1,19 +1,11 @@
-from fastapi import Header
-
 from app.models import IdempotencyKey
 from app.repository.idempotency import IdempotencyRepository
 from app.schemas.idempotency import IdempotencyRequest
-from app.utils.http_errors import raise_400_error
 
 
 class IdempotencyService:
 	def __init__(self, repository: IdempotencyRepository) -> None:
 		self.repository = repository
-
-	def get_idempotency_key(self, idempotency_key: str | None = Header(None)):
-		if not idempotency_key:
-			raise_400_error("Idempotency-Key header is required.")
-		return idempotency_key
 
 	def save_response(self, value: IdempotencyRequest) -> IdempotencyKey:
 		record = IdempotencyKey(
