@@ -49,7 +49,7 @@ class BankAccountRepository:
 	def get_by_id(self, id: int) -> BankAccount:
 		account = self.db.query(BankAccount).get(id)
 		if account is None:
-			raise_404_error()
+			raise_404_error(f"Account with ID: {id} not found.")
 		return account
 
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
@@ -59,5 +59,5 @@ class BankAccountRepository:
 			.first()
 		)
 		if account is None:
-			raise_404_error()
+			raise_404_error(f"Account with account number: {ac_number} not found.")
 		return account

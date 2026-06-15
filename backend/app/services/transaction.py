@@ -65,6 +65,7 @@ class TransactionService:
 			sender = self.account_service.get_by_ac_number(value.sender_account_number)
 
 			if not sender:
+				print("sender")
 				raise_404_error("Sender's account not found.")
 
 			self.pin_service.validate_account_pin(sender, value.security_pin)
@@ -73,6 +74,7 @@ class TransactionService:
 				value.receiver_account_number
 			)
 			if not receiver:
+				print("reciver")
 				raise_404_error("Receiver's account not found.")
 
 			if sender.account_number == receiver.account_number:
