@@ -1,7 +1,7 @@
 import { getCache, invalidateCache, type QueryKeyType, setCache } from "@/cache/queryCache";
 import { INITIAL_FETCH_TIME_MS, MAX_REFETCH_ATTEMPTS } from "@/constants/config";
 import React from "react";
-import { API } from "@/api/config/config";
+import { API, ApiError } from "@/api/config/config";
 import type { Endpoint } from "@/api/config/types";
 
 interface IQueryOptions {
@@ -28,6 +28,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 	const [data, setData] = React.useState<TResult | null>(null);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
+	const [errorStatus, setErrorStatus] = React.useState<number | null>(null);
 	const [refetchAttemptsState, setRefetchAttemptsState] = React.useState<number>(0);
 
 	let refetchTime = INITIAL_FETCH_TIME_MS;
@@ -52,10 +53,12 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 		} catch (err: unknown) {
 			retryFetching();
 
-			if (err instanceof Error) setError(err.message);
-			else setError("An unknown error occured. Please try again later.");
+			if (err instanceof ApiError) {
+				setError(err.message);
+				setErrorStatus(err.status);
+			} else setError("An unknown error occured. Please try again later.");
 		} finally {
-			if (!error) setIsLoading(false);
+			setIsLoading(false);
 		}
 	}
 
@@ -83,5 +86,5 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 
 		fetchData();
 	}, [url]);
-	return { data, error, isLoading, refetchAttemptsState };
+	return { data, error, errorStatus, isLoading, refetchAttemptsState };
 }

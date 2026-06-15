@@ -3,7 +3,7 @@ import type { IAPI } from "@/api/config/types";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const apiHeaders = new Headers();
 
-class ApiError extends Error {
+export class ApiError extends Error {
 	status: number;
 
 	constructor(status: number, message: string) {
