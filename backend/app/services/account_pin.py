@@ -47,7 +47,7 @@ class AccountPinService:
 			pin_record.failed_attempts += 1
 
 			self.repository.update(pin_record)
-			raise_401_error()
+			raise_401_error("Invalid security PIN.")
 
 		# on success
 		pin_record.failed_attempts = 0

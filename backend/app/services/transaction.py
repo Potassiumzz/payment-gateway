@@ -78,7 +78,7 @@ class TransactionService:
 				raise_404_error("Receiver's account not found.")
 
 			if sender.account_number == receiver.account_number:
-				raise_400_error()
+				raise_400_error("Self-transfer is not permitted.")
 
 			amount = intent.amount
 
