@@ -1,7 +1,7 @@
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import CheckoutPage from "@/pages/checkout/Checkout";
 import Home from "@/pages/home/Home";
-import PaymentSuccessPage from "@/pages/payment-success/PaymentSuccess";
+import PaymentResultPage from "@/pages/payment-result/PaymentResult";
 import SimulateMerchantPage from "@/pages/simulate-merchant/SimulateMerchant";
 import { createBrowserRouter } from "react-router-dom";
 
@@ -19,7 +19,7 @@ export const router = createBrowserRouter([
 		element: <CheckoutPage />,
 	},
 	{
-		path: `${NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE}:id`,
-		element: <PaymentSuccessPage />,
+		path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`,
+		element: <PaymentResultPage />,
 	},
 ]);

@@ -32,7 +32,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 
 		try {
       const res = await createTransaction(values);
-      if (!error && !isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_SUCCESS_ROUTE}${res.id}`);
+      if (!error && !isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}${res.id}`);
     } catch(err) {
       console.log(err);
     }

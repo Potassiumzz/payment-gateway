@@ -2,9 +2,9 @@ import { useParams } from "react-router-dom";
 import { useGetTransactionByID } from "@/features/transactions/hooks/useGetTransactionByID";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Link } from "react-router-dom";
-import { CheckIcon } from "lucide-react";
+import { CheckIcon, XIcon } from "lucide-react";
 
-export default function PaymentSuccessPage() {
+export default function PaymentResultPage() {
   const { id } = useParams();
   const { transactionDetail, error, isLoading } = useGetTransactionByID(id!);
 
@@ -26,13 +26,13 @@ export default function PaymentSuccessPage() {
       <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-background">
         {/* Red ambient glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-500/5 rounded-full blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-500/9 rounded-full blur-3xl" />
         </div>
 
         <div className="relative w-full max-w-md space-y-6 text-center">
           <div className="flex flex-col items-center gap-4">
             <div className="w-16 h-16 rounded-full border border-red-500/30 bg-red-500/10 flex items-center justify-center">
-              <span className="text-red-400 text-2xl">✕</span>
+              <span className="text-red-400 text-2xl"><XIcon /></span>
             </div>
             <div className="space-y-1">
               <h1 className="font-mono text-2xl font-bold text-red-400">
@@ -60,12 +60,20 @@ export default function PaymentSuccessPage() {
             )}
           </div>
 
-          <Link
-            to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE}
-            className="inline-flex items-center gap-2 border border-border hover:border-border-strong text-text-secondary hover:text-text-primary font-mono text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors duration-150"
-          >
-            ← Try again
-          </Link>
+          <div className="flex lg:flex-row gap-4 lg:justify-center">
+            <Link
+              to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE}
+              className="inline-flex items-center gap-2 border border-border hover:border-border-strong text-text-secondary hover:text-text-primary font-mono text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors duration-150"
+            >
+              Re-try payment
+            </Link>
+            <Link
+              to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE}
+              className="inline-flex items-center gap-2 border border-border hover:border-border-strong text-text-secondary hover:text-text-primary font-mono text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors duration-150"
+            >
+              New Simulation
+            </Link>
+          </div>
         </div>
       </main>
     );
