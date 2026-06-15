@@ -3,10 +3,14 @@ import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
 
 type ResultHeaderProps = {
   isSuccess: boolean;
+  failureReason: string;
 };
 
-export function ResultHeader({ isSuccess }: ResultHeaderProps) {
+export function ResultHeader({ isSuccess, failureReason }: ResultHeaderProps) {
   const IconComponent = isSuccess ? CheckCircle2Icon : XCircleIcon;
+  let failMsg;
+  if (failureReason) failMsg = failureReason.replaceAll("_", " ") 
+  else failMsg = "Something went wrong with this transaction";
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -23,7 +27,7 @@ export function ResultHeader({ isSuccess }: ResultHeaderProps) {
         <p className="font-mono text-xs text-text-muted">
           {isSuccess
             ? "Transaction has been processed and confirmed."
-            : "Something went wrong with this transaction."}
+            : failMsg}
         </p>
       </div>
     </div>
