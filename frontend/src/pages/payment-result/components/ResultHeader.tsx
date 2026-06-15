@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { CheckCircle2Icon, XCircleIcon } from "lucide-react";
+import { CheckIcon, XIcon } from "lucide-react";
 
 type ResultHeaderProps = {
   isSuccess: boolean;
@@ -7,7 +7,7 @@ type ResultHeaderProps = {
 };
 
 export function ResultHeader({ isSuccess, failureReason }: ResultHeaderProps) {
-  const IconComponent = isSuccess ? CheckCircle2Icon : XCircleIcon;
+  const IconComponent = isSuccess ? CheckIcon : XIcon;
   let failMsg;
   if (failureReason) failMsg = failureReason.replaceAll("_", " ") 
   else failMsg = "Something went wrong with this transaction";
