@@ -51,7 +51,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 			setData(result);
 			setError(null);
 		} catch (err: unknown) {
-			retryFetching();
+			if (err instanceof ApiError && err.status >= 500) retryFetching();
 
 			if (err instanceof ApiError) {
 				setError(err.message);
