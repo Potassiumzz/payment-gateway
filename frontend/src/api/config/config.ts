@@ -3,6 +3,19 @@ import type { IAPI } from "@/api/config/types";
 const BASE_URL = import.meta.env.VITE_BASE_URL;
 const apiHeaders = new Headers();
 
+class ApiError extends Error {
+	status: number;
+
+	constructor(status: number, message: string) {
+		super(message);
+
+		this.name = "ApiError";
+		this.status = status;
+
+		Object.setPrototypeOf(this, new.target.prototype);
+	}
+}
+
 export async function API<TInput, TResult>({
 	method,
 	endpoint,
@@ -27,8 +40,11 @@ export async function API<TInput, TResult>({
 			headers: apiHeaders,
 			...options,
 		});
+
 		if (!res.ok) {
-			throw new Error(`Response status: ${res.status}`);
+			const errorData = await res.json();
+
+			throw new ApiError(res.status, errorData.detail ?? `Response status: ${res.status}`);
 		}
 		return await res.json();
 	} catch (err) {
