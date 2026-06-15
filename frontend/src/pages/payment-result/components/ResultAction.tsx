@@ -5,9 +5,10 @@ const linkClass = "inline-flex items-center gap-2 border border-border hover:bor
 
 type ResultActionsProps = {
   isSuccess: boolean;
+  id?: string;
 };
 
-export function ResultActions({ isSuccess }: ResultActionsProps) {
+export function ResultActions({ isSuccess, id }: ResultActionsProps) {
   if (isSuccess) {
     return (
       <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass}>
@@ -18,7 +19,7 @@ export function ResultActions({ isSuccess }: ResultActionsProps) {
 
   return (
     <div className="flex gap-4 justify-center">
-      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass}>
+      <Link to={`${NAVIGATION_ROUTES.CHECKOUT_ROUTE}/${id}`} className={linkClass}>
         Re-try payment
       </Link>
       <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass}>
