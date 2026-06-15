@@ -9,6 +9,7 @@ def build_transaction_response(
 ) -> TransactionResponse:
 	return TransactionResponse(
 		id=transaction.id,
+		payment_intent_id=transaction.payment_intent_id,
 		sender_account_number=sender.account_number,
 		sender_owner_name=sender.owner_name,
 		sender_bank_name=sender.bank.name,

@@ -13,6 +13,7 @@ class TransactionCreate(BaseModel):
 
 class TransactionResponse(BaseModel):
 	id: int
+	payment_intent_id: str
 	sender_account_number: int
 	sender_owner_name: str
 	sender_bank_name: str

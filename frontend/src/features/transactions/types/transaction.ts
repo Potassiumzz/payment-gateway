@@ -7,6 +7,7 @@ export interface CreateTransactionPayload {
 
 export interface TransactionResponse {
 	id: number;
+	payment_intent_id: string;
 	sender_account_number: number;
 	sender_bank_name: string;
 	receiver_account_number: number;
