@@ -1,3 +1,4 @@
+import NotFoundPage from "@/components/page/NotFoundPage";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import CheckoutPage from "@/pages/checkout/Checkout";
 import Home from "@/pages/home/Home";
@@ -22,4 +23,8 @@ export const router = createBrowserRouter([
 		path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`,
 		element: <PaymentResultPage />,
 	},
+  {
+    path: "*",
+    element: <NotFoundPage />
+  }
 ]);
