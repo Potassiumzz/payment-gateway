@@ -6,13 +6,18 @@ import { cn } from "@/lib/utils";
 import { ResultHeader } from "./components/ResultHeader";
 import { ResultActions } from "./components/ResultAction";
 import { EllipsisLoader } from "@/components/ui/Loader";
+import ErrorPage from "@/components/page/ErrorPage";
 
 export default function PaymentResultPage() {
   const { id } = useParams();
-  const { transactionDetail, error, isLoading } = useGetTransactionByID(id!);
+  const { transactionDetail, error, isLoading, errorStatus } = useGetTransactionByID(id!);
 
   if (isLoading) {
     return <EllipsisLoader value="Verifying transaction"/>
+  }
+
+  if (errorStatus === 422) {
+    return <ErrorPage status={422} />
   }
 
   const isSuccess = !!id && !error && !!transactionDetail && transactionDetail.status === TransactionStatus.Successful;
