@@ -5,20 +5,14 @@ import { TransactionStatus } from "@/features/transactions/types/transaction";
 import { cn } from "@/lib/utils";
 import { ResultHeader } from "./components/ResultHeader";
 import { ResultActions } from "./components/ResultAction";
+import { EllipsisLoader } from "@/components/ui/Loader";
 
 export default function PaymentResultPage() {
   const { id } = useParams();
   const { transactionDetail, error, isLoading } = useGetTransactionByID(id!);
 
   if (isLoading) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <div className="flex items-center gap-2 font-mono text-xs text-text-muted">
-          <span className="w-3 h-3 border border-text-muted/30 border-t-text-muted rounded-full animate-spin" />
-          Verifying transaction...
-        </div>
-      </main>
-    );
+    return <EllipsisLoader value="Verifying transaction"/>
   }
 
   const isSuccess = !!id && !error && !!transactionDetail && transactionDetail.status === TransactionStatus.Successful;
