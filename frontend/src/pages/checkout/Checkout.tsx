@@ -1,11 +1,11 @@
-import { FieldError } from "@/components/ui/FieldError";
+import ErrorPage from "@/components/page/ErrorPage";
 import { useGetPaymentIntent } from "@/features/payments/hooks/useGetPaymentIntent";
 import CheckoutForm from "@/pages/checkout/components/CheckoutForm";
 import { useParams } from "react-router-dom";
 
 export default function CheckoutPage() {
   const { id } = useParams();
-  const { intentDetail, error, isLoading } = useGetPaymentIntent(id!);
+  const { intentDetail, error, isLoading, errorStatus } = useGetPaymentIntent(id!);
 
   if (isLoading) {
     return (
@@ -20,9 +20,7 @@ export default function CheckoutPage() {
 
   if (error || !intentDetail) {
     return (
-      <main className="min-h-screen flex items-center justify-center px-6">
-        <FieldError message={error ?? "Payment intent not found."} />
-      </main>
+      <ErrorPage message={error ?? "Something went wrong."} status={errorStatus ?? 500}/>
     );
   }
 
