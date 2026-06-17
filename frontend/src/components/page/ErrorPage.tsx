@@ -28,7 +28,7 @@ export default function ErrorPage({ status = 500, message }: ErrorPageProps) {
         <p className="font-mono text-text-muted text-sm mb-8">
           {message ?? "Something went wrong. Try again or go back."}
         </p>
-        <Button onClick={() => navigate(-1)} className="bg-transparent border border-white hover:bg-white/80 hover:text-black">
+        <Button onClick={() => navigate(-1)} className="bg-transparent border border-white hover:bg-white/80 hover:text-black flex justify-self-center md:justify-self-start">
           <ArrowLeftIcon size={14}/> go back
         </Button>
       </div>

@@ -11,7 +11,7 @@ type LabelProps = {
 
 export function Label({ htmlFor, children, hint, required, className, hintClassName }: LabelProps) {
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
       <label
         htmlFor={htmlFor}
         className={cn(

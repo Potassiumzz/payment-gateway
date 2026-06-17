@@ -56,7 +56,7 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 	}
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-8 xl:py-24">
       <div className="w-full max-w-lg space-y-8">
 
         <Card>
@@ -66,7 +66,7 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
             badge={
               <div className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-                <span className="font-sans text-[10px] text-text-muted uppercase tracking-widest">
+                <span className="hidden md:block font-sans text-[10px] text-text-muted uppercase tracking-widest">
                   sandbox
                 </span>
               </div>

@@ -25,7 +25,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24">
+    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-8 xl:py-24">
       <div className="w-full max-w-md space-y-6">
 
         {/* Amount summary */}

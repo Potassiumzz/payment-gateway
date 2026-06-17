@@ -29,7 +29,7 @@ export function CardHeader({ title, description, badge, className }: CardHeaderP
   return (
     <div
       className={cn(
-        "border-b border-border px-6 py-4 flex items-center justify-between",
+        "border-b border-border px-6 py-4 flex xl:items-center justify-between",
         className
       )}
     >

@@ -50,7 +50,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
         badge={
           <div className="flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse" />
-            <span className="font-sans text-[2px] text-text-muted uppercase tracking-widest">
+            <span className="hidden md:block font-sans text-[2px] text-text-muted uppercase tracking-widest">
               sandbox
             </span>
           </div>
