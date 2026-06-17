@@ -15,7 +15,7 @@ export default function NotFoundPage() {
         <p className="font-mono text-text-muted text-sm">
           The route you requested doesn't exist. Check the URL or go back.
         </p>
-        <Button onClick={() => navigate(-1)}>
+        <Button onClick={() => navigate(-1)} className="bg-transparent border border-white hover:bg-white/80 hover:text-black">
           <ArrowLeftIcon size={14}/> go back
         </Button>
       </div>
