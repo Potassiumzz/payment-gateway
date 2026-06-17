@@ -19,5 +19,5 @@ class PaymentIntentRepository:
 			self.db.query(PaymentIntent).filter(PaymentIntent.id == id).first()
 		)
 		if not intent_detail:
-			raise_404_error()
+			raise_404_error("Payment intent not found.")
 		return intent_detail
