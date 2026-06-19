@@ -14,6 +14,8 @@ type InputProps = {
 	step?: number;
   name?: string;
   max?: number;
+  maxLength?: number;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 };
 
 export function Input({
@@ -29,7 +31,9 @@ export function Input({
 	min,
 	step,
   name,
-  max
+  max,
+  maxLength,
+  inputMode,
 }: InputProps) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
@@ -56,6 +60,8 @@ export function Input({
 				onKeyDown={handleKeyDown}
         name={name}
         max={max}
+        maxLength={maxLength}
+        inputMode={inputMode}
 				className={cn(
 					"w-full bg-background border border-border font-mono text-sm text-text-primary",
 					"placeholder:text-text-muted rounded-sm py-2.5 transition-colors",
