@@ -21,7 +21,7 @@ export default function RegisterPage() {
 		e.preventDefault();
 
     try {
-      const res = await createAccount(values);
+      const res = await createAccount({...values, bank_id: Number(values.bank_id)});
       if (!isLoading) console.log("Account created", {...res});
     } catch (err) {
       console.log(err);
