@@ -66,6 +66,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
                 type={field.inputType}
                 placeholder={field.placeholder}
                 name={field.name}
+                autoComplete={field.autoComplete}
                 disabled={isLoading}
                 onChange={handleChange}
               />

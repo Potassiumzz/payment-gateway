@@ -25,5 +25,6 @@ export const checkoutFormFields = [
 		inputType: "password",
 		placeholder: "Your security pin",
 		name: "security_pin",
+		autoComplete: "current-password",
 	},
 ];

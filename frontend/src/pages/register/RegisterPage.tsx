@@ -63,6 +63,7 @@ return (
                 value={pin}
                 onChange={(e) => setPin(e.target.value.replace(/\D/g, "").slice(0, 4))}
                 placeholder="1234"
+                autoComplete="current-password"
               />
             </div>
 
