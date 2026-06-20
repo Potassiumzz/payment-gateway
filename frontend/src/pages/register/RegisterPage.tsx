@@ -17,12 +17,15 @@ export default function RegisterPage() {
     pin: "",
   } satisfies CreateAccountPayload)
 
-  async function handleSubmit() {
-    await createAccount({
-      owner_name: values.owner_name,
-      bank_id: Number(values.bank_id),
-      pin: values.pin,
-    });
+	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
+		e.preventDefault();
+
+    try {
+      const res = await createAccount(values);
+      if (!isLoading) console.log("Account created", {...res});
+    } catch (err) {
+      console.log(err);
+    }
   }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {

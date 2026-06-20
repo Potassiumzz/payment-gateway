@@ -5,12 +5,14 @@ const apiHeaders = new Headers();
 
 export class ApiError extends Error {
 	status: number;
+	detail: unknown;
 
-	constructor(status: number, message: string) {
+	constructor(status: number, message: string, detail?: unknown) {
 		super(message);
 
 		this.name = "ApiError";
 		this.status = status;
+		this.detail = detail;
 
 		Object.setPrototypeOf(this, new.target.prototype);
 	}
@@ -44,7 +46,13 @@ export async function API<TInput, TResult>({
 		if (!res.ok) {
 			const errorData = await res.json();
 
-			throw new ApiError(res.status, errorData.detail ?? `Response status: ${res.status}`);
+			throw new ApiError(
+				res.status,
+				Array.isArray(errorData.detail)
+					? errorData.detail.map((e: any) => e.msg).join(", ")
+					: (errorData.detail ?? `Response status: ${res.status}`),
+				errorData.detail,
+			);
 		}
 		return await res.json();
 	} catch (err) {

@@ -15,7 +15,7 @@ export const registerFormFields = [
 		label: "PIN",
 		inputType: "password",
 		placeholder: "Your security pin",
-		name: "security_pin",
+		name: "pin",
 		autoComplete: "current-password",
 	},
 ];
