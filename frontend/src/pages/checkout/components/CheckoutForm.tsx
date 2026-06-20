@@ -59,10 +59,10 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
       <CardContent>
         <form onSubmit={handlePaySubmit} className="space-y-5">
           {checkoutFormFields.map((field) => (
-            <div key={field.id} className="space-y-2">
-              <Label htmlFor={field.id}>{field.label}</Label>
+            <div key={field.name} className="space-y-2">
+              <Label htmlFor={field.name}>{field.label}</Label>
               <Input
-                id={field.id}
+                id={field.name}
                 type={field.inputType}
                 placeholder={field.placeholder}
                 name={field.name}
