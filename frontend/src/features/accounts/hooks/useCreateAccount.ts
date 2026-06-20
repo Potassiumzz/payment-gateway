@@ -6,7 +6,7 @@ export function useCreateAccount() {
 	const { mutate, error, isLoading } = useMutation<CreateAccountPayload, AccountResponse>();
 
 	return {
-		createIntent: (data: CreateAccountPayload) =>
+		createAccount: (data: CreateAccountPayload) =>
 			mutate({ url: BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT, input: data }),
 		error,
 		isLoading,
