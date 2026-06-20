@@ -99,7 +99,7 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                   id="amount"
                   type="number"
                   placeholder="0.00"
-                  prefix="$"
+                  leftIcon="$"
                   min={1}
                   step={1}
                   max={MAX_AMOUNT_VALUE}

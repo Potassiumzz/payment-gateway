@@ -1,39 +1,17 @@
 import { cn } from "@/lib/utils";
 
-type InputProps = {
-	id: string;
-	type: React.HTMLInputTypeAttribute;
-	placeholder?: string;
-	className?: string;
-	disabled?: boolean;
-	prefix?: React.ReactNode; // e.g. "$" or an icon
-	suffix?: React.ReactNode;
-	onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-	value?: string | number;
-	min?: number;
-	step?: number;
-  name?: string;
-  max?: number;
-  maxLength?: number;
-  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
-};
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+	leftIcon?: React.ReactNode; // e.g. "$" or an icon
+	rightIcon?: React.ReactNode;
+}
 
 export function Input({
-	id,
-	type,
-	placeholder,
-	className,
-	disabled,
-	prefix,
-	suffix,
+  type,
 	onChange,
-	value,
-	min,
-	step,
-  name,
-  max,
-  maxLength,
-  inputMode,
+  leftIcon,
+  rightIcon,
+  className,
+  ...props
 }: InputProps) {
 	function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
 		if (type === "number" && ["e", "E", "+", "-"].includes(e.key)) {
@@ -43,25 +21,15 @@ export function Input({
 
 	return (
 		<div className="relative flex items-center">
-			{prefix && (
+			{leftIcon && (
 				<span className="absolute left-3 font-mono text-sm text-text-muted pointer-events-none">
-					{prefix}
+					{leftIcon}
 				</span>
 			)}
 			<input
-				id={id}
-				type={type}
-				placeholder={placeholder}
-				disabled={disabled}
-				value={value}
-				min={min}
-				step={step}
 				onChange={onChange}
 				onKeyDown={handleKeyDown}
-        name={name}
-        max={max}
-        maxLength={maxLength}
-        inputMode={inputMode}
+        {...props}
 				className={cn(
 					"w-full bg-background border border-border font-mono text-sm text-text-primary",
 					"placeholder:text-text-muted rounded-sm py-2.5 transition-colors",
@@ -69,14 +37,14 @@ export function Input({
 					"disabled:opacity-40 disabled:cursor-not-allowed",
 					// kill the number spinners
 					"[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
-					prefix ? "pl-7" : "pl-3",
-					suffix ? "pr-7" : "pr-3",
+					leftIcon ? "pl-7" : "pl-3",
+					rightIcon ? "pr-7" : "pr-3",
 					className,
 				)}
 			/>
-			{suffix && (
+			{rightIcon && (
 				<span className="absolute right-3 font-mono text-sm text-text-muted pointer-events-none">
-					{suffix}
+					{rightIcon}
 				</span>
 			)}
 		</div>
