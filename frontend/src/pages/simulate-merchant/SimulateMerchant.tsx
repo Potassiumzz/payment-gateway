@@ -114,9 +114,9 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                 type="submit"
                 isLoading={isLoading}
                 disabled={intent.amount <= 0}
-                className="w-full"
+                className="w-full capitalize"
               >
-                Create Payment Intent
+              {isLoading ? "Creating payment intent" : "Create payment intent"}
               </Button>
 
             </form>

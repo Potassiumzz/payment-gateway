@@ -64,7 +64,7 @@ return (
               disabled={isLoading}
               className="w-full"
             >
-              Register
+            {isLoading ? "Hold on..." : "Register"}
             </Button>
           </form>
         </CardContent>
