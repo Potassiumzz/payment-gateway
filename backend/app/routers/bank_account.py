@@ -1,9 +1,14 @@
-from fastapi import Depends
+from fastapi import Depends, Query
 from fastapi.routing import APIRouter
 
 from app.dependencies.bank_account import BankAccountDependencies
 from app.globals.enums import RouterPrefix, RouterTag
-from app.schemas.bank_account import AccountCreate, AccountResponse, AccountUpdate
+from app.schemas.bank_account import (
+	AccountCreate,
+	AccountListResponse,
+	AccountResponse,
+	AccountUpdate,
+)
 from app.services.bank_account import BankAccountService
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
@@ -59,13 +64,18 @@ def hard_delete(
 
 @router.get(
 	"/",
-	response_model=list[AccountResponse],
+	response_model=AccountListResponse,
 	description="Get the list of all bank accounts.",
 )
 def get_accounts_list(
+	page: int = Query(1, ge=1),
+	limit: int = Query(10, ge=1, le=100),
+	search: str | None = Query(None),
 	service: BankAccountService = Depends(BankAccountDependencies.get_service),
 ):
-	return service.get_all()
+	offset = (page - 1) * limit
+	items, total = service.get_all(search=search, offset=offset, limit=limit)
+	return {"items": items, "total": total, "page": page, "limit": limit}
 
 
 @router.get(

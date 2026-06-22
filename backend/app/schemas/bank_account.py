@@ -38,5 +38,12 @@ class AccountResponse(BaseModel):
 	is_active: bool
 	bank: BankResponse
 
+
+class AccountListResponse(BaseModel):
+	items: list[AccountResponse]
+	total: int
+	page: int
+	limit: int
+
 	class Config:
 		model_config = ConfigDict(from_attributes=True)

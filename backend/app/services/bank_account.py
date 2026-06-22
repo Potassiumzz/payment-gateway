@@ -74,8 +74,10 @@ class BankAccountService:
 	def hard_delete(self, id: int) -> None:
 		return self.repository.hard_delete(id)
 
-	def get_all(self) -> list[BankAccount]:
-		return self.repository.get_all()
+	def get_all(
+		self, search: str | None, offset: int, limit: int
+	) -> tuple[list[BankAccount], int]:
+		return self.repository.get_all(search=search, offset=offset, limit=limit)
 
 	def get_by_id(self, id: int) -> BankAccount:
 		return self.repository.get_by_id(id)

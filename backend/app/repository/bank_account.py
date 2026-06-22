@@ -1,4 +1,4 @@
-from sqlalchemy import func
+from sqlalchemy import String, cast, func, or_
 from sqlalchemy.orm import Session
 
 from app.models import BankAccount
@@ -43,8 +43,20 @@ class BankAccountRepository:
 		self.db.commit()
 		return
 
-	def get_all(self) -> list[BankAccount]:
-		return self.db.query(BankAccount).all()
+	def get_all(
+		self, search: str | None, offset: int, limit: int
+	) -> tuple[list[BankAccount], int]:
+		query = self.db.query(BankAccount)
+		if search:
+			query = query.filter(
+				or_(
+					BankAccount.owner_name.ilike(f"%{search}%"),
+					cast(BankAccount.account_number, String).ilike(f"%{search}%"),
+				)
+			)
+		total = query.count()
+		items = query.offset(offset).limit(limit).all()
+		return items, total
 
 	def get_by_id(self, id: int) -> BankAccount:
 		account = self.db.query(BankAccount).get(id)
