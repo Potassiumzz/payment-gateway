@@ -9,9 +9,11 @@ export function useGetAccounts(page: number, search: string) {
 	params.set("page", String(page));
 	params.set("limit", String(ACCOUNT_PAGE_SIZE));
 
+	const queryKey = `ACCOUNT_LIST_${page}_${search}` as const;
+
 	const { data, errorStatus, error, isLoading } = useQuery<AccountListResponse>({
 		url: `${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}?${params.toString()}`,
-		queryKey: `account_list`,
+		queryKey,
 	});
 
 	return { accountList: data, error, isLoading, errorStatus };

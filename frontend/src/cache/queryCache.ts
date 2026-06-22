@@ -1,6 +1,6 @@
 import { QUERY_KEYS } from "@/cache/queryKeys";
 
-export type QueryKeyType = keyof typeof QUERY_KEYS;
+export type QueryKeyType = keyof typeof QUERY_KEYS | `ACCOUNT_LIST_${number}_${string}`;
 
 const queryCache = new Map();
 
