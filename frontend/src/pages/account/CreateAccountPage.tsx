@@ -33,8 +33,8 @@ export default function CreateAccountPage() {
   }
 
 return (
-  <div className="flex flex-col items-center justify-center px-6 py-8">
-    <div className="w-full max-w-sm">
+  <div className="flex flex-col items-center justify-center px-6 py-8 w-lg">
+    <div className="w-full">
       <Card>
         <CardHeader
           title="Create account"
