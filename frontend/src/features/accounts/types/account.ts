@@ -12,6 +12,13 @@ export interface AccountResponse {
 	bank: BankResponse;
 }
 
+export interface AccountListResponse {
+	items: AccountResponse[];
+	total: number;
+	page: number;
+	limit: number;
+}
+
 export interface BankResponse {
 	id: number;
 	name: string;
