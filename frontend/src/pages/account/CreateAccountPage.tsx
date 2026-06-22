@@ -5,10 +5,10 @@ import { Input } from "@/components/ui/Input";
 import { Label } from "@/components/ui/Label";
 import { Button } from "@/components/ui/Button";
 import { FieldError } from "@/components/ui/FieldError";
-import { registerFormFields } from "./data/formFields";
 import type { CreateAccountPayload } from "@/features/accounts/types/account";
+import { createAccountFormFields } from "./data/formFields";
 
-export default function RegisterPage() {
+export default function CreateAccountPage() {
   const { createAccount, error, isLoading } = useCreateAccount();
 
   const [values, setValues] = React.useState({
@@ -42,7 +42,7 @@ return (
         />
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
-            {registerFormFields.map((field) => (
+            {createAccountFormFields.map((field) => (
               <div key={field.name} className="space-y-2">
                 <Label htmlFor={field.name}>{field.label}</Label>
                 <Input

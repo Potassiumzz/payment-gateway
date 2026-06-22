@@ -1,4 +1,4 @@
-export const registerFormFields = [
+export const createAccountFormFields = [
 	{
 		label: "Owner name",
 		inputType: "text",

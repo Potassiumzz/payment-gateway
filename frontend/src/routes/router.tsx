@@ -1,8 +1,8 @@
 import NotFoundPage from "@/components/page/NotFoundPage";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
+import CreateAccountPage from "@/pages/account/CreateAccountPage";
 import CheckoutPage from "@/pages/checkout/Checkout";
 import Home from "@/pages/home/Home";
-import RegisterPage from "@/pages/register/RegisterPage";
 import PaymentResultPage from "@/pages/payment-result/PaymentResult";
 import SimulateMerchantPage from "@/pages/simulate-merchant/SimulateMerchant";
 import { createBrowserRouter } from "react-router-dom";
@@ -26,7 +26,7 @@ export const router = createBrowserRouter([
 	},
   {
     path: `${NAVIGATION_ROUTES.CREATE_ACCOUNT}`,
-    element: <RegisterPage />,
+    element: <CreateAccountPage />,
   },
   {
     path: "*",
