@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { FieldError } from "@/components/ui/FieldError";
 import React from "react";
 import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
+import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 
 type AccountCardProps = {
   account: AccountResponse;
@@ -19,14 +20,19 @@ export function AccountCard({ account }: AccountCardProps) {
   const {validatePin, error, isLoading} = useValidatePin();
 
   function handleToggle() {
-    if (state === "collapsed") setState("pin");
-    else setState("collapsed");
+    if (state === "collapsed") {
+      const alreadyUnlocked = getUnlockedAccounts().has(account.account_number);
+      setState(alreadyUnlocked ? "unlocked" : "pin");
+    } else {
+      setState("collapsed");
+    }
   }
 
   async function handlePinSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
     try {
       await validatePin({ pin, account_number: account.account_number });
+      markAccountUnlocked(account.account_number);
       setState("unlocked");
     } catch (e) {
       console.log(e);
