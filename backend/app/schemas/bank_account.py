@@ -30,6 +30,8 @@ class AccountUpdate(BaseModel):
 
 
 class AccountResponse(BaseModel):
+	model_config = ConfigDict(json_encoders={Decimal: float})
+	id: int
 	account_number: int
 	owner_name: str
 	balance: Decimal = Field(..., examples=["500.00"])
