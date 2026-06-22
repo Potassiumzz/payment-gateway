@@ -1,3 +1,4 @@
+import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom"
 
@@ -8,7 +9,7 @@ const NAV_LINKS = [
   },
   {
     label: "Simulate Merchant",
-    href: "/simulate-merchant",
+    href: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE,
   },
   // {
   //   label: "Accounts",
