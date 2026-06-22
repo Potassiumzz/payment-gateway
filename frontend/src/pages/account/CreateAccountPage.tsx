@@ -33,7 +33,7 @@ export default function CreateAccountPage() {
   }
 
 return (
-  <main className="min-h-screen flex flex-col items-center justify-center px-6 py-8">
+  <div className="flex flex-col items-center justify-center px-6 py-8">
     <div className="w-full max-w-sm">
       <Card>
         <CardHeader
@@ -70,6 +70,6 @@ return (
         </CardContent>
       </Card>
     </div>
-  </main>
+  </div>
 );
 }

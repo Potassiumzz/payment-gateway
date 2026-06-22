@@ -9,12 +9,12 @@ export default function CheckoutPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center">
         <div className="flex items-center gap-2 font-mono text-xs text-text-muted">
           <span className="w-3 h-3 border border-text-muted/30 border-t-text-muted rounded-full animate-spin" />
           Fetching payment details...
         </div>
-      </main>
+      </div>
     );
   }
 
@@ -25,7 +25,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-8 xl:py-24">
+    <div className="flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-md space-y-6">
 
         {/* Amount summary */}
@@ -45,6 +45,6 @@ export default function CheckoutPage() {
         <CheckoutForm intentDetail={intentDetail} />
 
       </div>
-    </main>
+    </div>
   );
 }

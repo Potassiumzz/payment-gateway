@@ -16,7 +16,7 @@ export function EllipsisLoader({value = "Loading"}: EllipsisLoaderProps) {
   }, []);
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <div className="font-mono text-md text-text-muted">
         {value}
         <span className="inline-block w-[3ch] text-left">

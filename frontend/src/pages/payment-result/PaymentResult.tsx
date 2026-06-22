@@ -24,7 +24,7 @@ export default function PaymentResultPage() {
   const glowColor = isSuccess ? "bg-secondary/5" : "bg-red-500/9";
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-24 bg-background">
+    <div className="flex flex-col items-center justify-center px-6 bg-background">
       <div className="absolute inset-0 pointer-events-none">
         <div className={cn("absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl", glowColor)} />
       </div>
@@ -38,6 +38,6 @@ export default function PaymentResultPage() {
           </>
         )}
       </div>
-    </main>
+    </div>
   );
 }

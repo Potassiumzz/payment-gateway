@@ -4,8 +4,8 @@ import { META_INFO } from "@/pages/home/data/hero-data";
 
 export default function Home() {
   return (
-    <main className="flex flex-col">
-      <section className="flex-1 flex flex-col justify-center px-6 md:px-16 max-w-3xl mx-auto w-full py-8 xl:py-24">
+    <div className="flex flex-col">
+      <section className="flex-1 flex flex-col justify-center px-6 md:px-16 max-w-3xl mx-auto w-full">
 
         <div className="mb-3">
           <span className="font-sans text-xs text-primary/90 tracking-widest uppercase">
@@ -43,6 +43,6 @@ export default function Home() {
         </div>
 
       </section>
-    </main>
+    </div>
   );
 }

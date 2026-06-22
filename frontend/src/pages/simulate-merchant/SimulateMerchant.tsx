@@ -56,7 +56,7 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
 	}
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center px-6 py-8 xl:py-24">
+    <div className="flex flex-col items-center justify-center px-6">
       <div className="w-full max-w-lg space-y-8">
 
         <Card>
@@ -130,6 +130,6 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
         </p>
 
       </div>
-    </main>
+    </div>
   );
 }
