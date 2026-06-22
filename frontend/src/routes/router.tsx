@@ -1,5 +1,5 @@
 import NotFoundPage from "@/components/page/NotFoundPage";
-import { AUTH_NAVIGATION_ROUTES, NAVIGATION_ROUTES } from "@/constants/routes";
+import { NAVIGATION_ROUTES } from "@/constants/routes";
 import CheckoutPage from "@/pages/checkout/Checkout";
 import Home from "@/pages/home/Home";
 import RegisterPage from "@/pages/register/RegisterPage";
@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
 		element: <PaymentResultPage />,
 	},
   {
-    path: `${AUTH_NAVIGATION_ROUTES.REGISTER}`,
+    path: `${NAVIGATION_ROUTES.CREATE_ACCOUNT}`,
     element: <RegisterPage />,
   },
   {
