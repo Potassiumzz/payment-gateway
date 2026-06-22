@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { FieldError } from "@/components/ui/FieldError";
 import React from "react";
+import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 
 type AccountCardProps = {
   account: AccountResponse;
@@ -15,17 +16,21 @@ type CardState = "collapsed" | "pin" | "unlocked";
 export function AccountCard({ account }: AccountCardProps) {
   const [state, setState] = React.useState<CardState>("collapsed");
   const [pin, setPin] = React.useState("");
-  const [pinError, setPinError] = React.useState<string | null>(null);
+  const {validatePin, error, isLoading} = useValidatePin();
 
   function handleToggle() {
     if (state === "collapsed") setState("pin");
     else setState("collapsed");
   }
 
-  function handlePinSubmit(e: React.SubmitEvent) {
+  async function handlePinSubmit(e: React.SubmitEvent<HTMLFormElement>) {
     e.preventDefault();
-    setPinError(null);
-    setState("unlocked");
+    try {
+      await validatePin({ pin, account_number: account.account_number });
+      setState("unlocked");
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   const isOpen = state !== "collapsed";
@@ -88,8 +93,8 @@ export function AccountCard({ account }: AccountCardProps) {
                   onChange={(e) => setPin(e.target.value)}
                   className="max-w-[120px]"
                 />
-                <FieldError message={pinError} />
-                <Button type="submit" size="sm">Unlock</Button>
+                <FieldError message={error} />
+                <Button type="submit" size="sm" disabled={isLoading}>{isLoading ? "Verifying..." : "Unlock"}</Button>
               </form>
             </div>
           )}
