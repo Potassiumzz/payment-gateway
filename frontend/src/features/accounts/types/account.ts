@@ -9,5 +9,10 @@ export interface AccountResponse {
 	owner_name: string;
 	balance: number;
 	is_active: boolean;
-	// bank: BankResponse
+	bank: BankResponse;
+}
+
+export interface BankResponse {
+	id: number;
+	name: string;
 }
