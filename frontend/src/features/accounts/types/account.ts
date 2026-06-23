@@ -9,6 +9,8 @@ export interface AccountResponse {
 	owner_name: string;
 	balance: number;
 	is_active: boolean;
+	is_default: boolean;
+	expires_at: string;
 	bank: BankResponse;
 }
 
