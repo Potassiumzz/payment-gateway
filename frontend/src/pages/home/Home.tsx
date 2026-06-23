@@ -4,7 +4,7 @@ import { META_INFO } from "@/pages/home/data/hero-data";
 
 export default function Home() {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center justify-center flex-1">
       <section className="flex-1 flex flex-col justify-center px-6 md:px-16 max-w-3xl mx-auto w-full">
 
         <div className="mb-3">

@@ -26,11 +26,11 @@ export function AccountListPage() {
   }
 
   return (
-    <div className="mx-auto px-6 max-w-5xl w-full">
-      <div className="flex gap-8 items-start">
+    <div className="mx-auto px-6 max-w-6xl w-full py-20">
+      <div className="flex gap-12 items-start">
 
         {/* Sidebar — desktop only */}
-        <div className="hidden lg:flex flex-col gap-3 w-56 shrink-0 sticky top-10">
+        <div className="hidden lg:flex flex-col gap-3 w-xs shrink-0 sticky top-10">
           <DefaultAccountCard label="Sender" account={sender} />
           <DefaultAccountCard label="Receiver" account={receiver} />
         </div>
