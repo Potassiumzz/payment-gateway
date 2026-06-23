@@ -86,5 +86,5 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 
 		fetchData();
 	}, [url]);
-	return { data, error, errorStatus, isLoading, refetchAttemptsState };
+	return { data, error, errorStatus, isLoading, refetchAttemptsState, refetch: fetchData };
 }

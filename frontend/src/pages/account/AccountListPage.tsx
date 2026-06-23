@@ -17,7 +17,7 @@ export function AccountListPage() {
   const [page, setPage] = React.useState(1);
   const debouncedSearch = useDebounce(search);
 
-  const { accountList, isLoading, error } = useGetAccounts(page, debouncedSearch);
+  const { accountList, isLoading, error, refetch } = useGetAccounts(page, debouncedSearch);
 
   const totalPages = accountList ? Math.ceil(accountList.total / ACCOUNT_PAGE_SIZE) : 1;
 
@@ -88,6 +88,7 @@ export function AccountListPage() {
                   account={account}
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
+                  onDelete={refetch}
                 />
               ))}
             </div>

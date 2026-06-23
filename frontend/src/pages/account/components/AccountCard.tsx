@@ -8,16 +8,18 @@ import React from "react";
 import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 import { useDeleteAccount } from "@/features/accounts/hooks/useDeleteAccount";
+import { invalidateCacheByPrefix } from "@/cache/queryCache";
 
 type AccountCardProps = {
   account: AccountResponse;
   onSetSender: (account: AccountResponse) => void;
   onSetReceiver: (account: AccountResponse) => void;
+  onDelete?: () => void;
 };
 
 type CardState = "collapsed" | "pin" | "unlocked";
 
-export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCardProps) {
+export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: AccountCardProps) {
   const [state, setState] = React.useState<CardState>("collapsed");
   const [confirmDelete, setConfirmDelete] = React.useState(false);
   const [pin, setPin] = React.useState("");
@@ -48,7 +50,11 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
   async function handleDelete() {
     try {
       await deleteAccount(account.id);
-      if (!deleteLoading) console.log("deleted account");
+      if (!deleteLoading) {
+        console.log("deleted account");
+        invalidateCacheByPrefix("ACCOUNT_LIST_");
+        onDelete?.();
+      }
     } catch (e) {
       console.log(e);
       console.log(deleteErr);
