@@ -46,7 +46,7 @@ class BankAccountRepository:
 	def get_all(
 		self, search: str | None, offset: int, limit: int
 	) -> tuple[list[BankAccount], int]:
-		query = self.db.query(BankAccount)
+		query = self.db.query(BankAccount).filter(BankAccount.is_active == 1)
 		if search:
 			query = query.filter(
 				or_(
@@ -59,7 +59,7 @@ class BankAccountRepository:
 		return items, total
 
 	def get_by_id(self, id: int) -> BankAccount:
-		account = self.db.query(BankAccount).get(id)
+		account = self.db.query(BankAccount).filter(BankAccount.is_active == 1).get(id)
 		if account is None:
 			raise_404_error(f"Account with ID: {id} not found.")
 		return account
@@ -67,7 +67,7 @@ class BankAccountRepository:
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
 		account = (
 			self.db.query(BankAccount)
-			.filter(BankAccount.account_number == ac_number)
+			.filter(BankAccount.account_number == ac_number, BankAccount.is_active == 1)
 			.first()
 		)
 		if account is None:
