@@ -120,9 +120,11 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
                   <p className="font-mono text-3xl font-light text-text-primary tracking-tight">
                     ${account.balance.toFixed(2)}
                   </p>
-                  <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
-                    Expires: <span className="text-text-secondary">N/A</span>
-                  </p>
+                  {account.expires_at && 
+                    <p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
+                      Expires: <span className="text-text-secondary">{account.expires_at}</span>
+                    </p>
+                  }
                 </div>
 
                 {/* Actions */}
@@ -130,7 +132,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
                   <Button size="sm" variant="secondary" onClick={() => onSetSender(account)}>Set as sender</Button>
                   <Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>Set as receiver</Button>
                   {/* <Button size="sm" variant="secondary">Refill</Button> */}
-                  <Button size="sm" variant="danger">Delete</Button>
+                  {!account.is_default && <Button size="sm" variant="danger">Delete</Button>}
                 </div>
 
               </div>
