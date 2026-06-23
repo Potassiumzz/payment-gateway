@@ -129,7 +129,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
                 <div className="flex flex-wrap gap-2">
                   <Button size="sm" variant="secondary" onClick={() => onSetSender(account)}>Set as sender</Button>
                   <Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>Set as receiver</Button>
-                  <Button size="sm" variant="secondary">Refill</Button>
+                  {/* <Button size="sm" variant="secondary">Refill</Button> */}
                   <Button size="sm" variant="danger">Delete</Button>
                 </div>
 
