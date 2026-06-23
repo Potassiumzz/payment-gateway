@@ -35,7 +35,7 @@ class AccountPinService:
 		if not pin_record:
 			raise_404_error()
 
-		now = datetime.now(UTC)
+		now = datetime.now(UTC).replace(tzinfo=None)
 
 		if pin_record.locked_until and pin_record.locked_until > now:
 			raise_403_error("Account temporarily locked due to failed PIN attempts.")
