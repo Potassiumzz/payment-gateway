@@ -45,7 +45,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
 
   return (
     <div className={cn(
-      "w-full border border-border bg-surface rounded-sm transition-colors duration-150",
+      "w-full border border-border bg-transparent rounded-sm transition-colors duration-150",
       isOpen && "border-border-strong"
     )}>
 
@@ -61,7 +61,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
           <span className="font-mono text-sm text-text-primary truncate">
             {account.owner_name}
           </span>
-          <span className="font-mono text-[11px] text-text-muted border border-border px-1.5 py-0.5 rounded-sm shrink-0">
+          <span className="font-mono text-[11px] text-text-muted border border-white/20 px-1.5 py-0.5 rounded-sm shrink-0">
             {account.bank.name}
           </span>
         </div>

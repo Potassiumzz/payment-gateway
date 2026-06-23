@@ -69,7 +69,7 @@ export function AccountListPage() {
               placeholder="Search by name or account number..."
               value={search}
               onChange={handleSearchChange}
-              className="pl-8"
+              className="pl-8 bg-surface"
             />
           </div>
 
