@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { FieldError } from "@/components/ui/FieldError";
 import { Button } from "@/components/ui/Button";
+import { getDefaultReceiver, getDefaultSender } from "@/lib/storage";
 
 type CheckoutFormProps = {
 	intentDetail: PaymentIntentResponse;
@@ -17,11 +18,19 @@ type CheckoutFormProps = {
 
 export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   const navigate = useNavigate();
+  const sender = getDefaultSender();
+  const receiver = getDefaultReceiver();
+
+  const isFieldDisabled = (name: string) => {
+    if (name === "sender_account_number") return !!sender;
+    if (name === "receiver_account_number") return !!receiver;
+    return false;
+  };
 
 	const [values, setValues] = React.useState({
 		payment_intent_id: intentDetail.id,
-		sender_account_number: 0,
-		receiver_account_number: 0,
+		sender_account_number: sender?.account_number ?? 0,
+		receiver_account_number: receiver?.account_number ?? 0,
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 
@@ -67,8 +76,9 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
                 placeholder={field.placeholder}
                 name={field.name}
                 autoComplete={field.autoComplete}
-                disabled={isLoading}
+                disabled={isLoading || isFieldDisabled(field.name)}
                 onChange={handleChange}
+                defaultValue={values[field.name as keyof typeof values]}
               />
             </div>
           ))}
