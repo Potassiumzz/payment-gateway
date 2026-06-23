@@ -24,7 +24,7 @@ export async function API<TInput, TResult>({
 	input,
 	headers,
 	id = "",
-}: IAPI<TInput>): Promise<TResult> {
+}: IAPI<TInput>): Promise<TResult | null> {
 	if (headers) {
 		const headerKey = Object.keys(headers);
 		const headerValue = Object.values(headers);
@@ -54,6 +54,9 @@ export async function API<TInput, TResult>({
 				errorData.detail,
 			);
 		}
+
+		if (res.status === 204) return null;
+
 		return await res.json();
 	} catch (err) {
 		console.log(err);
