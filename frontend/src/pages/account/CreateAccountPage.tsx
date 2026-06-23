@@ -7,8 +7,13 @@ import { Button } from "@/components/ui/Button";
 import { FieldError } from "@/components/ui/FieldError";
 import type { CreateAccountPayload } from "@/features/accounts/types/account";
 import { createAccountFormFields } from "./data/formFields";
+import { useNavigate } from "react-router-dom";
+import { NAVIGATION_ROUTES } from "@/constants/routes";
+import { invalidateCacheByPrefix } from "@/cache/queryCache";
 
 export default function CreateAccountPage() {
+  const navigate = useNavigate();
+
   const { createAccount, error, isLoading } = useCreateAccount();
 
   const [values, setValues] = React.useState({
@@ -21,8 +26,11 @@ export default function CreateAccountPage() {
 		e.preventDefault();
 
     try {
-      const res = await createAccount({...values, bank_id: Number(values.bank_id)});
-      if (!isLoading) console.log("Account created", {...res});
+      await createAccount({...values, bank_id: Number(values.bank_id)});
+      if (!isLoading) {
+        invalidateCacheByPrefix("ACCOUNT_LIST_");
+        navigate(NAVIGATION_ROUTES.ACCOUNTS);
+      }
     } catch (err) {
       console.log(err);
     }
