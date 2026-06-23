@@ -32,3 +32,19 @@ export function invalidateCache(queryKey: QueryKeyType): void {
 	queryCache.set(queryKey, null);
 	console.log(queryCache);
 }
+
+/**
+ * Clears the cache for keys with similar string values.
+ *
+ * Sets the value to null so future calls know the cache is invalid.
+ * This is useful when multiple caches with similar values need clearing.
+ * For example, for a data that is paginated, and is cached would have key like
+ * `ACCOUNT_LIST_1`, `ACCOUNT_LIST_2`, and so on.
+ */
+export function invalidateCacheByPrefix(prefix: string): void {
+	for (const key of queryCache.keys()) {
+		if (key.startsWith(prefix)) {
+			queryCache.set(key, null);
+		}
+	}
+}
