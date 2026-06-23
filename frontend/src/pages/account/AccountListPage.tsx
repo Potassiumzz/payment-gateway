@@ -8,6 +8,9 @@ import { useDebounce, useDefaultAccounts } from "@/lib/hooks";
 import { AccountCard } from "./components/AccountCard";
 import { ACCOUNT_PAGE_SIZE } from "@/constants/config";
 import { DefaultAccountCard } from "./components/DefaultAccountCard";
+import { Link } from "react-router-dom";
+import { NAVIGATION_ROUTES } from "@/constants/routes";
+import { Button } from "@/components/ui/Button";
 
 export function AccountListPage() {
   const [search, setSearch] = useState("");
@@ -44,9 +47,17 @@ export function AccountListPage() {
             <DefaultAccountCard label="Receiver" account={receiver} />
           </div>
 
-          <div>
-            <h1 className="font-mono text-lg text-foreground">Bank Accounts</h1>
-            <p className="text-xs text-muted-foreground mt-1">Search by name or account number. Click an account to verify with PIN.</p>
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <h1 className="font-mono text-lg text-foreground">Bank Accounts</h1>
+              <p className="text-xs text-muted-foreground mt-1">Search by name or account number. Click an account to verify with PIN.</p>
+            </div>
+            <Link
+              to={NAVIGATION_ROUTES.CREATE_ACCOUNT}
+              className="shrink-0"
+            >
+              <Button size="sm" variant="secondary">Create New Account</Button>
+            </Link>
           </div>
 
           {/* Search */}
