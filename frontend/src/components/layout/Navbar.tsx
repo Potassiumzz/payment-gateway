@@ -11,10 +11,10 @@ const NAV_LINKS = [
     label: "Simulate Merchant",
     href: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE,
   },
-  // {
-  //   label: "Accounts",
-  //   href: "/accounts",
-  // }
+  {
+    label: "Bank Accounts",
+    href: NAVIGATION_ROUTES.ACCOUNTS,
+  }
 ]
 export function Navbar() {
   const { pathname } = useLocation();
