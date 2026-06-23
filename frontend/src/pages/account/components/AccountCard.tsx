@@ -10,11 +10,13 @@ import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 
 type AccountCardProps = {
   account: AccountResponse;
+  onSetSender: (account: AccountResponse) => void;
+  onSetReceiver: (account: AccountResponse) => void;
 };
 
 type CardState = "collapsed" | "pin" | "unlocked";
 
-export function AccountCard({ account }: AccountCardProps) {
+export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCardProps) {
   const [state, setState] = React.useState<CardState>("collapsed");
   const [pin, setPin] = React.useState("");
   const {validatePin, error, isLoading} = useValidatePin();
@@ -125,8 +127,8 @@ export function AccountCard({ account }: AccountCardProps) {
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2">
-                  <Button size="sm" variant="secondary">Set as sender</Button>
-                  <Button size="sm" variant="secondary">Set as receiver</Button>
+                  <Button size="sm" variant="secondary" onClick={() => onSetSender(account)}>Set as sender</Button>
+                  <Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>Set as receiver</Button>
                   <Button size="sm" variant="secondary">Refill</Button>
                   <Button size="sm" variant="danger">Delete</Button>
                 </div>
