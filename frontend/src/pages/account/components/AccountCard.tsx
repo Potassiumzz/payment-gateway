@@ -7,6 +7,7 @@ import { FieldError } from "@/components/ui/FieldError";
 import React from "react";
 import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
+import { useDeleteAccount } from "@/features/accounts/hooks/useDeleteAccount";
 
 type AccountCardProps = {
   account: AccountResponse;
@@ -19,7 +20,9 @@ type CardState = "collapsed" | "pin" | "unlocked";
 export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCardProps) {
   const [state, setState] = React.useState<CardState>("collapsed");
   const [pin, setPin] = React.useState("");
+
   const {validatePin, error, isLoading} = useValidatePin();
+  const {deleteAccount, error: deleteErr, isLoading: deleteLoading} = useDeleteAccount();
 
   function handleToggle() {
     if (state === "collapsed") {
@@ -38,6 +41,16 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
       setState("unlocked");
     } catch (e) {
       console.log(e);
+    }
+  }
+
+  async function handleDelete() {
+    try {
+      await deleteAccount(account.id);
+      if (!deleteLoading) console.log("deleted account");
+    } catch (e) {
+      console.log(e);
+      console.log(deleteErr);
     }
   }
 
@@ -101,7 +114,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
                   onChange={(e) => setPin(e.target.value)}
                   className="max-w-[120px]"
                 />
-                <FieldError message={error} />
+                <FieldError message={error || deleteErr} />
                 <Button type="submit" size="sm" disabled={isLoading}>{isLoading ? "Verifying..." : "Unlock"}</Button>
               </form>
             </div>
@@ -132,7 +145,14 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
                   <Button size="sm" variant="secondary" onClick={() => onSetSender(account)}>Set as sender</Button>
                   <Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>Set as receiver</Button>
                   {/* <Button size="sm" variant="secondary">Refill</Button> */}
-                  {!account.is_default && <Button size="sm" variant="danger">Delete</Button>}
+                  {!account.is_default && 
+                    <Button 
+                      size="sm" 
+                      variant="danger" 
+                      disabled={deleteLoading} 
+                      onClick={() => handleDelete()}>
+                        {deleteLoading ? "Deleting..." : "Delete"}
+                    </Button>}
                 </div>
 
               </div>
