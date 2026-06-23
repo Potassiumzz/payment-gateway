@@ -4,7 +4,8 @@ import type { APIMethods, Endpoint } from "@/api/config/types";
 
 interface IMutateOptions<TInput> {
 	url: Endpoint;
-	input: TInput;
+	input?: TInput;
+	id?: TInput;
 	config?: {
 		headers: {
 			[key: string]: string;
@@ -18,7 +19,7 @@ export function useMutation<TInput, TResult>() {
 	const [isLoading, setIsLoading] = React.useState(false);
 
 	async function mutate(mutateOptions: IMutateOptions<TInput>) {
-		const { url, input, method = "POST", config } = mutateOptions;
+		const { url, input, id, method = "POST", config } = mutateOptions;
 		setIsLoading(true);
 		setError(null);
 
@@ -39,8 +40,9 @@ export function useMutation<TInput, TResult>() {
 					});
 				case "DELETE":
 					return await API<TInput, TResult>({
-						method: "GET",
+						method: "DELETE",
 						endpoint: url,
+						id: id,
 					});
 				default:
 					throw new Error(`Unsupported method: ${method}`);

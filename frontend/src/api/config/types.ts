@@ -14,5 +14,5 @@ export interface IAPI<T> {
 	headers?: {
 		[key: string]: string;
 	};
-	id?: string;
+	id?: string | T;
 }
