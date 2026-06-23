@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React from "react";
 import { SearchIcon } from "lucide-react";
 import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
 import { Input } from "@/components/ui/Input";
@@ -13,8 +13,8 @@ import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
 
 export function AccountListPage() {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
+  const [search, setSearch] = React.useState("");
+  const [page, setPage] = React.useState(1);
   const debouncedSearch = useDebounce(search);
 
   const { accountList, isLoading, error } = useGetAccounts(page, debouncedSearch);
