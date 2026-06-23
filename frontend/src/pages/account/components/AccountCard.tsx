@@ -19,6 +19,7 @@ type CardState = "collapsed" | "pin" | "unlocked";
 
 export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCardProps) {
   const [state, setState] = React.useState<CardState>("collapsed");
+  const [confirmDelete, setConfirmDelete] = React.useState(false);
   const [pin, setPin] = React.useState("");
 
   const {validatePin, error, isLoading} = useValidatePin();
@@ -142,17 +143,63 @@ export function AccountCard({ account, onSetReceiver, onSetSender }: AccountCard
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2">
-                  <Button size="sm" variant="secondary" onClick={() => onSetSender(account)}>Set as sender</Button>
-                  <Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>Set as receiver</Button>
-                  {/* <Button size="sm" variant="secondary">Refill</Button> */}
-                  {!account.is_default && 
-                    <Button 
-                      size="sm" 
-                      variant="danger" 
-                      disabled={deleteLoading} 
-                      onClick={() => handleDelete()}>
-                        {deleteLoading ? "Deleting..." : "Delete"}
-                    </Button>}
+                  {!confirmDelete ? (
+                    <>
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => onSetSender(account)}
+                      >
+                        Set as sender
+                      </Button>
+
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        onClick={() => onSetReceiver(account)}
+                      >
+                        Set as receiver
+                      </Button>
+
+                      {!account.is_default && (
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          onClick={() => setConfirmDelete(true)}
+                        >
+                          Delete
+                        </Button>
+                      )}
+                    </>
+                  ) : (
+                    <div className="space-y-3 w-full">
+                      <p className="font-mono text-xs text-red-400">
+                        Delete this account? This action cannot be undone through the system.
+                      </p>
+
+                      <div className="flex gap-2">
+                        <Button
+                          size="sm"
+                          variant="secondary"
+                          onClick={() => setConfirmDelete(false)}
+                          disabled={deleteLoading}
+                        >
+                          Cancel
+                        </Button>
+
+                        <Button
+                          size="sm"
+                          variant="danger"
+                          onClick={handleDelete}
+                          disabled={deleteLoading}
+                        >
+                          {deleteLoading ? "Deleting..." : "Yes, delete account"}
+                        </Button>
+                      </div>
+
+                      <FieldError message={deleteErr} />
+                    </div>
+                  )}
                 </div>
 
               </div>
