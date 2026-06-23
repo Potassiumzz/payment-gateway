@@ -1,3 +1,4 @@
+from datetime import datetime
 from decimal import Decimal
 from typing import Annotated, Optional
 
@@ -36,6 +37,8 @@ class AccountResponse(BaseModel):
 	owner_name: str
 	balance: Decimal = Field(..., examples=["500.00"])
 	is_active: bool
+	is_default: bool
+	expires_at: datetime | None
 	bank: BankResponse
 
 

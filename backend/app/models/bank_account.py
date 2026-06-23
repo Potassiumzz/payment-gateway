@@ -1,6 +1,7 @@
+from datetime import datetime
 from decimal import Decimal
 
-from sqlalchemy import Boolean, ForeignKey, Integer, Numeric, String
+from sqlalchemy import Boolean, DateTime, ForeignKey, Integer, Numeric, String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db import Base
@@ -24,6 +25,9 @@ class BankAccount(Base):
 	)
 
 	is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
+
+	is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+	expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
 
 	bank = relationship("Bank", back_populates="accounts")
 	account_pin = relationship(
