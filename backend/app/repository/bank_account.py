@@ -59,9 +59,18 @@ class BankAccountRepository:
 		return items, total
 
 	def get_by_id(self, id: int) -> BankAccount:
-		account = self.db.query(BankAccount).filter(BankAccount.is_active == 1).get(id)
+		account = (
+			self.db.query(BankAccount)
+			.filter(
+				BankAccount.id == id,
+				BankAccount.is_active == 1,
+			)
+			.first()
+		)
+
 		if account is None:
 			raise_404_error(f"Account with ID: {id} not found.")
+
 		return account
 
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
