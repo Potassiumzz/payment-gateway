@@ -118,7 +118,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 							<div className="px-5 py-4">
 								<form onSubmit={handlePinSubmit} className="space-y-3">
 									<p className="font-mono text-xs text-text-muted">Enter PIN to view account details.</p>
-									<div className="flex gap-4">
+									<div className="flex gap-4 items-center">
 										<Input
 											id="pin"
 											type="password"
