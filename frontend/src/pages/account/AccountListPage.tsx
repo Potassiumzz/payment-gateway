@@ -50,7 +50,7 @@ export function AccountListPage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <h1 className="font-mono text-lg text-foreground">Bank Accounts</h1>
-              <p className="text-xs text-muted-foreground mt-1">Search by name or account number. Click an account to verify with PIN.</p>
+              <p className="text-xs text-text-muted mt-1">Manage default sender and receiver accounts. Click an account to verify with PIN.</p>
             </div>
             <Link
               to={NAVIGATION_ROUTES.CREATE_ACCOUNT}
@@ -62,7 +62,7 @@ export function AccountListPage() {
 
           {/* Search */}
           <div className="relative">
-            <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+            <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
             <Input
               id="account-search"
               type="text"
@@ -79,7 +79,7 @@ export function AccountListPage() {
           ) : error ? (
             <p className="text-sm text-red-400 font-mono">Failed to load accounts.</p>
           ) : accountList?.items.length === 0 ? (
-            <p className="text-sm text-muted-foreground font-mono">No accounts found.</p>
+            <p className="text-sm text-text-muted font-mono">No accounts found.</p>
           ) : (
             <div className="space-y-2">
               {accountList?.items.map((account) => (
@@ -105,7 +105,7 @@ export function AccountListPage() {
                     "w-8 h-8 text-xs font-mono rounded border transition-colors",
                     p === page
                       ? "border-primary text-primary bg-primary/10"
-                      : "border-border text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                      : "border-border text-text-muted hover:border-primary/40 hover:text-foreground"
                   )}
                 >
                   {p}

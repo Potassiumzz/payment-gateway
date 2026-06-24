@@ -8,7 +8,7 @@ type Props = {
 export function DefaultAccountCard({ label, account }: Props) {
   return (
     <div className="border border-border rounded-md p-4 bg-surface w-full space-y-3">
-      <p className="text-xs text-muted-foreground font-mono uppercase tracking-wider">{label}</p>
+      <p className="text-xs text-text-muted font-mono uppercase tracking-wider">{label}</p>
       {account ? (
         <>
           <div>
@@ -23,7 +23,7 @@ export function DefaultAccountCard({ label, account }: Props) {
           </div>
         </>
       ) : (
-        <p className="text-xs text-muted-foreground italic font-mono">Not set</p>
+        <p className="text-xs text-text-muted italic font-mono">Not set</p>
       )}
     </div>
   );
