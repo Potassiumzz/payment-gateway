@@ -16,16 +16,17 @@ const NAV_LINKS = [
     href: NAVIGATION_ROUTES.ACCOUNTS,
   }
 ]
+
 export function Navbar() {
   const { pathname } = useLocation();
 
   return (
-    <nav className="flex items-center justify-between px-8 py-5">
+    <nav className="relative flex items-center px-8 py-5">
       <span className="font-mono text-sm tracking-widest text-zinc-500 uppercase cursor-default select-none">
         ntay
       </span>
 
-      <div className="flex items-center gap-6">
+      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
         {NAV_LINKS.map((nav) => {
           const isActive = pathname === nav.href;
           return (
@@ -45,4 +46,5 @@ export function Navbar() {
         })}
       </div>
     </nav>
-)}
+  );
+}
