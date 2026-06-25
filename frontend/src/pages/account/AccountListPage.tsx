@@ -3,7 +3,6 @@ import { SearchIcon } from "lucide-react";
 import { useGetAccounts } from "@/features/accounts/hooks/useGetAccounts";
 import { Input } from "@/components/ui/Input";
 import { EllipsisLoader } from "@/components/ui/Loader";
-import { cn } from "@/lib/utils";
 import { useDebounce, useDefaultAccounts } from "@/lib/hooks";
 import { AccountCard } from "./components/AccountCard";
 import { ACCOUNT_PAGE_SIZE } from "@/constants/config";
@@ -11,6 +10,7 @@ import { DefaultAccountCard } from "./components/DefaultAccountCard";
 import { Link } from "react-router-dom";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
+import { PaginationBar } from "@/components/ui/PaginationBar";
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -94,24 +94,8 @@ export function AccountListPage() {
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="flex items-center justify-center gap-1 pt-2">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                <button
-                  key={p}
-                  onClick={() => setPage(p)}
-                  className={cn(
-                    "w-8 h-8 text-xs font-mono rounded border transition-colors",
-                    p === page
-                      ? "border-primary text-primary bg-primary/10"
-                      : "border-border text-text-muted hover:border-primary/40 hover:text-foreground"
-                  )}
-                >
-                  {p}
-                </button>
-              ))}
-            </div>
+            <PaginationBar page={page} totalPages={totalPages} onPageChange={setPage} />
           )}
-
         </div>
       </div>
     </div>
