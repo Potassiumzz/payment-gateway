@@ -1,5 +1,7 @@
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
+import { MenuIcon, XIcon } from "lucide-react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom"
 
 const NAV_LINKS = [
@@ -19,25 +21,77 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const { pathname } = useLocation();
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <nav className="relative flex items-center px-8 py-5">
-      <span className="font-mono text-sm tracking-widest text-zinc-500 uppercase cursor-default select-none">
-        ntay
-      </span>
+    <nav className="relative z-40">
+      <div className="flex items-center justify-between px-8 py-5">
+        <span className="font-mono text-sm tracking-widest text-zinc-500 uppercase cursor-default select-none">
+          ntay
+        </span>
 
-      <div className="absolute left-1/2 -translate-x-1/2 flex items-center gap-6">
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
+          {NAV_LINKS.map((nav) => {
+            const isActive = pathname === nav.href;
+            return (
+              <Link
+                key={nav.href}
+                to={nav.href}
+                className={cn(
+                  "font-mono text-sm tracking-wide transition-colors duration-150",
+                  isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
+                )}
+              >
+                {nav.label}
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Hamburger */}
+        <button
+          onClick={() => setOpen((o) => !o)}
+          className="md:hidden text-zinc-500 hover:text-zinc-200 transition-colors"
+          aria-label="Toggle menu"
+        >
+          <MenuIcon
+            size={18}
+            className={cn("absolute transition-all duration-200", open ? "opacity-0 rotate-90" : "opacity-100 rotate-0")}
+          />
+          <XIcon
+            size={18}
+            className={cn("transition-all duration-200", open ? "opacity-100 rotate-0" : "opacity-0 -rotate-90")}
+          />
+        </button>
+      </div>
+
+      {/* Mobile menu */}
+      {/* Backdrop */}
+      <div
+        className={cn(
+          "fixed inset-x-0 bottom-0 top-[72px] z-10 md:hidden backdrop-blur-sm bg-black/40 transition-opacity duration-200",
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        )}
+        onClick={() => setOpen(false)}
+      />
+
+      <div
+        className={cn(
+          "absolute bg-background w-full min-h-50 border-b border-white/40 z-20 md:hidden transition-all duration-200 overflow-hidden",
+          open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
+        )}
+      >
         {NAV_LINKS.map((nav) => {
           const isActive = pathname === nav.href;
           return (
             <Link
               key={nav.href}
               to={nav.href}
+              onClick={() => setOpen(false)}
               className={cn(
-                "font-mono text-sm tracking-wide transition-colors duration-150",
-                isActive
-                  ? "text-white"
-                  : "text-zinc-500 hover:text-zinc-200"
+                "block px-8 py-4 font-mono text-sm tracking-wide transition-colors duration-150",
+                isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
               )}
             >
               {nav.label}
