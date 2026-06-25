@@ -61,17 +61,15 @@ export function AccountListPage() {
           </div>
 
           {/* Search */}
-          <div className="relative">
-            <SearchIcon size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted pointer-events-none" />
-            <Input
-              id="account-search"
-              type="text"
-              placeholder="Search by name or account number..."
-              value={search}
-              onChange={handleSearchChange}
-              className="pl-8 bg-surface"
-            />
-          </div>
+          <Input
+            leftIcon={<SearchIcon size={14} className="text-text-muted pointer-events-none mb-1" />}
+            id="account-search"
+            type="text"
+            placeholder="Search by name or account number..."
+            value={search}
+            onChange={handleSearchChange}
+            className="pl-8 bg-surface"
+          />
 
           {/* List */}
           {isLoading ? (
