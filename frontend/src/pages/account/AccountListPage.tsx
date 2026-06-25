@@ -30,7 +30,7 @@ export function AccountListPage() {
   }
 
   return (
-    <div className="mx-auto px-6 max-w-6xl w-full py-20">
+    <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-20">
       <div className="flex gap-12 items-start">
 
         {/* Sidebar — desktop only */}
@@ -76,14 +76,16 @@ export function AccountListPage() {
           />
           </div>
 
-          <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-4">
             <div>
-              <h1 className="font-mono text-lg text-foreground">Bank Accounts</h1>
-              <p className="text-xs text-text-muted mt-1">Manage default sender and receiver accounts. Click an account to verify with PIN.</p>
+              <h1 className="font-mono text-lg text-foreground text-center md:text-start">Bank Accounts</h1>
+              <p className="text-xs text-text-muted mt-1 text-center md:text-start">
+                Manage default sender and receiver accounts. Click an account to verify with PIN.
+              </p>
             </div>
             <Link
               to={NAVIGATION_ROUTES.CREATE_ACCOUNT}
-              className="shrink-0"
+              className="shrink-0 mx-auto md:mx-0"
             >
               <Button size="sm" variant="secondary">Create New Account</Button>
             </Link>
@@ -108,7 +110,7 @@ export function AccountListPage() {
           ) : accountList?.items.length === 0 ? (
             <p className="text-sm text-text-muted font-mono">No accounts found.</p>
           ) : (
-            <div className="space-y-2 min-h-75">
+            <div className="space-y-2 xl:min-h-75">
               {accountList?.items.map((account) => (
                 <AccountCard
                   key={account.account_number}
