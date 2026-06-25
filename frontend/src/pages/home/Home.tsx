@@ -5,7 +5,7 @@ import { META_INFO } from "@/pages/home/data/hero-data";
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center flex-1">
-      <section className="flex-1 flex flex-col justify-center px-6 md:px-16 max-w-3xl mx-auto w-full">
+      <section className="flex-1 flex flex-col justify-center px-6 md:px-16 max-w-3xl mx-auto w-full text-center md:text-start">
 
         <div className="mb-3">
           <span className="font-sans text-xs text-primary/90 tracking-widest uppercase">
@@ -33,7 +33,7 @@ export default function Home() {
           </Link>
         </div>
 
-        <div className="mt-8 md:mt-16 flex flex-col md:flex-row flex-wrap gap-x-8 gap-y-2">
+        <div className="mt-8 md:mt-16 flex justify-center md:flex-row md:justify-start flex-wrap gap-x-8 gap-y-2">
           {META_INFO.map(({ key, value }) => (
             <div key={key} className="flex items-center gap-2 font-mono text-xs cursor-default">
               <span className="text-text-muted">{key}</span>
