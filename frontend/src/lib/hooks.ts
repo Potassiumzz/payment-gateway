@@ -17,12 +17,12 @@ export function useDefaultAccounts() {
 	const [sender, setSenderState] = React.useState<AccountResponse | null>(() => getDefaultSender());
 	const [receiver, setReceiverState] = React.useState<AccountResponse | null>(() => getDefaultReceiver());
 
-	function setSender(account: AccountResponse) {
+	function setSender(account: AccountResponse | null) {
 		setDefaultSender(account);
 		setSenderState(account);
 	}
 
-	function setReceiver(account: AccountResponse) {
+	function setReceiver(account: AccountResponse | null) {
 		setDefaultReceiver(account);
 		setReceiverState(account);
 	}

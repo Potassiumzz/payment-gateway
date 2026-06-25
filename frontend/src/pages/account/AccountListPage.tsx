@@ -11,6 +11,7 @@ import { Link } from "react-router-dom";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
+import { removeDefaultReceiver, removeDefaultSender } from "@/lib/storage";
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -34,8 +35,22 @@ export function AccountListPage() {
 
         {/* Sidebar — desktop only */}
         <div className="hidden lg:flex flex-col gap-3 w-xs shrink-0 sticky top-10">
-          <DefaultAccountCard label="Sender" account={sender} />
-          <DefaultAccountCard label="Receiver" account={receiver} />
+          <DefaultAccountCard
+            label="Sender"
+            account={sender}
+            onRemove={() => {
+              removeDefaultSender();
+              setSender(null);
+            }}
+          />
+          <DefaultAccountCard
+            label="Receiver"
+            account={receiver}
+            onRemove={() => {
+              removeDefaultReceiver();
+              setReceiver(null);
+            }}
+          />
         </div>
 
         {/* Main content */}
@@ -43,8 +58,22 @@ export function AccountListPage() {
 
           {/* Mobile summary */}
           <div className="flex gap-3 lg:hidden">
-            <DefaultAccountCard label="Sender" account={sender} />
-            <DefaultAccountCard label="Receiver" account={receiver} />
+          <DefaultAccountCard
+            label="Sender"
+            account={sender}
+            onRemove={() => {
+              removeDefaultSender();
+              setSender(null);
+            }}
+          />
+          <DefaultAccountCard
+            label="Receiver"
+            account={receiver}
+            onRemove={() => {
+              removeDefaultReceiver();
+              setReceiver(null);
+            }}
+          />
           </div>
 
           <div className="flex items-start justify-between gap-4">

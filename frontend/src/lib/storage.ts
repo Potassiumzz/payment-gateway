@@ -37,10 +37,18 @@ export function getDefaultReceiver(): AccountResponse | null {
 	}
 }
 
-export function setDefaultSender(account: AccountResponse): void {
+export function setDefaultSender(account: AccountResponse | null): void {
 	localStorage.setItem(DEFAULT_SENDER_KEY, JSON.stringify(account));
 }
 
-export function setDefaultReceiver(account: AccountResponse): void {
+export function setDefaultReceiver(account: AccountResponse | null): void {
 	localStorage.setItem(DEFAULT_RECEIVER_KEY, JSON.stringify(account));
+}
+
+export function removeDefaultSender(): void {
+	localStorage.removeItem(DEFAULT_SENDER_KEY);
+}
+
+export function removeDefaultReceiver(): void {
+	localStorage.removeItem(DEFAULT_RECEIVER_KEY);
 }
