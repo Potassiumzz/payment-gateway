@@ -23,6 +23,11 @@ export function Navbar() {
   const { pathname } = useLocation();
   const [open, setOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    document.body.classList.toggle("overflow-hidden", open);
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [open]);
+
   return (
     <nav className="relative z-40">
       <div className="flex items-center justify-between px-8 py-5">
