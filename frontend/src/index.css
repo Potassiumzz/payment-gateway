@@ -30,6 +30,25 @@
   --color-border-strong: rgba(255, 255, 255, 0.16);
 }
 
+html {
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border-strong) transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--color-border-strong);
+    border-radius: 3px;
+  }
+}
+
 body {
   background: var(--color-background);
   color: var(--color-text-primary);
