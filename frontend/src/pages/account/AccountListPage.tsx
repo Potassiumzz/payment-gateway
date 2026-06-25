@@ -79,7 +79,7 @@ export function AccountListPage() {
           ) : accountList?.items.length === 0 ? (
             <p className="text-sm text-text-muted font-mono">No accounts found.</p>
           ) : (
-            <div className="space-y-2">
+            <div className="space-y-2 min-h-75">
               {accountList?.items.map((account) => (
                 <AccountCard
                   key={account.account_number}
