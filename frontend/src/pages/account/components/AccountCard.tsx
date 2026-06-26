@@ -150,7 +150,12 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 										</p>
 										{account.expires_at && (
 											<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
-												Expires: <span className="text-text-secondary">{account.expires_at}</span>
+                        Expires: <span className="text-text-secondary">
+                          {new Date(account.expires_at + "Z").toLocaleString(undefined, {
+                            year: "numeric", month: "short", day: "numeric",
+                            hour: "2-digit", minute: "2-digit"
+                          })}
+                        </span>
 											</p>
 										)}
 									</div>
