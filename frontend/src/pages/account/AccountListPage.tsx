@@ -98,6 +98,7 @@ export function AccountListPage() {
             <Link
               to={NAVIGATION_ROUTES.CREATE_ACCOUNT}
               className="shrink-0 mx-auto md:mx-0"
+              viewTransition
             >
               <Button size="sm" variant="secondary">Create New Account</Button>
             </Link>

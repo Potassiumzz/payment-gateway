@@ -28,6 +28,7 @@ export default function Home() {
           <Link
             to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE}
             className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white text-sm font-semibold px-5 py-3 transition-colors duration-150"
+            viewTransition
           >
             Simulate Merchant
           </Link>

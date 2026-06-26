@@ -49,6 +49,11 @@ html {
   }
 }
 
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+}
+
 body {
   background: var(--color-background);
   color: var(--color-text-primary);

@@ -47,6 +47,7 @@ export function Navbar() {
                   "font-mono text-sm tracking-wide transition-colors duration-150",
                   isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
                 )}
+                viewTransition
               >
                 {nav.label}
               </Link>
@@ -98,6 +99,7 @@ export function Navbar() {
                 "block px-8 py-4 font-mono text-sm tracking-wide transition-colors duration-150",
                 isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
               )}
+              viewTransition
             >
               {nav.label}
             </Link>

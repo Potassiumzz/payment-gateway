@@ -11,7 +11,7 @@ type ResultActionsProps = {
 export function ResultActions({ isSuccess, id }: ResultActionsProps) {
   if (isSuccess) {
     return (
-      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass}>
+      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass} viewTransition>
         New simulation
       </Link>
     );
@@ -19,10 +19,10 @@ export function ResultActions({ isSuccess, id }: ResultActionsProps) {
 
   return (
     <div className="flex gap-4 justify-center">
-      <Link to={`${NAVIGATION_ROUTES.CHECKOUT_ROUTE}/${id}`} className={linkClass}>
+      <Link to={`${NAVIGATION_ROUTES.CHECKOUT_ROUTE}/${id}`} className={linkClass} viewTransition>
         Re-try payment
       </Link>
-      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass}>
+      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass} viewTransition>
         New simulation
       </Link>
     </div>
