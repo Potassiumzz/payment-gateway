@@ -1,5 +1,12 @@
 import React from "react";
-import { getDefaultSender, getDefaultReceiver, setDefaultSender, setDefaultReceiver } from "@/lib/storage";
+import {
+	getDefaultSender,
+	getDefaultReceiver,
+	setDefaultSender,
+	setDefaultReceiver,
+	removeDefaultSender,
+	removeDefaultReceiver,
+} from "@/lib/storage";
 import type { AccountResponse } from "@/features/accounts/types/account";
 
 export function useDebounce<T>(value: T, delay = 400): T {
@@ -27,7 +34,18 @@ export function useDefaultAccounts() {
 		setReceiverState(account);
 	}
 
-	return { sender, receiver, setSender, setReceiver };
+	function removeSenderAndReceiver(accountId: number) {
+		if (sender?.id === accountId) {
+			removeDefaultSender();
+			setSender(null);
+		}
+		if (receiver?.id === accountId) {
+			removeDefaultReceiver();
+			setReceiver(null);
+		}
+	}
+
+	return { sender, receiver, setSender, setReceiver, removeSenderAndReceiver };
 }
 
 /**
