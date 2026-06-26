@@ -20,6 +20,11 @@ export function AccountListPage() {
 
   const { accountList, isLoading, error, refetch } = useGetAccounts(page, debouncedSearch);
 
+  function handleAccountSSERefetch() {
+				invalidateCacheByPrefix("ACCOUNT_LIST_");
+        refetch();
+  }
+  
   const totalPages = accountList ? Math.ceil(accountList.total / ACCOUNT_PAGE_SIZE) : 1;
 
   const { sender, receiver, setSender, setReceiver } = useDefaultAccounts();
@@ -28,6 +33,8 @@ export function AccountListPage() {
     setSearch(e.target.value);
     setPage(1); // reset to page 1 on new search
   }
+
+  useAccountSSE(handleAccountSSERefetch);
 
   return (
     <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-20">
