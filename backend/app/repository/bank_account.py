@@ -1,3 +1,5 @@
+from datetime import UTC, datetime
+
 from sqlalchemy import String, cast, func, or_
 from sqlalchemy.orm import Session
 
@@ -46,7 +48,13 @@ class BankAccountRepository:
 	def get_all(
 		self, search: str | None, offset: int, limit: int
 	) -> tuple[list[BankAccount], int]:
-		query = self.db.query(BankAccount).filter(BankAccount.is_active == 1)
+		query = self.db.query(BankAccount).filter(
+			BankAccount.is_active == 1,
+			or_(
+				BankAccount.expires_at.is_(None),
+				BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+			),
+		)
 		if search:
 			query = query.filter(
 				or_(
@@ -64,6 +72,10 @@ class BankAccountRepository:
 			.filter(
 				BankAccount.id == id,
 				BankAccount.is_active == 1,
+				or_(
+					BankAccount.expires_at.is_(None),
+					BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+				),
 			)
 			.first()
 		)
@@ -76,7 +88,14 @@ class BankAccountRepository:
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
 		account = (
 			self.db.query(BankAccount)
-			.filter(BankAccount.account_number == ac_number, BankAccount.is_active == 1)
+			.filter(
+				BankAccount.account_number == ac_number,
+				BankAccount.is_active == 1,
+				or_(
+					BankAccount.expires_at.is_(None),
+					BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+				),
+			)
 			.first()
 		)
 		if account is None:

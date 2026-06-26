@@ -1,4 +1,5 @@
 import logging
+from datetime import UTC, datetime, timedelta
 from decimal import Decimal
 
 from app.models import BankAccount
@@ -29,6 +30,16 @@ class BankAccountService:
 
 		return max_num + 1
 
+	def __sync_expiry(self, account: BankAccount) -> BankAccount:
+		now = datetime.now(UTC).replace(tzinfo=None)
+		if account.expires_at and now >= account.expires_at and account.is_active:
+			account.is_active = False
+			try:
+				self.repository.commit()
+			except Exception:
+				self.repository.rollback()
+		return account
+
 	def create(self, value: AccountCreate) -> BankAccount:
 		bank = self.bank_service.get_by_id(value.bank_id)
 
@@ -37,12 +48,16 @@ class BankAccountService:
 
 		ac_num = self.__generate_ac_number(value.bank_id)
 
+		now = datetime.now(UTC).replace(tzinfo=None)
+
 		account = BankAccount(
 			account_number=ac_num,
 			owner_name=value.owner_name,
 			bank_id=bank.id,
 			balance=Decimal("500.00"),
 			is_active=True,
+			is_default=False,
+			expires_at=now + timedelta(days=2),
 		)
 
 		try:
@@ -80,7 +95,7 @@ class BankAccountService:
 		return self.repository.get_all(search=search, offset=offset, limit=limit)
 
 	def get_by_id(self, id: int) -> BankAccount:
-		return self.repository.get_by_id(id)
+		return self.__sync_expiry(self.repository.get_by_id(id))
 
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
-		return self.repository.get_by_ac_number(ac_number)
+		return self.__sync_expiry(self.repository.get_by_ac_number(ac_number))
