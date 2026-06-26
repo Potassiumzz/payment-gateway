@@ -101,3 +101,24 @@ class BankAccountRepository:
 		if account is None:
 			raise_404_error(f"Account with account number: {ac_number} not found.")
 		return account
+
+	def get_next_expiry(self) -> datetime | None:
+		return (
+			self.db.query(func.min(BankAccount.expires_at))
+			.filter(
+				BankAccount.is_active,
+				BankAccount.expires_at.isnot(None),
+			)
+			.scalar()
+		)
+
+	def get_all_expired(self) -> list[BankAccount]:
+		now = datetime.now(UTC).replace(tzinfo=None)
+		return (
+			self.db.query(BankAccount)
+			.filter(
+				BankAccount.is_active,
+				BankAccount.expires_at <= now,
+			)
+			.all()
+		)

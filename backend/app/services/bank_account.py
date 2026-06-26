@@ -99,3 +99,11 @@ class BankAccountService:
 
 	def get_by_ac_number(self, ac_number: int) -> BankAccount:
 		return self.__sync_expiry(self.repository.get_by_ac_number(ac_number))
+
+	def get_next_expiry(self) -> datetime | None:
+		return self.repository.get_next_expiry()
+
+	def sync_all_expired(self) -> None:
+		accounts = self.repository.get_all_expired()
+		for account in accounts:
+			self.__sync_expiry(account)
