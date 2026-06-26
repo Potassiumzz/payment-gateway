@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -8,6 +9,7 @@ from app.schemas.bank_account import AccountCreate, AccountUpdate
 from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
 from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
+from app.utils.sse_bus import publish
 
 logger = logging.getLogger(__name__)
 
@@ -36,6 +38,9 @@ class BankAccountService:
 			account.is_active = False
 			try:
 				self.repository.commit()
+				asyncio.get_running_loop().create_task(
+					publish({"type": "account_expired", "account_id": account.id})
+				)
 			except Exception:
 				self.repository.rollback()
 		return account

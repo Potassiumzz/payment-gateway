@@ -1,5 +1,10 @@
+import asyncio
+import json
+from datetime import UTC, datetime
+
 from fastapi import Depends, Query
 from fastapi.routing import APIRouter
+from starlette.responses import StreamingResponse
 
 from app.dependencies.bank_account import BankAccountDependencies
 from app.globals.enums import RouterPrefix, RouterTag
@@ -10,8 +15,41 @@ from app.schemas.bank_account import (
 	AccountUpdate,
 )
 from app.services.bank_account import BankAccountService
+from app.utils.sse_bus import subscribe, unsubscribe
 
 router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.value])
+
+
+@router.get("/sse")
+async def account_events(
+	service: BankAccountService = Depends(BankAccountDependencies.get_service),
+):
+	async def stream():
+		q = subscribe()
+		try:
+			while True:
+				next_expiry = service.get_next_expiry()
+				if next_expiry:
+					now = datetime.now(UTC).replace(tzinfo=None)
+					delay = (next_expiry - now).total_seconds()
+					if delay > 0:
+						await asyncio.sleep(delay)
+					service.sync_all_expired()
+					# sync_all_expired calls __sync_expiry which publishes to queue
+					event = await q.get()
+					yield f"data: {json.dumps(event)}\n\n"
+				else:
+					# no expiring accounts, just keepalive every 30s
+					await asyncio.sleep(30)
+					yield ": keepalive\n\n"
+		finally:
+			unsubscribe(q)
+
+	return StreamingResponse(
+		stream(),
+		media_type="text/event-stream",
+		headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+	)
 
 
 @router.post(
