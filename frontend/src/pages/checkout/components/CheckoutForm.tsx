@@ -67,21 +67,23 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
       />
       <CardContent>
         <form onSubmit={handlePaySubmit} className="space-y-5">
-          {checkoutFormFields.map((field) => (
-            <div key={field.name} className="space-y-2">
-              <Label htmlFor={field.name}>{field.label}</Label>
-              <Input
-                id={field.name}
-                type={field.inputType}
-                placeholder={field.placeholder}
-                name={field.name}
-                autoComplete={field.autoComplete}
-                disabled={isLoading || isFieldDisabled(field.name)}
-                onChange={handleChange}
-                defaultValue={values[field.name as keyof typeof values]}
-              />
-            </div>
-          ))}
+          {checkoutFormFields.map((field) => {
+            const value = values[field.name as keyof typeof values];
+            return (
+              <div key={field.name} className="space-y-2">
+                <Label htmlFor={field.name}>{field.label}</Label>
+                <Input
+                  id={field.name}
+                  type={field.inputType}
+                  placeholder={field.placeholder}
+                  name={field.name}
+                  autoComplete={field.autoComplete}
+                  disabled={isLoading || isFieldDisabled(field.name)}
+                  value={value === 0 ? "" : value}
+                  onChange={handleChange}
+                />
+              </div>
+            )})}
           <FieldError message={error} />
           <Button
             type="submit"
