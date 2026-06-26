@@ -11,8 +11,8 @@ import { Link } from "react-router-dom";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
-import { removeDefaultReceiver, removeDefaultSender } from "@/lib/storage";
-import { useAccountSSE } from "@/features/accounts/hooks/useAccountSSE";
+import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
+import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
 import { invalidateCacheByPrefix } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
 
@@ -25,26 +25,19 @@ export function AccountListPage() {
 
   const totalPages = accountList ? Math.ceil(accountList.total / ACCOUNT_PAGE_SIZE) : 1;
 
-  const { sender, receiver, setSender, setReceiver } = useDefaultAccounts();
+  const { sender, receiver, setSender, setReceiver, removeSenderAndReceiver } = useDefaultAccounts();
 
   function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value);
     setPage(1); // reset to page 1 on new search
   }
 
-  function handleAccountSSERefetch(accountId: number) {
-      if (sender?.id === accountId) {
-          removeDefaultSender();
-          setSender(null);
-      }
-      if (receiver?.id === accountId) {
-          removeDefaultReceiver();
-          setReceiver(null);
-      }
+  function handleAccountSSERefetch(data: SSEResponse) {
+      removeSenderAndReceiver(data.account_number);
+      removeUnlockedAccount(data.account_id);
       invalidateCacheByPrefix("ACCOUNT_LIST_");
       refetch();
   }
-
 
   useAccountSSE(handleAccountSSERefetch);
 
@@ -139,7 +132,11 @@ export function AccountListPage() {
                   account={account}
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
-                  onDelete={refetch}
+                  onDelete={() => {
+                    refetch();
+                    removeSenderAndReceiver(account.id);
+                    removeUnlockedAccount(account.account_number);
+                  }}
                 />
               ))}
             </div>

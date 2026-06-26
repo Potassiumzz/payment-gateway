@@ -19,6 +19,21 @@ export function markAccountUnlocked(accountNumber: number): void {
 	sessionStorage.setItem(UNLOCKED_KEY, JSON.stringify([...current]));
 }
 
+export function removeUnlockedAccount(accountNumber: number): void {
+	try {
+		const current = getUnlockedAccounts();
+		current.delete(accountNumber);
+
+		if (current.size === 0) {
+			sessionStorage.removeItem(UNLOCKED_KEY);
+		} else {
+			sessionStorage.setItem(UNLOCKED_KEY, JSON.stringify([...current]));
+		}
+	} catch {
+		// Ignore storage errors
+	}
+}
+
 export function getDefaultSender(): AccountResponse | null {
 	try {
 		const raw = localStorage.getItem(DEFAULT_SENDER_KEY);
