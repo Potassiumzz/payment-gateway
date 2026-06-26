@@ -12,6 +12,9 @@ import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender } from "@/lib/storage";
+import { useAccountSSE } from "@/features/accounts/hooks/useAccountSSE";
+import { invalidateCacheByPrefix } from "@/cache/queryCache";
+import { InputProgressBar } from "@/components/ui/InputProgressBar";
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -99,18 +102,21 @@ export function AccountListPage() {
           </div>
 
           {/* Search */}
-          <Input
-            leftIcon={<SearchIcon size={14} className="text-text-muted pointer-events-none mb-1" />}
-            id="account-search"
-            type="text"
-            placeholder="Search by name or account number..."
-            value={search}
-            onChange={handleSearchChange}
-            className="pl-8 bg-surface"
-          />
+          <div className="relative">
+            <Input
+              leftIcon={<SearchIcon size={14} className="text-text-muted pointer-events-none mb-1" />}
+              id="account-search"
+              type="text"
+              placeholder="Search by name or account number..."
+              value={search}
+              onChange={handleSearchChange}
+              className="pl-8 bg-surface"
+            />
+            <InputProgressBar active={isLoading && !!accountList} />
+          </div>
 
           {/* List */}
-          {isLoading ? (
+          {isLoading && !accountList ? (
             <EllipsisLoader value="Loading accounts" />
           ) : error ? (
             <p className="text-sm text-red-400 font-mono">Failed to load accounts.</p>
