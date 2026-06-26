@@ -39,7 +39,13 @@ class BankAccountService:
 			try:
 				self.repository.commit()
 				asyncio.get_running_loop().create_task(
-					publish({"type": "account_expired", "account_id": account.id})
+					publish(
+						{
+							"type": "account_expired",
+							"account_id": account.id,
+							"account_number": account.account_number,
+						}
+					)
 				)
 			except Exception:
 				self.repository.rollback()
