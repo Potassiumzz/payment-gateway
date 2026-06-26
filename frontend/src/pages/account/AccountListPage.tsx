@@ -23,11 +23,6 @@ export function AccountListPage() {
 
   const { accountList, isLoading, error, refetch } = useGetAccounts(page, debouncedSearch);
 
-  function handleAccountSSERefetch() {
-				invalidateCacheByPrefix("ACCOUNT_LIST_");
-        refetch();
-  }
-  
   const totalPages = accountList ? Math.ceil(accountList.total / ACCOUNT_PAGE_SIZE) : 1;
 
   const { sender, receiver, setSender, setReceiver } = useDefaultAccounts();
@@ -36,6 +31,20 @@ export function AccountListPage() {
     setSearch(e.target.value);
     setPage(1); // reset to page 1 on new search
   }
+
+  function handleAccountSSERefetch(accountId: number) {
+      if (sender?.id === accountId) {
+          removeDefaultSender();
+          setSender(null);
+      }
+      if (receiver?.id === accountId) {
+          removeDefaultReceiver();
+          setReceiver(null);
+      }
+      invalidateCacheByPrefix("ACCOUNT_LIST_");
+      refetch();
+  }
+
 
   useAccountSSE(handleAccountSSERefetch);
 

@@ -1,14 +1,19 @@
 import React from "react";
 import { BACKEND_ENDPOINTS, BASE_URL } from "@/constants/endpoints";
 
-export function useAccountSSE(onExpiry: () => void) {
+interface SSEResponse {
+	type: string;
+	account_id: number;
+}
+
+export function useAccountSSE(onExpiry: (accountId: number) => void) {
 	React.useEffect(() => {
 		const es = new EventSource(`${BASE_URL}${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}sse`);
 
 		es.onmessage = (e) => {
-			const data = JSON.parse(e.data);
+			const data: SSEResponse = JSON.parse(e.data);
 			if (data.type === "account_expired") {
-				onExpiry();
+				onExpiry(data.account_id);
 			}
 		};
 
