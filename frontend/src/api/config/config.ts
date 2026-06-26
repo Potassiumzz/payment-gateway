@@ -1,6 +1,6 @@
 import type { IAPI } from "@/api/config/types";
+import { BASE_URL } from "@/constants/endpoints";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
 const apiHeaders = new Headers();
 
 export class ApiError extends Error {

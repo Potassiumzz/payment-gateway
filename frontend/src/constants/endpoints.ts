@@ -4,3 +4,5 @@ export const BACKEND_ENDPOINTS = {
 	ACCOUNT_ENDPOINT: "/accounts/",
 	PIN: "/pin/",
 } as const;
+
+export const BASE_URL = import.meta.env.VITE_BASE_URL;
