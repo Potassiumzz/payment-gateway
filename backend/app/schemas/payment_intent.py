@@ -18,6 +18,7 @@ class PaymentIntentResponse(BaseModel):
 	status: PaymentIntentStatus
 	return_url: str | None = None
 	receiver_account_number: int | None = None
+	checkout_url: str
 
 	class Config:
 		model_config = ConfigDict(from_attributes=True)

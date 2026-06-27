@@ -1,3 +1,5 @@
+import os
+
 from fastapi import Depends
 from sqlalchemy.orm.session import Session
 
@@ -13,4 +15,5 @@ class PaymentIntentDependencies:
 
 	@staticmethod
 	def get_service(repository: PaymentIntentRepository = Depends(__get_repository__)):
-		return PaymentIntentService(repository)
+		frontend_url = os.getenv("FRONTEND_URL", "").split(",")[0].strip()
+		return PaymentIntentService(repository, frontend_url=frontend_url)
