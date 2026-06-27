@@ -98,8 +98,18 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                     <span className="text-secondary">"receiver_account_number"</span>
                     <span className="text-text-muted">: </span>
                     <span className="text-primary">{receiver.account_number}</span>
+                    <span className="text-text-muted">,</span>
                   </p>
                 )}
+                <p className="pl-4">
+                  <p className="ml-2 text-[10px] text-text-muted uppercase tracking-widest font-sans opacity-60">// not used here</p>
+                  <p className="opacity-40">
+                    <span className="text-secondary">"return_url"</span>
+                    <span className="text-text-muted">: </span>
+                    <span className="text-text-muted">"https://your-return-site.com"</span>
+                    <span className="text-text-muted">,</span>
+                  </p>
+                </p>
                 <p className="text-text-muted">{"}"}</p>
               </div>
 
