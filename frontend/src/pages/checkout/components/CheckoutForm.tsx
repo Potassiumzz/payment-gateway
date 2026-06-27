@@ -22,15 +22,15 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   const receiver = getDefaultReceiver();
 
   const isFieldDisabled = (name: string) => {
-    if (name === "sender_account_number") return !!sender;
-    if (name === "receiver_account_number") return !!receiver;
+    if (name === "sender_account_number") return Boolean(sender);
+    if (name === "receiver_account_number") return Boolean(receiver) || Boolean(intentDetail.receiver_account_number);
     return false;
   };
 
 	const [values, setValues] = React.useState({
 		payment_intent_id: intentDetail.id,
 		sender_account_number: sender?.account_number ?? 0,
-		receiver_account_number: receiver?.account_number ?? 0,
+    receiver_account_number: intentDetail.receiver_account_number ?? receiver?.account_number ?? 0,
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 

@@ -1,6 +1,7 @@
 export interface PaymentIntentPayload {
 	amount: number;
 	return_url?: string;
+	receiver_account_number?: number;
 }
 
 export interface PaymentIntentResponse {
@@ -8,4 +9,5 @@ export interface PaymentIntentResponse {
 	amount: string;
 	status: string;
 	return_url?: string;
+	receiver_account_number?: number;
 }
