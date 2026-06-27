@@ -22,6 +22,7 @@ class PaymentIntent(Base):
 		default=PaymentIntentStatus.REQUIRES_PAYMENT,
 	)
 	attempt_count: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+	return_url: Mapped[str | None] = mapped_column(String, nullable=True)
 	created_at: Mapped[datetime] = mapped_column(
 		DateTime, default=lambda: datetime.now(UTC), nullable=False
 	)
