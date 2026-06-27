@@ -16,6 +16,7 @@ class PaymentIntent(Base):
 		String, primary_key=True, default=generate_intent_id
 	)
 	amount: Mapped[Decimal] = mapped_column(Numeric(10, 2), nullable=False)
+	receiver_account_number: Mapped[int | None] = mapped_column(Integer, nullable=True)
 	status: Mapped[PaymentIntentStatus] = mapped_column(
 		Enum(PaymentIntentStatus, name="payment_status"),
 		nullable=False,

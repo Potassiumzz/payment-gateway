@@ -9,6 +9,7 @@ from app.globals.enums import PaymentIntentStatus
 class PaymentIntentCreate(BaseModel):
 	amount: Decimal = Field(..., gt=0, le=MAX_AMOUNT, examples=["20.00"])
 	return_url: str | None = None
+	receiver_account_number: int | None = None
 
 
 class PaymentIntentResponse(BaseModel):
@@ -16,6 +17,7 @@ class PaymentIntentResponse(BaseModel):
 	amount: Decimal = Field(..., examples=["20.00"])
 	status: PaymentIntentStatus
 	return_url: str | None = None
+	receiver_account_number: int | None = None
 
 	class Config:
 		model_config = ConfigDict(from_attributes=True)
