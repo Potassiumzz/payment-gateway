@@ -13,15 +13,17 @@ import { MAX_AMOUNT_VALUE } from "@/constants/config";
 import { getDefaultReceiver } from "@/lib/storage";
 
 export default function SimulateMerchantPage() {
-	const router = useNavigate();
-	const [intent, setIntent] = React.useState<PaymentIntentPayload>({
-		amount: 0,
-	});
+  const router = useNavigate();
+
+  const receiver = getDefaultReceiver();
+  const [intent, setIntent] = React.useState<PaymentIntentPayload>({
+      amount: 0,
+      ...(receiver && { receiver_account_number: receiver.account_number }),
+  });
+
   const [maxAmountError, setMaxAmountError] = React.useState("");
 
 	const { createIntent, error, isLoading } = useCreatePaymentIntent();
-
-  const receiver = getDefaultReceiver();
 
 function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
   const value = e.target.value;
