@@ -16,6 +16,7 @@ class PaymentIntentService:
 		intent = PaymentIntent(
 			amount=value.amount,
 			status=PaymentIntentStatus.REQUIRES_PAYMENT,
+			return_url=value.return_url,
 		)
 		self.repository.create(intent)
 		return intent

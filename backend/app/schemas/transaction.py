@@ -26,6 +26,7 @@ class TransactionResponse(BaseModel):
 
 	amount_transferred: Decimal = Field(..., examples=["50.00"])
 	timestamp: datetime
+	return_url: str | None
 
 	class Config:
 		model_config = ConfigDict(from_attributes=True)

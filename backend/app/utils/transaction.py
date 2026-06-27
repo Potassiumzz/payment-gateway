@@ -1,4 +1,4 @@
-from app.models import BankAccount, Transaction
+from app.models import BankAccount, PaymentIntent, Transaction
 from app.schemas import TransactionResponse
 
 
@@ -6,6 +6,7 @@ def build_transaction_response(
 	transaction: Transaction,
 	sender: BankAccount,
 	receiver: BankAccount,
+	intent: PaymentIntent | None = None,
 ) -> TransactionResponse:
 	return TransactionResponse(
 		id=transaction.id,
@@ -20,4 +21,5 @@ def build_transaction_response(
 		failure_reason=transaction.failure_reason,
 		amount_transferred=transaction.amount_transferred,
 		timestamp=transaction.timestamp,
+		return_url=intent.return_url if intent else None,
 	)

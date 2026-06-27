@@ -3,6 +3,7 @@ import logging
 from fastapi import Depends
 from fastapi.routing import APIRouter
 
+from app.dependencies.payment_intent import PaymentIntentDependencies
 from app.dependencies.transaction import TranasctionDependencies
 from app.globals.enums import (
 	RouterPrefix,
@@ -10,6 +11,7 @@ from app.globals.enums import (
 )
 from app.schemas import TransactionCreate
 from app.schemas.transaction import TransactionResponse
+from app.services.payment_intent import PaymentIntentService
 from app.services.transaction import TransactionService
 from app.utils.transaction import build_transaction_response
 from app.utils.utils import get_idempotency_key
@@ -62,10 +64,14 @@ def get_all_transactions(
 def get_transaction_by_id(
 	transaction_id: int,
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
+	intent_service: PaymentIntentService = Depends(
+		PaymentIntentDependencies.get_service
+	),
 ):
 	transaction = service.get_by_id(transaction_id)
+	intent = intent_service.get_intent_details(transaction.payment_intent_id)
 	return build_transaction_response(
-		transaction, transaction.sender_account, transaction.receiver_account
+		transaction, transaction.sender_account, transaction.receiver_account, intent
 	)
 
 
