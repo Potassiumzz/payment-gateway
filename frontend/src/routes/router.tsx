@@ -1,5 +1,6 @@
 import NotFoundPage from "@/components/page/NotFoundPage";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
+import { CheckoutLayout } from "@/layouts/CheckoutLayout";
 import { RootLayout } from "@/layouts/RootLayout";
 import { AccountListPage } from "@/pages/account/AccountListPage";
 import CreateAccountPage from "@/pages/account/CreateAccountPage";
@@ -16,12 +17,18 @@ export const router = createBrowserRouter([
 		children: [
 			{ path: "/", element: <Home /> },
 			{ path: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE, element: <SimulateMerchantPage /> },
-			{ path: `${NAVIGATION_ROUTES.CHECKOUT_ROUTE}:id`, element: <CheckoutPage /> },
-			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`, element: <PaymentResultPage /> },
 			{ path: NAVIGATION_ROUTES.CREATE_ACCOUNT, element: <CreateAccountPage /> },
 			{ path: NAVIGATION_ROUTES.ACCOUNTS, element: <AccountListPage /> },
 			{ path: NAVIGATION_ROUTES.DOCUMENTATION, element: <DocumentationPage /> },
 			{ path: "*", element: <NotFoundPage /> },
 		],
 	},
+  {
+    element: <CheckoutLayout />,
+    children: [
+			{ path: `${NAVIGATION_ROUTES.CHECKOUT_ROUTE}:id`, element: <CheckoutPage /> },
+			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`, element: <PaymentResultPage /> },
+			{ path: "*", element: <NotFoundPage /> },
+    ]
+  }
 ]);
