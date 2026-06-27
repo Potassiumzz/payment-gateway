@@ -4,6 +4,7 @@ import { RootLayout } from "@/layouts/RootLayout";
 import { AccountListPage } from "@/pages/account/AccountListPage";
 import CreateAccountPage from "@/pages/account/CreateAccountPage";
 import CheckoutPage from "@/pages/checkout/Checkout";
+import DocumentationPage from "@/pages/documentation/DocumentationPage";
 import Home from "@/pages/home/Home";
 import PaymentResultPage from "@/pages/payment-result/PaymentResult";
 import SimulateMerchantPage from "@/pages/simulate-merchant/SimulateMerchant";
@@ -19,6 +20,7 @@ export const router = createBrowserRouter([
 			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`, element: <PaymentResultPage /> },
 			{ path: NAVIGATION_ROUTES.CREATE_ACCOUNT, element: <CreateAccountPage /> },
 			{ path: NAVIGATION_ROUTES.ACCOUNTS, element: <AccountListPage /> },
+			{ path: NAVIGATION_ROUTES.DOCUMENTATION, element: <DocumentationPage /> },
 			{ path: "*", element: <NotFoundPage /> },
 		],
 	},
