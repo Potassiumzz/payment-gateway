@@ -2,7 +2,7 @@ import { useMutation } from "@/api/hooks/useMutation";
 import { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 
 export function useDeleteAccount() {
-	const { mutate, error, isLoading } = useMutation<number, string>();
+	const { mutate, error, isLoading } = useMutation<number, null>();
 
 	return {
 		deleteAccount: (data: number) =>
