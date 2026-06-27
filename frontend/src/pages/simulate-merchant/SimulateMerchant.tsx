@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/Input";
 import { FieldError } from "@/components/ui/FieldError";
 import { Button } from "@/components/ui/Button";
 import { MAX_AMOUNT_VALUE } from "@/constants/config";
+import { getDefaultReceiver } from "@/lib/storage";
 
 export default function SimulateMerchantPage() {
 	const router = useNavigate();
@@ -20,6 +21,7 @@ export default function SimulateMerchantPage() {
 
 	const { createIntent, error, isLoading } = useCreatePaymentIntent();
 
+  const receiver = getDefaultReceiver();
 
 function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
   const value = e.target.value;
@@ -87,7 +89,15 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                   <span className="text-primary">
                     {intent.amount > 0 ? intent.amount : "..."}
                   </span>
+                  {receiver && <span className="text-text-muted">,</span>}
                 </p>
+                {receiver && (
+                  <p className="pl-4">
+                    <span className="text-secondary">"receiver_account_number"</span>
+                    <span className="text-text-muted">: </span>
+                    <span className="text-primary">{receiver.account_number}</span>
+                  </p>
+                )}
                 <p className="text-text-muted">{"}"}</p>
               </div>
 
