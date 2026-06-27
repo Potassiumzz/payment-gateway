@@ -17,6 +17,7 @@ export interface TransactionResponse {
 	failure_reason: string;
 	amount_transferred: string;
 	timestamp: Date;
+	return_url?: string;
 }
 
 export const TransactionStatus = {

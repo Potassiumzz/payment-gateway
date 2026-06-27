@@ -34,7 +34,7 @@ export default function PaymentResultPage() {
           <>
             <ResultHeader isSuccess={isSuccess} failureReason={transactionDetail.failure_reason}/>
             <TransactionSummary transactionDetail={transactionDetail} />
-            <ResultActions isSuccess={isSuccess} id={transactionDetail?.payment_intent_id}/>
+            <ResultActions isSuccess={isSuccess} id={transactionDetail?.payment_intent_id} returnUrl={transactionDetail?.return_url} />
           </>
         )}
       </div>

@@ -6,14 +6,22 @@ const linkClass = "inline-flex items-center gap-2 border border-border hover:bor
 type ResultActionsProps = {
   isSuccess: boolean;
   id?: string;
+  returnUrl?: string;
 };
 
-export function ResultActions({ isSuccess, id }: ResultActionsProps) {
+export function ResultActions({ isSuccess, id, returnUrl }: ResultActionsProps) {
   if (isSuccess) {
     return (
-      <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass} viewTransition>
-        New simulation
-      </Link>
+      <div className="flex gap-4 justify-center">
+        {returnUrl && (
+          <a href={returnUrl} className={linkClass}>
+            Return to merchant
+          </a>
+        )}
+        <Link to={NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE} className={linkClass} viewTransition>
+          New simulation
+        </Link>
+      </div>
     );
   }
 
