@@ -26,28 +26,28 @@ export default function SimulateMerchantPage() {
 
 	const { createIntent, error, isLoading } = useCreatePaymentIntent();
 
-function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-  const value = e.target.value;
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
 
-  if (value !== "" && !/^\d*\.?\d*$/.test(value)) return;
-  setRawAmount(value);
-  const amount = parseFloat(value) || 0;
+    if (value !== "" && !/^\d*\.?\d*$/.test(value)) return;
+    setRawAmount(value);
+    const amount = parseFloat(value) || 0;
 
-  // Allow clearing the field
-  if (value === "") {
-    setIntent({ amount: 0 });
+    // Allow clearing the field
+    if (value === "") {
+      setIntent({ amount: 0 });
+      setMaxAmountError("");
+      return;
+    }
+
+    if (amount > MAX_AMOUNT_VALUE) {
+      setMaxAmountError(`Maximum amount to create payment intent is $${MAX_AMOUNT_VALUE.toLocaleString()}`);
+      return;
+    }
+
     setMaxAmountError("");
-    return;
+    setIntent({ amount });
   }
-
-  if (amount > MAX_AMOUNT_VALUE) {
-    setMaxAmountError(`Maximum amount to create payment intent is $${MAX_AMOUNT_VALUE.toLocaleString()}`);
-    return;
-  }
-
-  setMaxAmountError("");
-  setIntent({ amount });
-}
 
 	async function handleSubmit(e: React.SubmitEvent) {
 		e.preventDefault();
