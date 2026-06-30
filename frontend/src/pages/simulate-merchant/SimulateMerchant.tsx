@@ -22,11 +22,16 @@ export default function SimulateMerchantPage() {
   });
 
   const [maxAmountError, setMaxAmountError] = React.useState("");
+  const [rawAmount, setRawAmount] = React.useState("");
 
 	const { createIntent, error, isLoading } = useCreatePaymentIntent();
 
 function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
   const value = e.target.value;
+
+  if (value !== "" && !/^\d*\.?\d*$/.test(value)) return;
+  setRawAmount(value);
+  const amount = parseFloat(value) || 0;
 
   // Allow clearing the field
   if (value === "") {
@@ -34,8 +39,6 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setMaxAmountError("");
     return;
   }
-
-  const amount = Number(value);
 
   if (amount > MAX_AMOUNT_VALUE) {
     setMaxAmountError(`Maximum amount to create payment intent is $${MAX_AMOUNT_VALUE.toLocaleString()}`);
@@ -89,7 +92,7 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                   <span className="text-secondary">"amount"</span>
                   <span className="text-text-muted">: </span>
                   <span className="text-primary">
-                    {intent.amount > 0 ? intent.amount : "..."}
+                    {rawAmount && parseFloat(rawAmount) > 0 ? rawAmount : "..."}
                   </span>
                   {receiver && <span className="text-text-muted">,</span>}
                 </p>
@@ -119,13 +122,13 @@ function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
                 </Label>
                 <Input
                   id="amount"
-                  type="number"
+                  type="text"
                   placeholder="0.00"
                   leftIcon="$"
                   min={1}
                   step={1}
                   max={MAX_AMOUNT_VALUE}
-                  value={intent.amount <= 0 ? "" : intent.amount}
+                  value={rawAmount}
                   onChange={(e) =>  handleChange(e)}
                 />
               </div>
