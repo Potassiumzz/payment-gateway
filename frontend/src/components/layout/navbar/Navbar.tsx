@@ -1,23 +1,8 @@
-import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { cn } from "@/lib/utils";
 import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom"
-
-const NAV_LINKS = [
-  {
-    label: "Home",
-    href: "/",
-  },
-  {
-    label: "Simulate Merchant",
-    href: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE,
-  },
-  {
-    label: "Bank Accounts",
-    href: NAVIGATION_ROUTES.ACCOUNTS,
-  }
-]
+import { NAV_LINKS } from "./data";
 
 export function Navbar() {
   const { pathname } = useLocation();

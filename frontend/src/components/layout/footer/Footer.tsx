@@ -1,13 +1,7 @@
-import { EXTERNAL_LINKS, NAVIGATION_ROUTES } from "@/constants/routes"
+import { EXTERNAL_LINKS } from "@/constants/routes"
 import { cn } from "@/lib/utils";
 import { Link, useLocation } from "react-router-dom";
-
-const FOOTER_LINKS = [
-  {
-    label: "Documentation",
-    href: NAVIGATION_ROUTES.DOCUMENTATION,
-  }
-]
+import { FOOTER_LINKS } from "./data";
 
 export function Footer() {
   const { pathname } = useLocation();
