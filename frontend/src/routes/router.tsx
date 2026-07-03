@@ -1,5 +1,5 @@
 import NotFoundPage from "@/components/page/NotFoundPage";
-import { NAVIGATION_ROUTES } from "@/constants/routes";
+import { NAVIGATION_ROUTES, type RouteHandle } from "@/constants/routes";
 import { CheckoutLayout } from "@/layouts/CheckoutLayout";
 import { RootLayout } from "@/layouts/RootLayout";
 import { AccountListPage } from "@/pages/account/AccountListPage";
@@ -15,20 +15,36 @@ export const router = createBrowserRouter([
 	{
 		element: <RootLayout />,
 		children: [
-			{ path: "/", element: <Home /> },
-			{ path: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE, element: <SimulateMerchantPage /> },
-			{ path: NAVIGATION_ROUTES.CREATE_ACCOUNT, element: <CreateAccountPage /> },
-			{ path: NAVIGATION_ROUTES.ACCOUNTS, element: <AccountListPage /> },
-			{ path: NAVIGATION_ROUTES.DOCUMENTATION, element: <DocumentationPage /> },
-			{ path: "*", element: <NotFoundPage /> },
+			{ path: "/", element: <Home />, handle: { title: "Home" } satisfies RouteHandle },
+			{
+				path: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE,
+				element: <SimulateMerchantPage />,
+				handle: { title: "Simulate Merchant" } satisfies RouteHandle,
+			},
+			{
+				path: NAVIGATION_ROUTES.CREATE_ACCOUNT,
+				element: <CreateAccountPage />,
+				handle: { title: "Create Account" } satisfies RouteHandle,
+			},
+			{
+				path: NAVIGATION_ROUTES.ACCOUNTS,
+				element: <AccountListPage />,
+				handle: { title: "Bank Accounts" } satisfies RouteHandle,
+			},
+			{
+				path: NAVIGATION_ROUTES.DOCUMENTATION,
+				element: <DocumentationPage />,
+				handle: { title: "Docs" } satisfies RouteHandle,
+			},
+			{ path: "*", element: <NotFoundPage />, handle: { title: "404" } satisfies RouteHandle },
 		],
 	},
-  {
-    element: <CheckoutLayout />,
-    children: [
+	{
+		element: <CheckoutLayout />,
+		children: [
 			{ path: `${NAVIGATION_ROUTES.CHECKOUT_ROUTE}:id`, element: <CheckoutPage /> },
 			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`, element: <PaymentResultPage /> },
 			{ path: "*", element: <NotFoundPage /> },
-    ]
-  }
+		],
+	},
 ]);

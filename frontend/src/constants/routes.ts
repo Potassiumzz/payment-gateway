@@ -10,3 +10,7 @@ export const NAVIGATION_ROUTES = {
 export const EXTERNAL_LINKS = {
 	SOURCE_CODE: "https://github.com/Potassiumzz/payment-gateway",
 } as const;
+
+export interface RouteHandle {
+	title?: string;
+}
