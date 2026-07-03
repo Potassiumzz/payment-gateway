@@ -12,6 +12,12 @@ import { TOC_ITEMS } from "./data/TOC";
 export default function DocumentationPage() {
 	const [activeId, setActiveId] = React.useState<string>("endpoint");
 
+  function handleToClick (e: React.MouseEvent, id: string) {
+    e.preventDefault();
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    setActiveId(id);
+  };
+
 	React.useEffect(() => {
 		const handleScroll = () => {
 			const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 50;
@@ -119,6 +125,7 @@ export default function DocumentationPage() {
 						<li key={id}>
 							<a
 								href={`#${id}`}
+                onClick={(e) => handleToClick(e, id)}
 								className={cn(
 									"block text-xs py-1 pl-3 border-l transition-colors duration-150",
 									activeId === id
