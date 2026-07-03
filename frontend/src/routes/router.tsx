@@ -15,7 +15,7 @@ export const router = createBrowserRouter([
 	{
 		element: <RootLayout />,
 		children: [
-			{ path: "/", element: <Home />, handle: { title: "Home" } satisfies RouteHandle },
+			{ path: "/", element: <Home /> },
 			{
 				path: NAVIGATION_ROUTES.SIMULATE_MERCHANT_ROUTE,
 				element: <SimulateMerchantPage />,

@@ -122,9 +122,9 @@ export function AccountListPage() {
           {isLoading && !accountList ? (
             <EllipsisLoader value="Loading accounts" />
           ) : error ? (
-            <p className="text-sm text-red-400">Failed to load accounts.</p>
+            <p className="text-sm text-red-400 text-center">Failed to load accounts.</p>
           ) : accountList?.items.length === 0 ? (
-            <p className="text-sm text-text-muted">No accounts found.</p>
+            <p className="text-sm text-text-muted text-center">No accounts found.</p>
           ) : (
             <div className="space-y-2 xl:min-h-75">
               {accountList?.items.map((account) => (

@@ -150,7 +150,7 @@ export default function SimulateMerchantPage() {
 
         <ContextBanner />
 
-        <p className="font-mono text-[11px] text-text-muted text-center">
+        <p className="text-[11px] text-text-muted text-center">
           This flow is only accessible in sandbox mode.
         </p>
 

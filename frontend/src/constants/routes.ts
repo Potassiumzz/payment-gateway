@@ -4,7 +4,7 @@ export const NAVIGATION_ROUTES = {
 	PAYMENT_RESULT_ROUTE: "/payment-result/",
 	CREATE_ACCOUNT: "/create-account/",
 	ACCOUNTS: "/accounts/",
-	DOCUMENTATION: "/documentation/",
+	DOCUMENTATION: "/docs/",
 };
 
 export const EXTERNAL_LINKS = {
