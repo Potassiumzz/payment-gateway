@@ -21,7 +21,7 @@ export function ResultHeader({ isSuccess, failureReason }: ResultHeaderProps) {
         <IconComponent className={cn("w-7 h-7", isSuccess ? "text-secondary" : "text-red-400")} />
       </div>
       <div className="space-y-1">
-        <h1 className={cn("font-mono text-2xl font-bold", isSuccess ? "text-secondary" : "text-red-400")}>
+        <h1 className={cn("text-2xl font-bold", isSuccess ? "text-secondary" : "text-red-400")}>
           {isSuccess ? "Payment Successful" : "Payment Failed"}
         </h1>
         <p className="font-mono text-xs text-text-muted">

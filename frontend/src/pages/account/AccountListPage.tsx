@@ -90,7 +90,7 @@ export function AccountListPage() {
 
           <div className="flex flex-col-reverse md:flex-row items-start justify-between gap-4">
             <div>
-              <h1 className="font-mono text-lg text-foreground text-center md:text-start">Bank Accounts</h1>
+              <h1 className="text-lg text-foreground text-center md:text-start">Bank Accounts</h1>
               <p className="text-xs text-text-muted mt-1 text-center md:text-start">
                 Manage default sender and receiver accounts. Click an account to verify with PIN.
               </p>
@@ -122,9 +122,9 @@ export function AccountListPage() {
           {isLoading && !accountList ? (
             <EllipsisLoader value="Loading accounts" />
           ) : error ? (
-            <p className="text-sm text-red-400 font-mono">Failed to load accounts.</p>
+            <p className="text-sm text-red-400">Failed to load accounts.</p>
           ) : accountList?.items.length === 0 ? (
-            <p className="text-sm text-text-muted font-mono">No accounts found.</p>
+            <p className="text-sm text-text-muted">No accounts found.</p>
           ) : (
             <div className="space-y-2 xl:min-h-75">
               {accountList?.items.map((account) => (

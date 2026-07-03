@@ -41,8 +41,8 @@ export default function DocumentationPage() {
 				{/* Header */}
 				<div className="space-y-2 border-b border-border pb-10">
 					<p className="font-mono text-xs text-text-muted tracking-widest uppercase">gateway / docs</p>
-					<h1 className="font-mono text-2xl font-semibold text-text-primary">Payment Intents</h1>
-					<p className="font-mono text-sm text-text-secondary leading-relaxed">
+					<h1 className="text-2xl font-semibold text-text-primary">Payment Intents</h1>
+					<p className="text-sm text-text-secondary leading-relaxed">
 						A payment intent represents a single payment session. Create one from your server, then redirect
 						the user to the returned checkout URL to complete the flow.
 					</p>
@@ -113,14 +113,14 @@ export default function DocumentationPage() {
 			</div>
 
 			<aside className="hidden xl:block w-48 shrink-0 sticky top-16 self-start">
-				<p className="font-mono text-xs text-text-muted tracking-widest uppercase mb-4">On this page</p>
+				<p className="text-xs text-text-muted tracking-widest uppercase mb-4">On this page</p>
 				<ul className="space-y-1">
 					{TOC_ITEMS.map(({ id, label }) => (
 						<li key={id}>
 							<a
 								href={`#${id}`}
 								className={cn(
-									"block font-mono text-xs py-1 pl-3 border-l transition-colors duration-150",
+									"block text-xs py-1 pl-3 border-l transition-colors duration-150",
 									activeId === id
 										? "border-primary text-text-primary"
 										: "border-transparent text-text-muted hover:text-text-secondary hover:border-border-strong",

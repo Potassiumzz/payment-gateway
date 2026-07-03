@@ -31,7 +31,7 @@ export function Input({
 				onKeyDown={handleKeyDown}
         {...props}
 				className={cn(
-					"w-full bg-background border border-border font-mono text-sm text-text-primary",
+					"w-full bg-background border border-border text-sm text-text-primary",
 					"placeholder:text-text-muted rounded-sm py-2.5 transition-colors",
 					"hover:border-border-strong focus:border-primary/50 focus:outline-none",
 					"disabled:opacity-40 disabled:cursor-not-allowed",

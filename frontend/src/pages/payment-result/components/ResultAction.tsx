@@ -1,7 +1,7 @@
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Link } from "react-router-dom";
 
-const linkClass = "inline-flex items-center gap-2 border border-border hover:border-border-strong text-text-secondary hover:text-text-primary font-mono text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors duration-150";
+const linkClass = "inline-flex items-center gap-2 border border-border hover:border-border-strong text-text-secondary hover:text-text-primary text-sm font-semibold px-5 py-2.5 rounded-sm transition-colors duration-150";
 
 type ResultActionsProps = {
   isSuccess: boolean;

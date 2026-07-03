@@ -43,7 +43,7 @@ export function Button({
       disabled={disabled || isLoading}
       onClick={onClick}
       className={cn(
-        "inline-flex items-center justify-center gap-2 font-mono font-semibold rounded-sm",
+        "inline-flex items-center justify-center gap-2 font-semibold rounded-sm",
         "transition-colors duration-150",
         "disabled:opacity-40 disabled:cursor-not-allowed",
         variantStyles[variant],

@@ -13,13 +13,13 @@ export default function Home() {
           </span>
         </div>
 
-        <h1 className="font-mono text-4xl md:text-5xl font-bold text-text-primary leading-tight tracking-tight mb-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-text-primary leading-tight tracking-tight mb-4">
           Payment Gateway
           <br />
           <span className="text-text-muted text-2xl md:text-5xl">Simulation Environment</span>
         </h1>
 
-        <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-10 max-w-lg font-mono">
+        <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-10 max-w-lg">
           Test and simulate merchant payment flows end-to-end. No real transactions.
           No third-party dependencies. Just raw gateway behavior.
         </p>
