@@ -20,6 +20,11 @@ export default function DocumentationPage() {
 
 	React.useEffect(() => {
 		const handleScroll = () => {
+      if (window.scrollY < 330) {
+        setActiveId(TOC_ITEMS[0].id);
+        return;
+      }
+
 			const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 50;
 			if (scrolledToBottom) {
 				setActiveId(TOC_ITEMS[TOC_ITEMS.length - 1].id);
