@@ -123,3 +123,29 @@ class BankAccountService:
 		accounts = self.repository.get_all_expired()
 		for account in accounts:
 			self.__sync_expiry(account)
+
+	def refill_balance(self, id: int) -> BankAccount:
+		account = self.repository.get_by_id(id)
+
+		if not account:
+			raise_404_error()
+
+		if account.balance < 500:
+			account.balance = Decimal("500.00")
+
+		account = self.repository.refill_balance(account)
+
+		try:
+			asyncio.get_running_loop().create_task(
+				publish(
+					{
+						"type": "account_refilled",
+						"account_id": account.id,
+						"account_number": account.account_number,
+					}
+				)
+			)
+		except Exception:
+			logger.exception("Failed to publish account_refilled event.")
+
+		return account

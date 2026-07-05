@@ -125,3 +125,15 @@ def get_account(
 	id: int, service: BankAccountService = Depends(BankAccountDependencies.get_service)
 ):
 	return service.get_by_id(id)
+
+
+@router.put(
+	"/refill/{id}",
+	response_model=AccountResponse,
+	description="Refill an account's balance. Sets the balance to 500. No more, no less.",
+)
+def refill_balance(
+	id: int,
+	service: BankAccountService = Depends(BankAccountDependencies.get_service),
+):
+	return service.refill_balance(id)

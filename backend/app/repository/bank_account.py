@@ -122,3 +122,8 @@ class BankAccountRepository:
 			)
 			.all()
 		)
+
+	def refill_balance(self, account: BankAccount) -> BankAccount:
+		self.db.commit()
+		self.db.refresh(account)
+		return account
