@@ -1,8 +1,9 @@
 import React from "react";
 import { BACKEND_ENDPOINTS, BASE_URL } from "@/constants/endpoints";
+import type { SSEKey } from "@/api/constants/sseKeys";
 
 export interface SSEResponse {
-	type: string;
+	type: SSEKey;
 	account_id: number;
 	account_number: number;
 }

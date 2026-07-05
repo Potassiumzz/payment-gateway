@@ -15,6 +15,8 @@ import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } fro
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
 import { invalidateCacheByPrefix } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
+import { QUERY_KEYS } from "@/cache/queryKeys";
+import { SSE_KEYS } from "@/api/constants/sseKeys";
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -33,10 +35,12 @@ export function AccountListPage() {
   }
 
   function handleAccountSSERefetch(data: SSEResponse) {
+    if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
       removeSenderAndReceiver(data.account_number);
       removeUnlockedAccount(data.account_id);
-      invalidateCacheByPrefix("ACCOUNT_LIST_");
-      refetch();
+    }
+    invalidateCacheByPrefix(`${QUERY_KEYS.account_list}_`);
+    refetch();
   }
 
   useAccountSSE(handleAccountSSERefetch);
