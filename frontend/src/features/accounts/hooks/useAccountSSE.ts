@@ -7,15 +7,13 @@ export interface SSEResponse {
 	account_number: number;
 }
 
-export function useAccountSSE(onExpiry: (data: SSEResponse) => void) {
+export function useAccountSSE(onMessage: (data: SSEResponse) => void) {
 	React.useEffect(() => {
 		const es = new EventSource(`${BASE_URL}${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}sse`);
 
 		es.onmessage = (e) => {
 			const data: SSEResponse = JSON.parse(e.data);
-			if (data.type === "account_expired") {
-				onExpiry(data);
-			}
+			onMessage(data);
 		};
 
 		es.onerror = () => es.close();
