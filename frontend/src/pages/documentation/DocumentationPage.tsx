@@ -14,39 +14,37 @@ export default function DocumentationPage() {
 
   function handleToClick (e: React.MouseEvent, id: string) {
     e.preventDefault();
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setActiveId(id);
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "center" });
+    setTimeout(() => {
+      setActiveId(id);
+    }, 500);
   };
 
-	React.useEffect(() => {
-		const handleScroll = () => {
-      if (window.scrollY < 330) {
-        setActiveId(TOC_ITEMS[0].id);
-        return;
-      }
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries.filter((e) => e.isIntersecting);
+        if (visible.length > 0) {
+          setActiveId(visible[visible.length - 1].target.id);
+        }
+      },
+      { rootMargin: "-55% 0px -40% 0px" }
+    );
 
-			const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.scrollHeight - 50;
-			if (scrolledToBottom) {
-				setActiveId(TOC_ITEMS[TOC_ITEMS.length - 1].id);
-				return;
-			}
+    TOC_ITEMS.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
 
-			const offsets = TOC_ITEMS.map(({ id }) => {
-				const el = document.getElementById(id);
-				return { id, top: el ? el.getBoundingClientRect().top : Infinity };
-			});
-
-			const active = offsets.filter(({ top }) => top <= window.innerHeight * 0.4).at(-1); // last one still above 40% mark
-
-			if (active) setActiveId(active.id);
-		};
-
-		window.addEventListener("scroll", handleScroll, { passive: true });
-		return () => window.removeEventListener("scroll", handleScroll);
-	}, []);
+    return () => observer.disconnect();
+  }, []);
 
 	return (
 		<div className="max-w-5xl mx-auto px-6 py-16 flex gap-16 items-start">
+    {/* Visual Representation of `rootMargin` of `IntersectionObserver`
+        <div className="fixed top-0 left-0 right-0 h-[55%] bg-blue-500/10 pointer-events-none z-50" />
+        <div className="fixed bottom-0 left-0 right-0 h-[40%] bg-green-500/10 pointer-events-none z-50" />
+    */}
 			{/* Main content */}
 			<div className="flex-1 min-w-0 space-y-10">
 				{/* Header */}
@@ -120,10 +118,9 @@ export default function DocumentationPage() {
 						</CardContent>
 					</Card>
 				</div>
-				<div className="h-[10vh]" />
 			</div>
 
-			<aside className="hidden xl:block w-48 shrink-0 sticky top-16 self-start">
+			<aside className="hidden lg:block w-48 shrink-0 sticky top-16 self-start">
 				<p className="text-xs text-text-muted tracking-widest uppercase mb-4">On this page</p>
 				<ul className="space-y-1">
 					{TOC_ITEMS.map(({ id, label }) => (
