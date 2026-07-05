@@ -37,6 +37,7 @@ export function useMutation<TInput, TResult>() {
 						method: "PUT",
 						endpoint: url,
 						input: input,
+						id: id,
 					});
 				case "DELETE":
 					return await API<TInput, TResult>({
