@@ -9,6 +9,7 @@ import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 import { useDeleteAccount } from "@/features/accounts/hooks/useDeleteAccount";
 import { invalidateCacheByPrefix } from "@/cache/queryCache";
+import { useRefillAccountBalance } from "@/features/accounts/hooks/useRefillAccountBalance";
 
 type AccountCardProps = {
 	account: AccountResponse;
@@ -29,6 +30,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 
 	const { validatePin, error, isLoading } = useValidatePin();
 	const { deleteAccount, error: deleteErr, isLoading: deleteLoading } = useDeleteAccount();
+	const { refillBalance, error: refillErr, isLoading: refillLoading } = useRefillAccountBalance();
 
 	function handleToggle() {
 		if (state === "collapsed") {
@@ -63,6 +65,20 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 			console.log(deleteErr);
 		}
 	}
+
+  async function handleRefill() {
+    if (account.balance >= 500) return;
+
+    try {
+      await refillBalance(account.id);
+      if(!refillLoading) {
+        console.log("Account refilled");
+      }
+    } catch (e) {
+      console.log(e);
+      console.log(refillErr);
+    }
+  }
 
 	const isOpen = state !== "collapsed";
 
@@ -170,6 +186,10 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 
 												<Button size="sm" variant="secondary" onClick={() => onSetReceiver(account)}>
 													Set as receiver
+												</Button>
+
+												<Button size="sm" variant="secondary" onClick={handleRefill} disabled={account.balance >= 500}>
+													Refill
 												</Button>
 
 												{!account.is_default && (
