@@ -1,7 +1,10 @@
+import asyncio
 import os
+from contextlib import asynccontextmanager
 from typing import cast
 
 from dotenv import load_dotenv
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import HTMLResponse
@@ -10,10 +13,21 @@ from fastapi_offline import FastAPIOffline
 
 # from app.db import Base, engine
 from app.routers import account_pin, bank, bank_account, payment_intent, transaction
+from app.services.account_expiry_worker import run_account_expiry_worker
+from app.utils.sse_bus import set_loop
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+	set_loop(asyncio.get_running_loop())
+	task = asyncio.create_task(run_account_expiry_worker())
+	yield
+	task.cancel()
+
+
+app = FastAPIOffline(docs_url=None, lifespan=lifespan)
 
 load_dotenv()
-
-app = FastAPIOffline(docs_url=None)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
