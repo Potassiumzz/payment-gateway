@@ -48,3 +48,18 @@ export function invalidateCacheByPrefix(prefix: string): void {
 		}
 	}
 }
+
+/**
+ * Clears a specific value from the cache.
+ *
+ * Sets the value to null so future calls know the cache is invalid.
+ */
+export function removeFromCachedList<Q, T>(queryKey: Q, predicate: (item: T) => boolean): void {
+	console.log({ queryKey, queryCache });
+	const cached = queryCache.get(queryKey);
+	if (!cached) return;
+	cached.then((c: { items: T[] }) => {
+		const items = c.items;
+		queryCache.set(queryKey, { ...cached, items: items.filter((i: T) => !predicate(i)) });
+	});
+}
