@@ -41,7 +41,7 @@ export function AccountListPage() {
   function handleAccountExpired(accountId: number, accountNumber: number) {
     removeSenderAndReceiver(accountNumber);
     removeUnlockedAccount(accountId);
-    removeFromCachedList<AccountQueryKeyType,AccountResponse>(`${QUERY_KEYS.account_list}_${page}_`, (acc) => acc.id === accountId);
+    removeFromCachedList<AccountQueryKeyType,AccountResponse>(`${QUERY_KEYS.ACCOUNT_LIST}_${page}_`, (acc) => acc.id === accountId);
     setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
   }
 

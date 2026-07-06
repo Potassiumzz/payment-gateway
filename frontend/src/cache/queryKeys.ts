@@ -1,5 +1,5 @@
 export const QUERY_KEYS = {
-	intent_detail: "INTENT_DETAIL",
-	transaction_detail: "TRANSACTION_DETAIL",
-	account_list: "ACCOUNT_LIST",
+	INTENT_DETAIL: "INTENT_DETAIL",
+	TRANSACTION_DETAIL: "TRANSACTION_DETAIL",
+	ACCOUNT_LIST: "ACCOUNT_LIST",
 } as const;
