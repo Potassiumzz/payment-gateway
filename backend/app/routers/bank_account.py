@@ -1,6 +1,5 @@
 import asyncio
 import json
-from datetime import UTC, datetime
 
 from fastapi import Depends, Query
 from fastapi.routing import APIRouter
@@ -21,26 +20,15 @@ router = APIRouter(prefix=RouterPrefix.ACCOUNTS.value, tags=[RouterTag.ACCOUNTS.
 
 
 @router.get("/sse")
-async def account_events(
-	service: BankAccountService = Depends(BankAccountDependencies.get_service),
-):
+async def account_events():
 	async def stream():
 		q = subscribe()
 		try:
 			while True:
-				next_expiry = service.get_next_expiry()
-				if next_expiry:
-					now = datetime.now(UTC).replace(tzinfo=None)
-					delay = (next_expiry - now).total_seconds()
-					if delay > 0:
-						await asyncio.sleep(delay)
-					service.sync_all_expired()
-					# sync_all_expired calls __sync_expiry which publishes to queue
-					event = await q.get()
+				try:
+					event = await asyncio.wait_for(q.get(), timeout=30)
 					yield f"data: {json.dumps(event)}\n\n"
-				else:
-					# no expiring accounts, just keepalive every 30s
-					await asyncio.sleep(30)
+				except asyncio.TimeoutError:
 					yield ": keepalive\n\n"
 		finally:
 			unsubscribe(q)

@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from datetime import UTC, datetime, timedelta
 from decimal import Decimal
@@ -9,7 +8,7 @@ from app.schemas.bank_account import AccountCreate, AccountUpdate
 from app.services.account_pin import AccountPinService
 from app.services.bank import BankService
 from app.utils.http_errors import raise_400_error, raise_404_error, raise_500_error
-from app.utils.sse_bus import publish
+from app.utils.sse_bus import publish_threadsafe
 
 logger = logging.getLogger(__name__)
 
@@ -36,19 +35,17 @@ class BankAccountService:
 		now = datetime.now(UTC).replace(tzinfo=None)
 		if account.expires_at and now >= account.expires_at and account.is_active:
 			account.is_active = False
+			self.repository.commit()
 			try:
-				self.repository.commit()
-				asyncio.get_running_loop().create_task(
-					publish(
-						{
-							"type": "account_expired",
-							"account_id": account.id,
-							"account_number": account.account_number,
-						}
-					)
+				publish_threadsafe(
+					{
+						"type": "account_expired",
+						"account_id": account.id,
+						"account_number": account.account_number,
+					}
 				)
 			except Exception:
-				self.repository.rollback()
+				logger.exception("Failed to publish account_expired event.")
 		return account
 
 	def create(self, value: AccountCreate) -> BankAccount:
