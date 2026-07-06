@@ -11,10 +11,10 @@ export function useGetAccounts(page: number, search: string) {
 
 	const queryKey = `ACCOUNT_LIST_${page}_${search}` as const;
 
-	const { data, errorStatus, error, isLoading, refetch } = useQuery<AccountListResponse>({
+	const { data, errorStatus, error, isLoading } = useQuery<AccountListResponse>({
 		url: `${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}?${params.toString()}`,
 		queryKey,
 	});
 
-	return { accountList: data, error, isLoading, errorStatus, refetch };
+	return { accountList: data, error, isLoading, errorStatus };
 }

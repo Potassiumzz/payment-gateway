@@ -13,17 +13,21 @@ import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
-import { invalidateCacheByPrefix } from "@/cache/queryCache";
+import { removeFromCachedList } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
 import { QUERY_KEYS } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
+import { type AccountResponse } from "@/features/accounts/types/account";
+
+type AccountQueryKeyType = `ACCOUNT_LIST_${number}_`;
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
   const [page, setPage] = React.useState(1);
+  const [accounts, setAccounts] = React.useState<AccountResponse[] | null>(null);
   const debouncedSearch = useDebounce(search);
 
-  const { accountList, isLoading, error, refetch } = useGetAccounts(page, debouncedSearch);
+  const { accountList, isLoading, error } = useGetAccounts(page, debouncedSearch);
 
   const totalPages = accountList ? Math.ceil(accountList.total / ACCOUNT_PAGE_SIZE) : 1;
 
@@ -34,16 +38,33 @@ export function AccountListPage() {
     setPage(1); // reset to page 1 on new search
   }
 
+  function handleAccountExpired(accountId: number, accountNumber: number) {
+    removeSenderAndReceiver(accountNumber);
+    removeUnlockedAccount(accountId);
+    removeFromCachedList<AccountQueryKeyType,AccountResponse>(`${QUERY_KEYS.account_list}_${page}_`, (acc) => acc.id === accountId);
+    setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
+  }
+
   function handleAccountSSERefetch(data: SSEResponse) {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
-      removeSenderAndReceiver(data.account_number);
-      removeUnlockedAccount(data.account_id);
+      handleAccountExpired(data.account_id, data.account_number);
     }
-    invalidateCacheByPrefix(`${QUERY_KEYS.account_list}_`);
-    refetch();
   }
 
   useAccountSSE(handleAccountSSERefetch);
+
+  React.useEffect(() => {
+    if(!accountList) return;
+
+    setAccounts(accountList.items);
+
+    const now = Date.now();
+    const expiredOnes = accountList.items.filter(
+      (acc) => acc.expires_at && new Date(acc.expires_at).getTime() <= now && acc.is_active
+    );
+
+    expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.account_number));
+  }, [accountList])
 
   return (
     <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-20">
@@ -123,25 +144,21 @@ export function AccountListPage() {
           </div>
 
           {/* List */}
-          {isLoading && !accountList ? (
+          {isLoading && !accounts ? (
             <EllipsisLoader value="Loading accounts" />
           ) : error ? (
             <p className="text-sm text-red-400 text-center">Failed to load accounts.</p>
-          ) : accountList?.items.length === 0 ? (
+          ) : accounts?.length === 0 ? (
             <p className="text-sm text-text-muted text-center">No accounts found.</p>
           ) : (
             <div className="space-y-2 xl:min-h-75">
-              {accountList?.items.map((account) => (
+              {accounts?.map((account) => (
                 <AccountCard
                   key={account.account_number}
                   account={account}
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
-                  onDelete={() => {
-                    refetch();
-                    removeSenderAndReceiver(account.id);
-                    removeUnlockedAccount(account.account_number);
-                  }}
+                  onDelete={() => handleAccountExpired(account.id, account.account_number)}
                 />
               ))}
             </div>

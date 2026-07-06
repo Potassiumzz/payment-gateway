@@ -8,7 +8,6 @@ import React from "react";
 import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 import { useDeleteAccount } from "@/features/accounts/hooks/useDeleteAccount";
-import { invalidateCacheByPrefix } from "@/cache/queryCache";
 import { useRefillAccountBalance } from "@/features/accounts/hooks/useRefillAccountBalance";
 
 type AccountCardProps = {
@@ -57,7 +56,6 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 			await deleteAccount(account.id);
 			if (!deleteLoading) {
 				console.log("deleted account");
-				invalidateCacheByPrefix("ACCOUNT_LIST_");
 				onDelete?.();
 			}
 		} catch (e) {
