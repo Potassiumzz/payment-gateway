@@ -134,18 +134,4 @@ class BankAccountService:
 			account.balance = Decimal("500.00")
 
 		account = self.repository.refill_balance(account)
-
-		try:
-			asyncio.get_running_loop().create_task(
-				publish(
-					{
-						"type": "account_refilled",
-						"account_id": account.id,
-						"account_number": account.account_number,
-					}
-				)
-			)
-		except Exception:
-			logger.exception("Failed to publish account_refilled event.")
-
 		return account
