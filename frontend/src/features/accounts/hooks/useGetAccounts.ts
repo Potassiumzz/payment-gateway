@@ -2,6 +2,7 @@ import { useQuery } from "@/api/hooks/useQuery";
 import { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 import type { AccountListResponse } from "../types/account";
 import { ACCOUNT_PAGE_SIZE } from "@/constants/config";
+import { QUERY_KEYS } from "@/cache/queryKeys";
 
 export function useGetAccounts(page: number, search: string) {
 	const params = new URLSearchParams();
@@ -9,7 +10,7 @@ export function useGetAccounts(page: number, search: string) {
 	params.set("page", String(page));
 	params.set("limit", String(ACCOUNT_PAGE_SIZE));
 
-	const queryKey = `ACCOUNT_LIST_${page}_${search}` as const;
+	const queryKey = QUERY_KEYS.ACCOUNT_LIST(page, search);
 
 	const { data, errorStatus, error, isLoading } = useQuery<AccountListResponse>({
 		url: `${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}?${params.toString()}`,

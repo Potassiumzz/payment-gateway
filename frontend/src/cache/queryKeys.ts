@@ -5,3 +5,9 @@ export const QUERY_KEYS = {
 	TRANSACTION_DETAIL: "TRANSACTION_DETAIL",
 	ACCOUNT_LIST: (page: number, search: string) => `${ACCOUNT_LIST}_${page}_${search}`,
 } as const;
+
+export const QUERY_KEY_PREFIX = {
+	ACCOUNT_LIST: ACCOUNT_LIST,
+};
+
+export type AccountListKey = ReturnType<typeof QUERY_KEYS.ACCOUNT_LIST>;

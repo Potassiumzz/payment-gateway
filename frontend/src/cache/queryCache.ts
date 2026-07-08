@@ -1,6 +1,6 @@
-import { QUERY_KEYS } from "@/cache/queryKeys";
+import { QUERY_KEYS, type AccountListKey } from "@/cache/queryKeys";
 
-export type QueryKeyType = keyof typeof QUERY_KEYS | `ACCOUNT_LIST_${number}_${string}`;
+export type QueryKeyType = keyof typeof QUERY_KEYS | AccountListKey;
 
 const queryCache = new Map();
 
@@ -50,14 +50,22 @@ export function invalidateCacheByPrefix(prefix: string): void {
 }
 
 /**
- * Clears a specific value from the cache.
+ * Clears a specific value from the cache for a specific key.
  *
  * Sets the value to null so future calls know the cache is invalid.
  */
-export function removeFromCachedList<Q, T>(queryKey: Q, predicate: (item: T) => boolean): void {
-	console.log({ queryKey, queryCache });
+export function removeFromCachedList<Q, T>(
+	queryKey: Q,
+	predicate: (item: T) => boolean,
+	removeFromAllOptions?: { prefix: string },
+): void {
 	const cached = queryCache.get(queryKey);
 	if (!cached) return;
+
+	if (removeFromAllOptions) {
+		invalidateCacheByPrefix(removeFromAllOptions.prefix);
+	}
+
 	cached.then((c: { items: T[] }) => {
 		const items = c.items;
 		queryCache.set(queryKey, { ...cached, items: items.filter((i: T) => !predicate(i)) });

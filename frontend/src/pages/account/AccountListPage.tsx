@@ -15,11 +15,9 @@ import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } fro
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
 import { removeFromCachedList } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
-import { QUERY_KEYS } from "@/cache/queryKeys";
+import { QUERY_KEY_PREFIX, QUERY_KEYS, type AccountListKey } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
 import { type AccountResponse } from "@/features/accounts/types/account";
-
-type AccountQueryKeyType = `ACCOUNT_LIST_${number}_`;
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -41,7 +39,11 @@ export function AccountListPage() {
   function handleAccountExpired(accountId: number, accountNumber: number) {
     removeSenderAndReceiver(accountNumber);
     removeUnlockedAccount(accountId);
-    removeFromCachedList<AccountQueryKeyType,AccountResponse>(`${QUERY_KEYS.ACCOUNT_LIST}_${page}_`, (acc) => acc.id === accountId);
+    removeFromCachedList<AccountListKey,AccountResponse>(
+      QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch), 
+      (acc) => acc.id === accountId,
+      {prefix: QUERY_KEY_PREFIX.ACCOUNT_LIST}
+    );
     setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
   }
 
