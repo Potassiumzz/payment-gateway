@@ -103,7 +103,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 			>
 				<div className="flex items-center gap-5 min-w-0">
 					<span className="font-mono text-[11px] text-text-muted shrink-0">#{account.account_number}</span>
-					<span className="font-mono text-sm text-text-primary truncate">{account.owner_name}</span>
+					<span className="text-sm text-text-primary truncate font-semibold">{account.owner_name}</span>
 					<span className="font-mono text-[11px] text-text-muted border border-white/20 px-1.5 py-0.5 rounded-sm shrink-0">
 						{account.bank.name}
 					</span>
@@ -159,12 +159,12 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 										<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
 											Available Balance
 										</p>
-										<p className="font-mono text-3xl font-light text-text-primary tracking-tight">
+										<p className="text-3xl font-light text-text-primary tracking-tight">
 											${account.balance.toFixed(2)}
 										</p>
 										{account.expires_at && (
 											<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
-                        Expires: <span className="text-text-secondary">
+                        Expires: <span className="text-text-secondary font-sans">
                           {new Date(account.expires_at + "Z").toLocaleString(undefined, {
                             year: "numeric", month: "short", day: "numeric",
                             hour: "2-digit", minute: "2-digit"
