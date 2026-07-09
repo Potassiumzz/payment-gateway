@@ -15,11 +15,12 @@ type AccountCardProps = {
 	onSetSender: (account: AccountResponse) => void;
 	onSetReceiver: (account: AccountResponse) => void;
 	onDelete?: () => void;
+  onRefill?: (account: AccountResponse) => void;
 };
 
 type CardState = "collapsed" | "pin" | "unlocked";
 
-export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: AccountCardProps) {
+export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onRefill }: AccountCardProps) {
 	const [state, setState] = React.useState<CardState>("collapsed");
 	const [confirmDelete, setConfirmDelete] = React.useState(false);
 	const [pin, setPin] = React.useState("");
@@ -55,7 +56,6 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
 		try {
 			await deleteAccount(account.id);
 			if (!deleteLoading) {
-				console.log("deleted account");
 				onDelete?.();
 			}
 		} catch (e) {
@@ -68,9 +68,9 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete }: A
     if (account.balance >= 500) return;
 
     try {
-      await refillBalance(account.id);
+      const res = await refillBalance(account.id);
       if(!refillLoading) {
-        console.log("Account refilled");
+        onRefill?.(res)
       }
     } catch (e) {
       console.log(e);

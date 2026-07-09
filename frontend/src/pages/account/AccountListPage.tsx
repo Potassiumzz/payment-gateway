@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
-import { removeFromCachedList } from "@/cache/queryCache";
+import { getCache, removeFromCachedList, updateEachCacheEntry } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
 import { QUERY_KEY_PREFIX, QUERY_KEYS, type AccountListKey } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
@@ -51,6 +51,24 @@ export function AccountListPage() {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
       handleAccountExpired(data.account_id, data.account_number);
     }
+  }
+
+  function handleAccountRefilled(updated: AccountResponse) {
+    setAccounts((prev) =>
+      prev ? prev.map((acc) => (acc.id === updated.id ? updated : acc)) : prev
+    );
+
+    const cached = getCache<{ items: AccountResponse[] }>(
+      QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch)
+    );
+    if (!cached) return;
+    updateEachCacheEntry<{items: AccountResponse[]}>(
+      QUERY_KEY_PREFIX.ACCOUNT_LIST, 
+      (cache) => (
+        {...cache, 
+          items: cache.items.map((acc) => (acc.id === updated.id ? updated: acc))
+        }
+    ))
   }
 
   useAccountSSE(handleAccountSSERefetch);
@@ -161,6 +179,7 @@ export function AccountListPage() {
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
                   onDelete={() => handleAccountExpired(account.id, account.account_number)}
+                  onRefill={handleAccountRefilled}
                 />
               ))}
             </div>
