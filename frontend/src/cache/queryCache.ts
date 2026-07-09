@@ -10,7 +10,7 @@ const queryCache = new Map();
  * The promise is stored instead of resolved data so that
  * multiple calls with the same key can share the same request.
  */
-export function setCache<TResult>(queryKey: QueryKeyType, data: Promise<TResult | unknown>): void {
+export function setCache<TResult>(queryKey: QueryKeyType, data: Promise<TResult>): void {
 	queryCache.set(queryKey, data);
 }
 
@@ -19,7 +19,7 @@ export function setCache<TResult>(queryKey: QueryKeyType, data: Promise<TResult 
  *
  * Returns the stored promise if it exists, otherwise undefined.
  */
-export function getCache<TResult>(queryKey: QueryKeyType | string): Promise<TResult | undefined> {
+export function getCache<TResult>(queryKey: QueryKeyType | string): Promise<TResult> {
 	return queryCache.get(queryKey);
 }
 
