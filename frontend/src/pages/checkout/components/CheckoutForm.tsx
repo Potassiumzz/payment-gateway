@@ -10,7 +10,10 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { FieldError } from "@/components/ui/FieldError";
 import { Button } from "@/components/ui/Button";
-import { getDefaultReceiver, getDefaultSender } from "@/lib/storage";
+import { useDefaultAccounts } from "@/lib/hooks";
+import { updateEachCacheEntry } from "@/cache/queryCache";
+import type { AccountResponse } from "@/features/accounts/types/account";
+import { QUERY_KEY_PREFIX } from "@/cache/queryKeys";
 
 type CheckoutFormProps = {
 	intentDetail: PaymentIntentResponse;
@@ -18,8 +21,8 @@ type CheckoutFormProps = {
 
 export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   const navigate = useNavigate();
-  const sender = getDefaultSender();
-  const receiver = getDefaultReceiver();
+
+  const { sender, receiver, setSender, setReceiver } = useDefaultAccounts();
 
   const isFieldDisabled = (name: string) => {
     if (name === "sender_account_number") return Boolean(sender);
@@ -36,11 +39,48 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 
 	const { createTransaction, error, isLoading } = useCreateTransaction();
 
+  function handleDefaultCardBalanceUpdate(amount: number): void {
+    if (sender) {
+      const senderBalance = sender?.balance - amount;
+      const updatedSender = {...sender, balance: senderBalance};
+      setSender(updatedSender);
+    };
+
+    if(receiver) {
+      const receiverBalance = receiver?.balance + amount;
+      const updatedReceiver = {...receiver, balance: receiverBalance};
+      setReceiver(updatedReceiver);
+    }
+  }
+
+  function handleAccountListCacheUpdate(amount: number): void {
+    updateEachCacheEntry<{ items: AccountResponse[] }>(
+      QUERY_KEY_PREFIX.ACCOUNT_LIST,
+      (cache) => ({
+        ...cache,
+        items: cache.items.map((acc) => {
+          if (acc.account_number === sender?.account_number) {
+            return { ...acc, balance: acc.balance - amount };
+          }
+          if (acc.account_number === receiver?.account_number) {
+            return { ...acc, balance: acc.balance + amount };
+          }
+          return acc;
+        }),
+      })
+    );
+  }
+
 	async function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 
 		try {
       const res = await createTransaction(values);
+      const amount = parseFloat(res.amount_transferred);
+
+      handleDefaultCardBalanceUpdate(amount);
+      handleAccountListCacheUpdate(amount);
+
       if (!isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}${res.id}`);
     } catch(err) {
       console.log(err);
