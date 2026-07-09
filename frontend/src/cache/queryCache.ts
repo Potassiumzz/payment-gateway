@@ -71,3 +71,21 @@ export function removeFromCachedList<Q, T>(
 		queryCache.set(queryKey, { ...cached, items: items.filter((i: T) => !predicate(i)) });
 	});
 }
+
+/**
+ * Update specific entry from the cache for all matching keys prefix.
+ *
+ * For example, a cache for the same data could be stored under different keys.
+ * Use this function to update a specific value for all those cache keys.
+ */
+export function updateEachCacheEntry<T>(prefix: string, updater: (value: T) => T): void {
+	for (const key of queryCache.keys()) {
+		if (!key.startsWith(prefix)) continue;
+		const cached = getCache<T>(key);
+		if (!cached) continue;
+
+		cached.then((c) => {
+			setCache(key, Promise.resolve(updater(c)));
+		});
+	}
+}
