@@ -54,7 +54,7 @@ class TransactionService:
 			return existing.response_body
 
 		try:
-			intent = self.intent_service.get_intent_details(value.payment_intent_id)
+			intent = self.intent_service.get_intent(value.payment_intent_id)
 
 			if not intent:
 				raise_404_error("Payment intent not found.")

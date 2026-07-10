@@ -69,7 +69,7 @@ def get_transaction_by_id(
 	),
 ):
 	transaction = service.get_by_id(transaction_id)
-	intent = intent_service.get_intent_details(transaction.payment_intent_id)
+	intent = intent_service.get_intent(transaction.payment_intent_id)
 	return build_transaction_response(
 		transaction, transaction.sender_account, transaction.receiver_account, intent
 	)

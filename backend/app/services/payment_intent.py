@@ -28,8 +28,13 @@ class PaymentIntentService:
 		)
 
 	def get_intent_details(self, id: str) -> PaymentIntentResponse:
+		"""For API responses; Read-only DTO."""
 		intent = self.repository.get_intent_details(id)
 		return PaymentIntentResponse(
 			**intent.__dict__,
 			checkout_url=f"{self.frontend_url}/checkout/{intent.id}",
 		)
+
+	def get_intent(self, id: str) -> PaymentIntent:
+		"""For internal service use; the live, mutable ORM entity."""
+		return self.repository.get_intent_details(id)
