@@ -89,15 +89,14 @@ class TransactionService:
 				status = TransactionStatus.SUCCESSFUL
 				failure_reason = None
 
+			intent.attempt_count += 1
+
 			if status is TransactionStatus.SUCCESSFUL:
 				sender.balance -= amount
 				receiver.balance += amount
 				intent.status = PaymentIntentStatus.SUCCEEDED
-
-			if intent.attempt_count >= MAX_PAYMENT_INTENT_ATTEMPT:
+			elif intent.attempt_count >= MAX_PAYMENT_INTENT_ATTEMPT:
 				intent.status = PaymentIntentStatus.FAILED
-
-			intent.attempt_count += 1
 
 			transaction = Transaction(
 				payment_intent_id=intent.id,
