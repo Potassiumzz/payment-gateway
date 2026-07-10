@@ -33,6 +33,17 @@ export default function Home() {
             Simulate Merchant
           </Link>
         </div>
+        <p className="text-text-muted text-xs mt-5 mx-auto md:mx-0">
+          First time here?{" "}
+          <Link
+            to={NAVIGATION_ROUTES.ACCOUNTS}
+            className="text-primary hover:text-primary-hover underline underline-offset-2"
+            viewTransition
+          >
+            Check available accounts
+          </Link>{" "}
+          to get account numbers before simulating a payment.
+        </p>
 
         <div className="mt-8 md:mt-16 flex justify-center md:flex-row md:justify-start flex-wrap gap-x-8 gap-y-2">
           {META_INFO.map(({ key, value }) => (
