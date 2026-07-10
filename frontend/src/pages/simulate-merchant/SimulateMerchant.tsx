@@ -105,12 +105,14 @@ export default function SimulateMerchantPage() {
                   </p>
                 )}
                 <div className="pl-4">
-                  <p className="ml-2 text-[10px] text-text-muted uppercase tracking-widest font-sans opacity-60">// not used here</p>
-                  <p className="opacity-40">
+                  <p className="line-through decoration-white/50 decoration-2">
                     <span className="text-secondary">"return_url"</span>
                     <span className="text-text-muted">: </span>
                     <span className="text-text-muted">"https://your-return-site.com"</span>
                     <span className="text-text-muted">,</span>
+                  </p>
+                  <p className="text-text-muted/60 text-[10px] no-underline">
+                    // ignored - real gateways redirect here post-payment
                   </p>
                 </div>
                 <p className="text-text-muted">{"}"}</p>
