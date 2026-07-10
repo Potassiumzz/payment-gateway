@@ -4,13 +4,15 @@ import { cn } from "@/lib/utils";
 import { FieldTable } from "./components/FieldTable";
 import { REQUEST_FIELDS, RESPONSE_FIELDS } from "./data/fields";
 import { BASE_URL } from "@/constants/endpoints";
-import { CODE_EXAMPLE } from "./data/code";
+import { CODE_EXAMPLE_JS, CODE_EXAMPLE_CURL } from "./data/code";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { STATUS_VALUES } from "./data/status";
 import { TOC_ITEMS } from "./data/TOC";
 
 export default function DocumentationPage() {
 	const [activeId, setActiveId] = React.useState<string>("endpoint");
+  const [activeTab, setActiveTab] = React.useState<"curl" | "js">("curl");
+  const activeCode = activeTab === "curl" ? CODE_EXAMPLE_CURL : CODE_EXAMPLE_JS;
 
   function handleToClick (e: React.MouseEvent, id: string) {
     e.preventDefault();
@@ -93,14 +95,41 @@ export default function DocumentationPage() {
 				</div>
 
 				<div id="example">
-					<Card>
-						<CardHeader title="Example" badge={<CopyButton text={CODE_EXAMPLE} />} />
-						<CardContent className="p-0">
-							<pre className="font-mono text-xs text-text-secondary leading-relaxed p-6 overflow-x-auto">
-								<code>{CODE_EXAMPLE}</code>
-							</pre>
-						</CardContent>
-					</Card>
+          <Card>
+            <CardHeader
+              title="Example"
+              badge={
+                <div className="flex items-center gap-2">
+                  <div className="flex text-xs font-mono border border-border rounded-sm overflow-hidden">
+                    <button
+                      onClick={() => setActiveTab("curl")}
+                      className={cn(
+                        "px-2 py-1 transition-colors",
+                        activeTab === "curl" ? "bg-primary text-white" : "text-text-muted hover:text-text-primary"
+                      )}
+                    >
+                      curl
+                    </button>
+                    <button
+                      onClick={() => setActiveTab("js")}
+                      className={cn(
+                        "px-2 py-1 transition-colors",
+                        activeTab === "js" ? "bg-primary text-white" : "text-text-muted hover:text-text-primary"
+                      )}
+                    >
+                      JS
+                    </button>
+                  </div>
+                  <CopyButton text={activeCode} />
+                </div>
+              }
+            />
+            <CardContent className="p-0">
+              <pre className="font-mono text-xs text-text-secondary leading-relaxed p-6 overflow-x-auto">
+                <code>{activeCode}</code>
+              </pre>
+            </CardContent>
+          </Card>
 				</div>
 
 				<div id="status">
