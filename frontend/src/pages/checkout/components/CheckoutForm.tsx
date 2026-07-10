@@ -130,7 +130,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
             isLoading={isLoading}
             className="w-full"
           >
-            {isLoading ? "Processing payment..." : `Pay ${parseFloat(intentDetail.amount).toFixed(2)}`}
+            {isLoading ? "Processing payment..." : `Pay $${parseFloat(intentDetail.amount).toFixed(2)}`}
           </Button>
         </form>
       </CardContent>
