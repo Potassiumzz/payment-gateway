@@ -10,4 +10,5 @@ export interface PaymentIntentResponse {
 	status: string;
 	return_url?: string;
 	receiver_account_number?: number;
+	checkout_url: string;
 }
