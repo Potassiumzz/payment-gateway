@@ -132,6 +132,19 @@ export default function DocumentationPage() {
           </Card>
 				</div>
 
+        <div id="next-step">
+          <Card>
+            <CardHeader title="Next step" />
+            <CardContent>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                The response includes a <code className="font-mono text-xs bg-background px-1 py-0.5 rounded-sm text-primary">checkout_url</code>.
+                Redirect your user there to complete the payment where they will enter
+                the sender account number and PIN to authorise the transfer.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+
 				<div id="status">
 					<Card>
 						<CardHeader title="Status values" />

@@ -37,6 +37,13 @@ export const RESPONSE_FIELDS: Field[] = [
 		description: "Status of the intent: Pending, Succeeded, RequiresPayment, Failed.",
 	},
 	{
+		name: "checkout_url",
+		type: "string",
+		required: true,
+		description:
+			"The checkout URL where the application is supposed to re-direct to complete the transaction.",
+	},
+	{
 		name: "return_url",
 		type: "string",
 		required: false,
