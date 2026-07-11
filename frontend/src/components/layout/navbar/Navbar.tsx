@@ -3,6 +3,7 @@ import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom"
 import { NAV_LINKS } from "./data";
+import { useScrollDirection } from "@/lib/hooks";
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -13,8 +14,15 @@ export function Navbar() {
     return () => document.body.classList.remove("overflow-hidden");
   }, [open]);
 
+  const hidden = useScrollDirection();
+
   return (
-    <nav className="relative z-40">
+    <nav
+      className={cn(
+        "relative z-40 sticky top-0 backdrop-blur-lg bg-background/40 transition-transform duration-300",
+        hidden && "-translate-y-full",
+      )}
+    >
       <div className="flex items-center justify-between px-8 py-5">
         <span className="font-mono text-sm tracking-widest text-zinc-500 uppercase cursor-default select-none">
           ntay

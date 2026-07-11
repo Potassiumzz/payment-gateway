@@ -162,7 +162,7 @@ export default function DocumentationPage() {
 				</div>
 			</div>
 
-			<aside className="hidden lg:block w-48 shrink-0 sticky top-16 self-start">
+			<aside className="hidden lg:block w-48 shrink-0 sticky top-20 self-start">
 				<p className="text-xs text-text-muted tracking-widest uppercase mb-4">On this page</p>
 				<ul className="space-y-1">
 					{TOC_ITEMS.map(({ id, label }) => (

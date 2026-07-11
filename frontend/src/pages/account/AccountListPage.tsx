@@ -91,7 +91,7 @@ export function AccountListPage() {
       <div className="flex gap-12 items-start">
 
         {/* Sidebar — desktop only */}
-        <div className="hidden lg:flex flex-col gap-3 w-xs shrink-0 sticky top-10">
+        <div className="hidden lg:flex flex-col gap-3 w-xs shrink-0 sticky top-20">
           <DefaultAccountCard
             label="Sender"
             account={sender}
