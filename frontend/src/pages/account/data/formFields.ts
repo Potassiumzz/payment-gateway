@@ -1,17 +1,35 @@
-export const createAccountFormFields = [
+type FormField =
+	| {
+			type: "input";
+			label: string;
+			inputType: string;
+			placeholder: string;
+			name: string;
+			autoComplete?: string;
+	  }
+	| {
+			type: "select";
+			label: string;
+			placeholder: string;
+			name: string;
+	  };
+
+export const createAccountFormFields: FormField[] = [
 	{
+		type: "input",
 		label: "Owner name",
 		inputType: "text",
 		placeholder: "Enter a fake name",
 		name: "owner_name",
 	},
 	{
-		label: "Bank ID",
-		inputType: "number",
-		placeholder: "1",
+		type: "select",
+		label: "Bank",
+		placeholder: "Select a bank",
 		name: "bank_id",
 	},
 	{
+		type: "input",
 		label: "PIN",
 		inputType: "password",
 		placeholder: "Your security pin",
