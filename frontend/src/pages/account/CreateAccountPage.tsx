@@ -10,11 +10,16 @@ import { createAccountFormFields } from "./data/formFields";
 import { useNavigate } from "react-router-dom";
 import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { invalidateCacheByPrefix } from "@/cache/queryCache";
+import { useGetBanks } from "@/features/banks/hooks/useGetBanks";
+import { Select } from "@/components/ui/Select";
 
 export default function CreateAccountPage() {
   const navigate = useNavigate();
 
   const { createAccount, error, isLoading } = useCreateAccount();
+  const {banksData, isLoading: isLoadingBanks, error: bankError} = useGetBanks();
+
+  console.log(banksData);
 
   const [values, setValues] = React.useState({
     owner_name: "",
@@ -24,6 +29,8 @@ export default function CreateAccountPage() {
 
 	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
+
+    if (!values.owner_name.trim() || !values.bank_id || values.pin.length !== 4) return;
 
     try {
       await createAccount({...values, bank_id: Number(values.bank_id)});
@@ -36,7 +43,7 @@ export default function CreateAccountPage() {
     }
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
     setValues((p) => ({...p, [e.target.name]: e.target.value}))
   }
 
@@ -50,26 +57,56 @@ return (
         />
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
-            {createAccountFormFields.map((field) => (
-              <div key={field.name} className="space-y-2">
-                <Label htmlFor={field.name}>{field.label}</Label>
-                <Input
-                  id={field.name}
-                  type={field.inputType}
-                  placeholder={field.placeholder}
-                  name={field.name}
-                  autoComplete={field.autoComplete}
-                  disabled={isLoading}
-                  onChange={handleChange}
-                />
-              </div>
-            ))}
-            <FieldError message={error} />
+            {createAccountFormFields.map((field) => {
+              if (field.type === "select") {
+                return (
+                  <div key={field.name} className="space-y-2">
+                    <Label htmlFor={field.name}>{field.label}</Label>
+                    <Select
+                      id={field.name}
+                      name={field.name}
+                      placeholder={isLoadingBanks ? "Loading banks..." : field.placeholder}
+                      disabled={isLoading || isLoadingBanks}
+                      value={values.bank_id === 0 ? "" : values.bank_id}
+                      onChange={handleChange}
+                      options={(banksData ?? []).map((bank) => ({
+                        label: bank.name,
+                        value: bank.id,
+                      }))}
+                    />
+                  </div>
+                );
+              }
+
+              const value = values[field.name as keyof typeof values];
+              return (
+                <div key={field.name} className="space-y-2">
+                  <Label htmlFor={field.name}>{field.label}</Label>
+                  <Input
+                    id={field.name}
+                    type={field.inputType}
+                    placeholder={field.placeholder}
+                    name={field.name}
+                    autoComplete={field.autoComplete}
+                    disabled={isLoading}
+                    value={value === 0 ? "" : value}
+                    onChange={handleChange}
+                  />
+                </div>
+              );
+            })}
+
+            <FieldError message={error || bankError} />
 
             <Button
               type="submit"
               isLoading={isLoading}
-              disabled={isLoading}
+              disabled={
+                isLoading ||
+                !values.owner_name.trim() ||
+                !values.bank_id ||
+                values.pin.length !== 4
+              }
               className="w-full"
             >
             {isLoading ? "Hold on..." : "Register"}
