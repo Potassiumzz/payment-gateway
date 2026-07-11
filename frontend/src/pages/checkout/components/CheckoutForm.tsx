@@ -1,4 +1,4 @@
-import { type PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
+import { PaymentIntentStatus, type PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTransaction";
 import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
 import React from "react";
@@ -74,6 +74,8 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	async function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 
+    if (values.security_pin.length < 4) return;
+
 		try {
       const res = await createTransaction(values);
 
@@ -130,6 +132,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
           <Button
             type="submit"
             isLoading={isLoading}
+            disabled={isLoading || values.security_pin.length < 4}
             className="w-full"
           >
             {isLoading ? "Processing payment..." : `Pay $${parseFloat(intentDetail.amount).toFixed(2)}`}
