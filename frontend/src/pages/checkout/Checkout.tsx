@@ -1,4 +1,5 @@
 import ErrorPage from "@/components/page/ErrorPage";
+import { EllipsisLoader } from "@/components/ui/Loader";
 import { useGetPaymentIntent } from "@/features/payments/hooks/useGetPaymentIntent";
 import CheckoutForm from "@/pages/checkout/components/CheckoutForm";
 import { useParams } from "react-router-dom";
@@ -8,14 +9,7 @@ export default function CheckoutPage() {
   const { intentDetail, error, isLoading, errorStatus } = useGetPaymentIntent(id!);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center">
-        <div className="flex items-center gap-2 font-mono text-xs text-text-muted">
-          <span className="w-3 h-3 border border-text-muted/30 border-t-text-muted rounded-full animate-spin" />
-          Fetching payment details...
-        </div>
-      </div>
-    );
+    return <EllipsisLoader value="Fetching payment details" />
   }
 
   if (error || !intentDetail) {
