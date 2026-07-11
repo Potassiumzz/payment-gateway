@@ -40,9 +40,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) 
 
 		try {
 			const cachedData = await getCache<TResult>(queryString);
-			console.log(cachedData);
 			if (cachedData) return setData(cachedData);
-			console.log("no cache");
 
 			const res = API<any, TResult>({ method: "GET", endpoint: url, headers: config?.headers, id });
 			setCache<TResult>(queryKey, res);

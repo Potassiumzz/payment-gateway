@@ -19,8 +19,6 @@ export default function CreateAccountPage() {
   const { createAccount, error, isLoading } = useCreateAccount();
   const {banksData, isLoading: isLoadingBanks, error: bankError} = useGetBanks();
 
-  console.log(banksData);
-
   const [values, setValues] = React.useState({
     owner_name: "",
     bank_id: 0,
