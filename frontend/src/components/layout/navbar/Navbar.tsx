@@ -81,7 +81,7 @@ export function Navbar() {
               to={nav.href}
               onClick={() => setOpen(false)}
               className={cn(
-                "block px-8 py-4 font-mono text-sm tracking-wide transition-colors duration-150",
+                "block px-8 py-4 text-sm tracking-wide transition-colors duration-150",
                 isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
               )}
               viewTransition
