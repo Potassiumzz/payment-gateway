@@ -55,6 +55,10 @@ return (
           title="Create account"
           description="Register your bank account"
         />
+        <div className="px-6 pt-4 text-xs text-tertiary/70">
+          Accounts are automatically deleted after 2 days to keep the sandbox
+          clean - nobody's holding onto test data here.
+        </div>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-5">
             {createAccountFormFields.map((field) => {
