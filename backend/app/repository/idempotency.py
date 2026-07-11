@@ -27,3 +27,8 @@ class IdempotencyRepository:
 			)
 			.first()
 		)
+
+	def update(self, value: IdempotencyKey) -> IdempotencyKey:
+		self.db.commit()
+		self.db.refresh(value)
+		return value

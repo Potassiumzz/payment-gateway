@@ -13,6 +13,11 @@ class TransactionRepository:
 		self.db.refresh(transaction)
 		return transaction
 
+	def update(self, transaction: Transaction) -> Transaction:
+		self.db.commit()
+		self.db.refresh(transaction)
+		return transaction
+
 	def delete(self, id: int) -> None:
 		self.db.delete(id)
 		self.db.commit()
@@ -23,3 +28,10 @@ class TransactionRepository:
 
 	def get_by_id(self, id: int) -> Transaction:
 		return self.db.query(Transaction).filter(Transaction.id == id).first()
+
+	def get_by_intent_id(self, id: str) -> Transaction:
+		return (
+			self.db.query(Transaction)
+			.filter(Transaction.payment_intent_id == id)
+			.first()
+		)

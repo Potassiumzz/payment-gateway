@@ -1,3 +1,6 @@
+from typing import Any
+
+from app.globals.enums import TransactionStatus
 from app.models import IdempotencyKey
 from app.repository.idempotency import IdempotencyRepository
 from app.schemas.idempotency import IdempotencyRequest
@@ -19,3 +22,15 @@ class IdempotencyService:
 
 	def get_existing_response(self, key: str, endpoint: str) -> IdempotencyKey:
 		return self.repository.get_existing_response(key, endpoint)
+
+	def update_response(
+		self,
+		existing: IdempotencyKey,
+		response_body: dict[str, Any],
+		status: TransactionStatus,
+		failure_reason: str | None,
+	) -> IdempotencyKey:
+		existing.response_body = response_body
+		existing.status = status
+		existing.failure_reason = failure_reason
+		return self.repository.update(existing)
