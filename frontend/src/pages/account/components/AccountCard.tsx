@@ -80,14 +80,21 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 
 	const isOpen = state !== "collapsed";
 
-	React.useEffect(() => {
-		if (!bodyRef.current) return;
-		if (isOpen) {
-			setBodyHeight(bodyRef.current.scrollHeight);
-		} else {
-			setBodyHeight(0);
-		}
-	}, [isOpen, state]);
+  React.useEffect(() => {
+    if (!isOpen) {
+      setBodyHeight(0);
+      return;
+    }
+    if (!bodyRef.current) return;
+
+    const el = bodyRef.current;
+    const observer = new ResizeObserver(() => {
+      setBodyHeight(el.scrollHeight);
+    });
+    observer.observe(el);
+
+    return () => observer.disconnect();
+  }, [isOpen]);
 
 	return (
 		<div
@@ -155,7 +162,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 							<div className="px-5 py-5 bg-surface-raised">
 								<div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
 									{/* Balance */}
-									<div className="space-y-0.5">
+									<div className="flex flex-col gap-0.5 self-start">
 										<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest">
 											Available Balance
 										</p>
@@ -198,7 +205,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 											</>
 										) : (
 											<div className="space-y-3 w-full">
-												<p className="font-mono text-xs text-red-400">
+												<p className="font-sans text-xs text-red-400">
 													Delete this account? This action cannot be undone through the system.
 												</p>
 
