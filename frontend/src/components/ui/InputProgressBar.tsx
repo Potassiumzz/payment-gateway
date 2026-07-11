@@ -1,4 +1,4 @@
-import { useFakeProgress } from "@/lib/hooks";
+import { useFakeProgress } from "@/lib/hooks/useFakeProgressBar";
 
 export function InputProgressBar({ active }: { active: boolean }) {
   const { progress, visible, fading } = useFakeProgress(active);

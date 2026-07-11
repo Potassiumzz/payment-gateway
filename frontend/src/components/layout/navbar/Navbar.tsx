@@ -3,7 +3,7 @@ import { MenuIcon, XIcon } from "lucide-react";
 import React from "react";
 import { Link, useLocation } from "react-router-dom"
 import { NAV_LINKS } from "./data";
-import { useScrollDirection } from "@/lib/hooks";
+import { useScrollDirection } from "@/lib/hooks/useScrollDirection";
 
 export function Navbar() {
   const { pathname } = useLocation();

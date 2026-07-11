@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/Label";
 import { Input } from "@/components/ui/Input";
 import { FieldError } from "@/components/ui/FieldError";
 import { Button } from "@/components/ui/Button";
-import { useDefaultAccounts } from "@/lib/hooks";
+import { useDefaultAccounts } from "@/lib/hooks/useDefaultAccounts";
 import { updateEachCacheEntry } from "@/cache/queryCache";
 import type { AccountResponse } from "@/features/accounts/types/account";
 import { QUERY_KEY_PREFIX } from "@/cache/queryKeys";
