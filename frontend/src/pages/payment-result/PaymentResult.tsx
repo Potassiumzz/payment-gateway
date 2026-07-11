@@ -20,6 +20,12 @@ export default function PaymentResultPage() {
     return <ErrorPage status={422} />
   }
 
+  if (error) {
+    return (
+      <ErrorPage message={error ?? "Something went wrong."} status={errorStatus ?? 500}/>
+    );
+  }
+
   const isSuccess = !!id && !error && !!transactionDetail && transactionDetail.status === TransactionStatus.Successful;
   const glowColor = isSuccess ? "bg-secondary/5" : "bg-red-500/9";
 
