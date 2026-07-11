@@ -46,14 +46,21 @@ class TransactionService:
 	) -> TransactionResponse | None:
 		endpoint = RouterPrefix.TRANSACTIONS.value
 
-		existing = self.idempotency_service.get_existing_response(
-			idempotency_key, endpoint
-		)
-
-		if existing:
-			return existing.response_body
-
 		try:
+			existing = self.idempotency_service.get_existing_response(
+				idempotency_key, endpoint
+			)
+
+			sender = self.account_service.get_by_ac_number(value.sender_account_number)
+
+			if not sender:
+				raise_404_error("Sender's account not found.")
+
+			self.pin_service.validate_account_pin(sender, value.security_pin)
+
+			if existing:
+				return existing.response_body
+
 			intent = self.intent_service.get_intent(value.payment_intent_id)
 
 			if not intent:
@@ -61,14 +68,6 @@ class TransactionService:
 
 			if intent.status != PaymentIntentStatus.REQUIRES_PAYMENT:
 				raise_400_error()
-
-			sender = self.account_service.get_by_ac_number(value.sender_account_number)
-
-			if not sender:
-				print("sender")
-				raise_404_error("Sender's account not found.")
-
-			self.pin_service.validate_account_pin(sender, value.security_pin)
 
 			receiver = self.account_service.get_by_ac_number(
 				value.receiver_account_number
