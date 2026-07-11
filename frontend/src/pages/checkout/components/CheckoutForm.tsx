@@ -1,4 +1,4 @@
-import { type PaymentIntentResponse, PaymentIntentStatus } from "@/features/payments/types/paymentIntent";
+import { type PaymentIntentResponse } from "@/features/payments/types/paymentIntent";
 import { useCreateTransaction } from "@/features/transactions/hooks/useCreateTransaction";
 import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
 import React from "react";
@@ -77,7 +77,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 		try {
       const res = await createTransaction(values);
 
-      if (intentDetail.status !== PaymentIntentStatus.SUCCEEDED) {
+      if (!res.failure_reason && intentDetail.status !== PaymentIntentStatus.SUCCEEDED) {
         const amount = parseFloat(res.amount_transferred);
         handleDefaultCardBalanceUpdate(amount);
         handleAccountListCacheUpdate(amount);
