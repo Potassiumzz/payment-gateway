@@ -127,7 +127,6 @@ class TransactionService:
 				intent.receiver_account_number or value.receiver_account_number
 			)
 			if not receiver:
-				print("reciver")
 				raise_404_error("Receiver's account not found.")
 
 			if sender.account_number == receiver.account_number:
