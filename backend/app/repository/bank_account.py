@@ -99,7 +99,7 @@ class BankAccountRepository:
 			.first()
 		)
 		if account is None:
-			raise_404_error(f"Account with account number: {ac_number} not found.")
+			raise_404_error(f"Account number {ac_number} not found.")
 		return account
 
 	def get_next_expiry(self) -> datetime | None:
