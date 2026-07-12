@@ -131,6 +131,7 @@ export default function SimulateMerchantPage() {
                   step={1}
                   max={MAX_AMOUNT_VALUE}
                   value={rawAmount}
+                  inputMode="numeric"
                   onChange={(e) =>  handleChange(e)}
                 />
               </div>

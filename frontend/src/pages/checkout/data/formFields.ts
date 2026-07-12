@@ -1,26 +1,31 @@
-export const checkoutFormFields = [
+import type { CreateTransactionPayload } from "@/features/transactions/types/transaction";
+import React from "react";
+
+type CheckoutField = Pick<
+	React.InputHTMLAttributes<HTMLInputElement>,
+	"type" | "placeholder" | "autoComplete" | "maxLength" | "pattern" | "inputMode"
+> & {
+	label: string;
+	name: keyof CreateTransactionPayload;
+};
+
+export const checkoutFormFields: CheckoutField[] = [
 	{
 		label: "Sender Account Number",
-		inputType: "number",
+		type: "number",
 		placeholder: "Your account number",
 		name: "sender_account_number",
 	},
 	{
 		label: "Receiver Account Number",
-		inputType: "number",
+		type: "number",
 		placeholder: "Receiver's account number",
 		name: "receiver_account_number",
 	},
-	// {
-	//   label: "Email",
-	//   inputType: "email",
-	//   placeholder: "email@example.com"
-	// },
 	{
 		label: "Security pin",
-		inputType: "password",
+		type: "password",
 		placeholder: "Your security pin",
 		name: "security_pin",
-		autoComplete: "current-password",
 	},
 ];

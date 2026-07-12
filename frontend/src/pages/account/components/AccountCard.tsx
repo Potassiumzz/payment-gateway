@@ -148,7 +148,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 											onChange={(e) => setPin(e.target.value)}
 											className="max-w-[120px]"
 										/>
-										<Button type="submit" size="sm" disabled={isLoading}>
+										<Button type="submit" size="sm" disabled={isLoading || pin.length < 4}>
 											{isLoading ? "Verifying..." : "Unlock"}
 										</Button>
 									</div>

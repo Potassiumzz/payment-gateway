@@ -88,7 +88,7 @@ export function AccountListPage() {
   }, [accountList])
 
   return (
-    <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-20">
+    <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-16">
       <div className="flex gap-12 items-start">
 
         {/* Sidebar — desktop only */}

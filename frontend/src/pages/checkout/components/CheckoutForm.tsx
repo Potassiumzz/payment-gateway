@@ -74,7 +74,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	async function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 
-    if (values.security_pin.length < 4) return;
+    if (values.security_pin.length < 4 || !values.sender_account_number || !values.receiver_account_number) return;
 
 		try {
       const res = await createTransaction(values);
@@ -113,18 +113,17 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
         <form onSubmit={handlePaySubmit} className="space-y-5">
           {checkoutFormFields.map((field) => {
             const value = values[field.name as keyof typeof values];
+            const { label, name, ...inputProps } = field;
             return (
               <div key={field.name} className="space-y-2">
                 <Label htmlFor={field.name}>{field.label}</Label>
                 <Input
                   id={field.name}
-                  type={field.inputType}
-                  placeholder={field.placeholder}
                   name={field.name}
-                  autoComplete={field.autoComplete}
                   disabled={isLoading || isFieldDisabled(field.name)}
                   value={value === 0 ? "" : value}
                   onChange={handleChange}
+                  {...inputProps}
                 />
               </div>
             )})}
@@ -132,7 +131,12 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
           <Button
             type="submit"
             isLoading={isLoading}
-            disabled={isLoading || values.security_pin.length < 4}
+            disabled={
+              isLoading ||
+              !values.security_pin ||
+              !values.receiver_account_number ||
+              values.security_pin.length < 4
+            }
             className="w-full"
           >
             {isLoading ? "Processing payment..." : `Pay $${parseFloat(intentDetail.amount).toFixed(2)}`}
