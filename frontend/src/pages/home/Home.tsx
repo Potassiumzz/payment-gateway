@@ -33,7 +33,7 @@ export default function Home() {
             Simulate Merchant
           </Link>
         </div>
-        <p className="text-text-muted text-xs mt-5 mx-auto md:mx-0">
+        <p className="text-text-muted text-xs mt-5 mx-auto md:mx-0 md:max-w-md">
           First time here?{" "}
           <Link
             to={NAVIGATION_ROUTES.ACCOUNTS}
