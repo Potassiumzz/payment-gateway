@@ -63,7 +63,7 @@ class BankAccountRepository:
 				)
 			)
 		total = query.count()
-		items = query.offset(offset).limit(limit).all()
+		items = query.order_by(BankAccount.id.desc()).offset(offset).limit(limit).all()
 		return items, total
 
 	def get_by_id(self, id: int) -> BankAccount:
