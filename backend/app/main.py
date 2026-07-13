@@ -18,6 +18,8 @@ from app.seed import seed_defaults
 from app.services.account_expiry_worker import run_account_expiry_worker
 from app.utils.sse_bus import set_loop
 
+load_dotenv()
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -33,8 +35,6 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPIOffline(docs_url=None, lifespan=lifespan)
-
-load_dotenv()
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
 
