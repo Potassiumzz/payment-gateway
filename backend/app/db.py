@@ -7,9 +7,7 @@ DATABASE_URL = os.getenv(
 	"DATABASE_URL", "postgresql+psycopg://postgres:postgres@localhost:5432/gateway"
 )
 
-print("Using DB:", DATABASE_URL)
-
-engine = create_engine(DATABASE_URL)
+engine = create_engine(DATABASE_URL, connect_args={"options": "-c timezone=UTC"})
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
