@@ -39,7 +39,7 @@ class Transaction(Base):
 	failure_reason: Mapped[str | None] = mapped_column(String, nullable=True)
 
 	timestamp: Mapped[datetime] = mapped_column(
-		DateTime, default=lambda: datetime.now(UTC), nullable=False
+		DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
 	)
 
 	payment_intent = relationship(

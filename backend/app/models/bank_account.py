@@ -27,7 +27,9 @@ class BankAccount(Base):
 	is_active: Mapped[bool] = mapped_column(Boolean, nullable=False)
 
 	is_default: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
-	expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+	expires_at: Mapped[datetime | None] = mapped_column(
+		DateTime(timezone=True), nullable=True
+	)
 
 	bank = relationship("Bank", back_populates="accounts")
 	account_pin = relationship(

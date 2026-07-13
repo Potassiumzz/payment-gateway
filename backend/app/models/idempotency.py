@@ -19,5 +19,5 @@ class IdempotencyKey(Base):
 	)
 	failure_reason: Mapped[str | None] = mapped_column(String, nullable=True)
 	created_at: Mapped[datetime] = mapped_column(
-		DateTime, default=lambda: datetime.now(UTC), nullable=False
+		DateTime(timezone=True), default=lambda: datetime.now(UTC), nullable=False
 	)
