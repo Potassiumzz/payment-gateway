@@ -4,7 +4,7 @@ from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 MAX_ATTEMPTS = 3
-LOCK_TIME = timedelta(minutes=15)
+LOCK_TIME = timedelta(minutes=5)
 
 
 def hash_pin(pin: str) -> str:
