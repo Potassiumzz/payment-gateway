@@ -49,29 +49,6 @@ export function invalidateCacheByPrefix(prefix: string): void {
 }
 
 /**
- * Clears a specific value from the cache for a specific key.
- *
- * Sets the value to null so future calls know the cache is invalid.
- */
-export function removeFromCachedList<Q, T>(
-	queryKey: Q,
-	predicate: (item: T) => boolean,
-	removeFromAllOptions?: { prefix: string },
-): void {
-	const cached = queryCache.get(queryKey);
-	if (!cached) return;
-
-	if (removeFromAllOptions) {
-		invalidateCacheByPrefix(removeFromAllOptions.prefix);
-	}
-
-	cached.then((c: { items: T[] }) => {
-		const items = c.items;
-		queryCache.set(queryKey, { ...cached, items: items.filter((i: T) => !predicate(i)) });
-	});
-}
-
-/**
  * Update specific entry from the cache for all matching keys prefix.
  *
  * For example, a cache for the same data could be stored under different keys.
