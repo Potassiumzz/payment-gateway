@@ -14,9 +14,9 @@ import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
-import { getCache, invalidateCache, invalidateCacheByPrefix, removeFromCachedList, updateEachCacheEntry } from "@/cache/queryCache";
+import { getCache, invalidateCache, invalidateCacheByPrefix, updateEachCacheEntry } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
-import { QUERY_KEY_PREFIX, QUERY_KEYS, type AccountListKey } from "@/cache/queryKeys";
+import { QUERY_KEY_PREFIX, QUERY_KEYS } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
 import { type AccountResponse } from "@/features/accounts/types/account";
 
@@ -40,17 +40,13 @@ export function AccountListPage() {
   function handleAccountExpired(accountId: number, accountNumber: number) {
     removeSenderAndReceiver(accountNumber);
     removeUnlockedAccount(accountId);
+    invalidateCache(QUERY_KEYS.ACCOUNT_LIST(page, search));
     setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
   }
 
   function handleAccountSSERefetch(data: SSEResponse) {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
       handleAccountExpired(data.account_id, data.account_number);
-      removeFromCachedList<AccountListKey,AccountResponse>(
-        QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch), 
-        (acc) => acc.id === data.account_id,
-        // {prefix: QUERY_KEY_PREFIX.ACCOUNT_LIST}
-      );
     }
   }
 
