@@ -26,8 +26,6 @@ def upgrade() -> None:
 		"REQUIRES_PAYMENT", "PENDING", "SUCCEEDED", "FAILED", name="payment_status"
 	)
 
-	payment_status_enum.create(op.get_bind(), checkfirst=True)
-
 	op.create_table(
 		"payment_intents",
 		sa.Column("id", sa.String(), nullable=False),
