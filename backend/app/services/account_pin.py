@@ -41,10 +41,13 @@ class AccountPinService:
 			raise_403_error("Account temporarily locked due to failed PIN attempts.")
 
 		if not verify_pin(pin, pin_record.pin_hash):
+			pin_record.failed_attempts += 1
+
 			if pin_record.failed_attempts >= MAX_ATTEMPTS:
 				pin_record.locked_until = now + LOCK_TIME
-
-			pin_record.failed_attempts += 1
+				raise_403_error(
+					"Account temporarily locked due to failed PIN attempts."
+				)
 
 			self.repository.update(pin_record)
 			raise_401_error("Invalid security PIN.")
