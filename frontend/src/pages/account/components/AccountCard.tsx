@@ -172,7 +172,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 										{account.expires_at && (
 											<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
                         Expires: <span className="text-text-secondary font-sans">
-                          {new Date(account.expires_at + "Z").toLocaleString(undefined, {
+                          {new Date(account.expires_at).toLocaleString(undefined, {
                             year: "numeric", month: "short", day: "numeric",
                             hour: "2-digit", minute: "2-digit"
                           })}

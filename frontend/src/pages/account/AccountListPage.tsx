@@ -77,7 +77,7 @@ export function AccountListPage() {
 
     const now = Date.now();
     const expiredOnes = accountList.items.filter(
-      (acc) => acc.expires_at && new Date(acc.expires_at + "Z").getTime() <= now && acc.is_active
+      (acc) => acc.expires_at && new Date(acc.expires_at).getTime() <= now && acc.is_active
     );
 
     expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.account_number));
