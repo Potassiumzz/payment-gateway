@@ -12,7 +12,9 @@ from fastapi.staticfiles import StaticFiles
 from fastapi_offline import FastAPIOffline
 
 # from app.db import Base, engine
+from app.db import SessionLocal
 from app.routers import account_pin, bank, bank_account, payment_intent, transaction
+from app.seed import seed_defaults
 from app.services.account_expiry_worker import run_account_expiry_worker
 from app.utils.sse_bus import set_loop
 
@@ -20,6 +22,11 @@ from app.utils.sse_bus import set_loop
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 	set_loop(asyncio.get_running_loop())
+	db = SessionLocal()
+	try:
+		seed_defaults(db)
+	finally:
+		db.close()
 	task = asyncio.create_task(run_account_expiry_worker())
 	yield
 	task.cancel()
