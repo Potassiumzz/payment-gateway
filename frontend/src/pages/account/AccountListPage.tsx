@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
 import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
-import { getCache, removeFromCachedList, updateEachCacheEntry } from "@/cache/queryCache";
+import { getCache, invalidateCache, invalidateCacheByPrefix, removeFromCachedList, updateEachCacheEntry } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
 import { QUERY_KEY_PREFIX, QUERY_KEYS, type AccountListKey } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
@@ -40,17 +40,17 @@ export function AccountListPage() {
   function handleAccountExpired(accountId: number, accountNumber: number) {
     removeSenderAndReceiver(accountNumber);
     removeUnlockedAccount(accountId);
-    removeFromCachedList<AccountListKey,AccountResponse>(
-      QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch), 
-      (acc) => acc.id === accountId,
-      {prefix: QUERY_KEY_PREFIX.ACCOUNT_LIST}
-    );
     setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
   }
 
   function handleAccountSSERefetch(data: SSEResponse) {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
       handleAccountExpired(data.account_id, data.account_number);
+      removeFromCachedList<AccountListKey,AccountResponse>(
+        QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch), 
+        (acc) => acc.id === data.account_id,
+        // {prefix: QUERY_KEY_PREFIX.ACCOUNT_LIST}
+      );
     }
   }
 
@@ -86,6 +86,14 @@ export function AccountListPage() {
 
     expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.account_number));
   }, [accountList])
+
+  React.useEffect(() => {
+    if(page !== 1 && accounts?.length === 0) {
+      setPage(page - 1);
+      invalidateCache(QUERY_KEYS.ACCOUNT_LIST(page, search));
+    }
+
+  }, [page, accounts])
 
   return (
     <div className="mx-auto px-2 md:px-6 max-w-6xl w-full py-4 md:py-16">
@@ -179,7 +187,10 @@ export function AccountListPage() {
                   account={account}
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
-                  onDelete={() => handleAccountExpired(account.id, account.account_number)}
+                  onDelete={() => {
+                    invalidateCacheByPrefix(QUERY_KEY_PREFIX.ACCOUNT_LIST);
+                    handleAccountExpired(account.id, account.account_number);
+                  }}
                   onRefill={handleAccountRefilled}
                 />
               ))}
