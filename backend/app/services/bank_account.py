@@ -32,7 +32,7 @@ class BankAccountService:
 		return max_num + 1
 
 	def __sync_expiry(self, account: BankAccount) -> BankAccount:
-		now = datetime.now(UTC).replace(tzinfo=None)
+		now = datetime.now(UTC)
 		if account.expires_at and now >= account.expires_at and account.is_active:
 			account.is_active = False
 			self.repository.commit()
@@ -56,7 +56,7 @@ class BankAccountService:
 
 		ac_num = self.__generate_ac_number(value.bank_id)
 
-		now = datetime.now(UTC).replace(tzinfo=None)
+		now = datetime.now(UTC)
 
 		account = BankAccount(
 			account_number=ac_num,

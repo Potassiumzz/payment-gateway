@@ -49,10 +49,10 @@ class BankAccountRepository:
 		self, search: str | None, offset: int, limit: int
 	) -> tuple[list[BankAccount], int]:
 		query = self.db.query(BankAccount).filter(
-			BankAccount.is_active == 1,
+			BankAccount.is_active.is_(True),
 			or_(
 				BankAccount.expires_at.is_(None),
-				BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+				BankAccount.expires_at > datetime.now(UTC),
 			),
 		)
 		if search:
@@ -71,10 +71,10 @@ class BankAccountRepository:
 			self.db.query(BankAccount)
 			.filter(
 				BankAccount.id == id,
-				BankAccount.is_active == 1,
+				BankAccount.is_active.is_(True),
 				or_(
 					BankAccount.expires_at.is_(None),
-					BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+					BankAccount.expires_at > datetime.now(UTC),
 				),
 			)
 			.first()
@@ -90,10 +90,10 @@ class BankAccountRepository:
 			self.db.query(BankAccount)
 			.filter(
 				BankAccount.account_number == ac_number,
-				BankAccount.is_active == 1,
+				BankAccount.is_active.is_(True),
 				or_(
 					BankAccount.expires_at.is_(None),
-					BankAccount.expires_at > datetime.now(UTC).replace(tzinfo=None),
+					BankAccount.expires_at > datetime.now(UTC),
 				),
 			)
 			.first()
@@ -113,7 +113,7 @@ class BankAccountRepository:
 		)
 
 	def get_all_expired(self) -> list[BankAccount]:
-		now = datetime.now(UTC).replace(tzinfo=None)
+		now = datetime.now(UTC)
 		return (
 			self.db.query(BankAccount)
 			.filter(

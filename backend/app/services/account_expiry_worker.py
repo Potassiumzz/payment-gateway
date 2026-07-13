@@ -21,7 +21,7 @@ async def run_account_expiry_worker() -> None:
 			)
 			next_expiry = service.get_next_expiry()
 			if next_expiry:
-				now = datetime.now(UTC).replace(tzinfo=None)
+				now = datetime.now(UTC)
 				delay = max((next_expiry - now).total_seconds(), 0)
 				await asyncio.sleep(delay)
 				service.sync_all_expired()
