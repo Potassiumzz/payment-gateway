@@ -1,6 +1,6 @@
 import { Footer } from "@/components/layout/footer/Footer";
 import { Navbar } from "@/components/layout/navbar/Navbar";
-import { TitleUpdater } from "@/components/TitleUpdater";
+import { TitleUpdater } from "./components/TitleUpdater";
 import { Outlet, ScrollRestoration } from "react-router-dom";
 
 export function RootLayout() {
