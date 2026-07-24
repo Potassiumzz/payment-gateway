@@ -2,7 +2,7 @@ import React from "react";
 import { API } from "@/api/config/config";
 import type { APIMethods, Endpoint } from "@/api/config/types";
 
-interface IMutateOptions<TInput> {
+interface MutateOptions<TInput> {
 	url: Endpoint;
 	input?: TInput;
 	id?: TInput;
@@ -18,7 +18,7 @@ export function useMutation<TInput, TResult>() {
 	const [error, setError] = React.useState<string | null>(null);
 	const [isLoading, setIsLoading] = React.useState(false);
 
-	async function mutate(mutateOptions: IMutateOptions<TInput>) {
+	async function mutate(mutateOptions: MutateOptions<TInput>) {
 		const { url, input, id, method = "POST", config } = mutateOptions;
 		setIsLoading(true);
 		setError(null);

@@ -1,4 +1,4 @@
-import type { IAPI } from "@/api/config/types";
+import type { ApiOptions } from "@/api/config/types";
 import { BASE_URL } from "@/constants/endpoints";
 
 const apiHeaders = new Headers();
@@ -24,7 +24,7 @@ export async function API<TInput, TResult>({
 	input,
 	headers,
 	id = "",
-}: IAPI<TInput>): Promise<TResult> {
+}: ApiOptions<TInput>): Promise<TResult> {
 	if (headers) {
 		const headerKey = Object.keys(headers);
 		const headerValue = Object.values(headers);

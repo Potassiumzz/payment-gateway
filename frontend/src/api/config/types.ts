@@ -7,7 +7,7 @@ type AccountEndpoint =
 	| `${typeof BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}?${string}`
 	| `${typeof BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}${number}`;
 
-export interface IAPI<T> {
+export interface ApiOptions<T> {
 	method: APIMethods;
 	endpoint: Endpoint;
 	input?: T;

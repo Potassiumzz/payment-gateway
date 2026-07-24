@@ -4,7 +4,7 @@ import React from "react";
 import { API, ApiError } from "@/api/config/config";
 import type { Endpoint } from "@/api/config/types";
 
-interface IQueryOptions {
+interface QueryOptions {
 	url: Endpoint;
 	id?: string;
 	queryKey: QueryKeyType;
@@ -24,7 +24,7 @@ interface IQueryOptions {
  * @param config - Custom header config options while fetching - optional.
  * Stores data based on the provided `url` and makes caching more efficient.
  */
-export function useQuery<TResult>({ url, id, queryKey, config }: IQueryOptions) {
+export function useQuery<TResult>({ url, id, queryKey, config }: QueryOptions) {
 	const [data, setData] = React.useState<TResult | null>(null);
 	const [isLoading, setIsLoading] = React.useState(true);
 	const [error, setError] = React.useState<string | null>(null);
