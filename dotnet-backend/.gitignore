@@ -1,0 +1,21 @@
+# Build output
+bin/
+obj/
+
+# User-specific files (per-developer IDE state, not project config)
+*.user
+*.suo
+
+# IDE folders
+.vs/
+.vscode/
+
+# Rider
+.idea/
+
+# NuGet
+*.nupkg
+packages/
+
+# Test results
+[Tt]est[Rr]esult*/
