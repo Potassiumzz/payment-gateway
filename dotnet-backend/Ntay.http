@@ -1,6 +1,1 @@
-@Ntay_HostAddress = http://localhost:5072
-
-GET {{Ntay_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
+@Ntay_HostAddress = http://localhost:8888
