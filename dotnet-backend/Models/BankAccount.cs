@@ -1,3 +1,5 @@
+using System;
+
 namespace Ntay.Models;
 
 public class BankAccount
