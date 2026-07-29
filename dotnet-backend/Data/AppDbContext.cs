@@ -10,40 +10,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder
-            .Entity<BankAccount>()
-            .HasOne(ba => ba.Bank)
-            .WithMany()
-            .HasForeignKey(ba => ba.BankId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder
-            .Entity<Transaction>()
-            .HasOne(t => t.SenderAccount)
-            .WithMany()
-            .HasForeignKey(t => t.SenderAccountId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder
-            .Entity<Transaction>()
-            .HasOne(t => t.ReceiverAccount)
-            .WithMany()
-            .HasForeignKey(t => t.ReceiverAccountId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder
-            .Entity<PaymentIntent>()
-            .HasOne(pi => pi.ReceiverAccount)
-            .WithMany()
-            .HasForeignKey(pi => pi.ReceiverAccountId)
-            .OnDelete(DeleteBehavior.Restrict);
-
-        modelBuilder
-            .Entity<Transaction>()
-            .HasOne(t => t.PaymentIntent)
-            .WithMany()
-            .HasForeignKey(t => t.PaymentIntentId)
-            .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
     }
 
     public DbSet<Bank> Banks { get; set; } = null!;
