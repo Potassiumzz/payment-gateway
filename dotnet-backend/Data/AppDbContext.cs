@@ -17,4 +17,5 @@ public class AppDbContext : DbContext
     public DbSet<BankAccount> BankAccounts { get; set; } = null!;
     public DbSet<Transaction> Transactions { get; set; } = null!;
     public DbSet<PaymentIntent> PaymentIntents { get; set; } = null!;
+    public DbSet<AccountPin> AccountPins { get; set; } = null!;
 }
