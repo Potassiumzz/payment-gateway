@@ -1,4 +1,4 @@
-namespace Ntay.Dtos;
+namespace Ntay.Dtos.Bank;
 
 public record BankResponse
 {
