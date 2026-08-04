@@ -44,9 +44,9 @@ public class BankService
         return new BankResponse { Id = bank.Id, Name = bank.Name };
     }
 
-    public async Task<BankResponse?> UpdateBankAsync(UpdateBankRequest request)
+    public async Task<BankResponse?> UpdateBankAsync(int id, UpdateBankRequest request)
     {
-        var bank = await _dbContext.Banks.FindAsync(request.Id);
+        var bank = await _dbContext.Banks.FindAsync(id);
         if (bank is null)
             return null;
 
