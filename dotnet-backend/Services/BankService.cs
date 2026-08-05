@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
 using Ntay.Dtos.Bank;
@@ -36,7 +36,7 @@ public class BankService
     {
         var nameExists = await _dbContext.Banks.AnyAsync(b => b.Name == request.Name);
         if (nameExists)
-            throw new BadHttpRequestException($"Bank with name '{request.Name}' already exists.");
+            throw new InvalidOperationException($"Bank with name '{request.Name}' already exists.");
 
         var bank = new Bank { Name = request.Name };
         _dbContext.Banks.Add(bank);
@@ -52,7 +52,7 @@ public class BankService
 
         var nameExists = await _dbContext.Banks.AnyAsync(b => b.Name == request.Name);
         if (nameExists)
-            throw new BadHttpRequestException($"Bank with name '{request.Name}' already exists.");
+            throw new InvalidOperationException($"Bank with name '{request.Name}' already exists.");
 
         bank.Name = request.Name;
         await _dbContext.SaveChangesAsync();

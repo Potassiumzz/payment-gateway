@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -36,17 +37,31 @@ public class BankController : ControllerBase
     [HttpPost]
     public async Task<ActionResult<BankResponse>> CreateBank(CreateBankRequest request)
     {
-        var bank = await _bankService.CreateBankAsync(request);
-        return CreatedAtAction(nameof(GetBank), new { id = bank.Id }, bank);
+        try
+        {
+            var bank = await _bankService.CreateBankAsync(request);
+            return CreatedAtAction(nameof(GetBank), new { id = bank.Id }, bank);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Conflict(new { error = e.Message });
+        }
     }
 
     [HttpPut("{id}")]
     public async Task<ActionResult<BankResponse>> UpdateBank(int id, UpdateBankRequest request)
     {
-        var bank = await _bankService.UpdateBankAsync(id, request);
-        if (bank is null)
-            return NotFound();
-        return Ok(bank);
+        try
+        {
+            var bank = await _bankService.UpdateBankAsync(id, request);
+            if (bank is null)
+                return NotFound();
+            return Ok(bank);
+        }
+        catch (InvalidOperationException e)
+        {
+            return Conflict(new { error = e.Message });
+        }
     }
 
     [HttpDelete("{id}")]
