@@ -34,7 +34,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 
 	function handleToggle() {
 		if (state === "collapsed") {
-			const alreadyUnlocked = getUnlockedAccounts().has(account.account_number);
+			const alreadyUnlocked = getUnlockedAccounts().has(account.accountNumber);
 			setState(alreadyUnlocked ? "unlocked" : "pin");
 		} else {
 			setState("collapsed");
@@ -44,8 +44,8 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 	async function handlePinSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		try {
-			await validatePin({ pin, account_number: account.account_number });
-			markAccountUnlocked(account.account_number);
+			await validatePin({ pin, account_number: account.accountNumber });
+			markAccountUnlocked(account.accountNumber );
 			setState("unlocked");
 		} catch (e) {
 			console.log(e);
@@ -109,15 +109,15 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 				className="w-full flex items-center justify-between px-5 py-3.5 text-left hover:bg-surface-hover transition-colors duration-150"
 			>
 				<div className="flex items-center gap-5 min-w-0">
-					<span className="font-mono text-[11px] text-text-muted shrink-0">#{account.account_number}</span>
-					<span className="text-sm text-text-primary truncate font-semibold">{account.owner_name}</span>
+					<span className="font-mono text-[11px] text-text-muted shrink-0">#{account.accountNumber}</span>
+					<span className="text-sm text-text-primary truncate font-semibold">{account.ownerName}</span>
 					<span className="font-mono text-[11px] text-text-muted border border-white/20 px-1.5 py-0.5 rounded-sm shrink-0">
 						{account.bank.name}
 					</span>
 				</div>
 
 				<div className="flex items-center gap-3 shrink-0 ml-4">
-					{!account.is_active && (
+					{!account.isActive && (
 						<span className="font-mono text-[10px] text-red-400 uppercase tracking-widest">inactive</span>
 					)}
 					<ChevronDownIcon
@@ -169,10 +169,10 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 										<p className="text-3xl font-light text-text-primary tracking-tight">
 											${account.balance.toFixed(2)}
 										</p>
-										{account.expires_at && (
+										{account.expiresAt && (
 											<p className="font-mono text-[10px] text-text-muted uppercase tracking-widest mt-1">
                         Expires: <span className="text-text-secondary font-sans">
-                          {new Date(account.expires_at).toLocaleString(undefined, {
+                          {new Date(account.expiresAt).toLocaleString(undefined, {
                             year: "numeric", month: "short", day: "numeric",
                             hour: "2-digit", minute: "2-digit"
                           })}
@@ -197,7 +197,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 													Refill
 												</Button>
 
-												{!account.is_default && (
+												{!account.isDefault && (
 													<Button size="sm" variant="danger" onClick={() => setConfirmDelete(true)}>
 														Delete
 													</Button>

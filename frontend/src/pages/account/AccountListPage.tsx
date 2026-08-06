@@ -77,10 +77,10 @@ export function AccountListPage() {
 
     const now = Date.now();
     const expiredOnes = accountList.items.filter(
-      (acc) => acc.expires_at && new Date(acc.expires_at).getTime() <= now && acc.is_active
+      (acc) => acc.expiresAt && new Date(acc.expiresAt).getTime() <= now && acc.isActive
     );
 
-    expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.account_number));
+    expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.accountNumber));
   }, [accountList])
 
   React.useEffect(() => {
@@ -179,13 +179,13 @@ export function AccountListPage() {
             <div className="space-y-2 xl:min-h-75">
               {accounts?.map((account) => (
                 <AccountCard
-                  key={account.account_number}
+                  key={account.accountNumber}
                   account={account}
                   onSetSender={setSender}
                   onSetReceiver={setReceiver}
                   onDelete={() => {
                     invalidateCacheByPrefix(QUERY_KEY_PREFIX.ACCOUNT_LIST);
-                    handleAccountExpired(account.id, account.account_number);
+                    handleAccountExpired(account.id, account.accountNumber);
                   }}
                   onRefill={handleAccountRefilled}
                 />

@@ -26,8 +26,8 @@ export function DefaultAccountCard({ label, account, onRemove }: Props) {
       {account ? (
         <>
           <div>
-            <p className="text-sm  text-foreground font-medium">{account.owner_name}</p>
-            <p className="text-xs text-text-muted">#{account.account_number}</p>
+            <p className="text-sm  text-foreground font-medium">{account.ownerName}</p>
+            <p className="text-xs text-text-muted">#{account.accountNumber}</p>
           </div>
           <div>
             <p className="text-xs text-text-muted font-mono uppercase tracking-wider">Available Balance</p>

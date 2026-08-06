@@ -18,7 +18,7 @@ export default function SimulateMerchantPage() {
   const receiver = getDefaultReceiver();
   const [intent, setIntent] = React.useState<PaymentIntentPayload>({
       amount: 0,
-      ...(receiver && { receiver_account_number: receiver.account_number }),
+      ...(receiver && { receiver_account_number: receiver.accountNumber }),
   });
 
   const [maxAmountError, setMaxAmountError] = React.useState("");
@@ -100,7 +100,7 @@ export default function SimulateMerchantPage() {
                   <p className="pl-4">
                     <span className="text-secondary">"receiver_account_number"</span>
                     <span className="text-text-muted">: </span>
-                    <span className="text-primary">{receiver.account_number}</span>
+                    <span className="text-primary">{receiver.accountNumber}</span>
                     <span className="text-text-muted">,</span>
                   </p>
                 )}

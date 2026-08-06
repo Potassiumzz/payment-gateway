@@ -20,18 +20,18 @@ export default function CreateAccountPage() {
   const {banksData, isLoading: isLoadingBanks, error: bankError} = useGetBanks();
 
   const [values, setValues] = React.useState({
-    owner_name: "",
-    bank_id: 0,
+    ownerName: "",
+    bankId: 0,
     pin: "",
   } satisfies CreateAccountPayload)
 
 	async function handleSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 
-    if (!values.owner_name.trim() || !values.bank_id || values.pin.length !== 4) return;
+    if (!values.ownerName.trim() || !values.bankId || values.pin.length !== 4) return;
 
     try {
-      await createAccount({...values, bank_id: Number(values.bank_id)});
+      await createAccount({...values, bankId: Number(values.bankId)});
       if (!isLoading) {
         invalidateCacheByPrefix("ACCOUNT_LIST_");
         navigate(NAVIGATION_ROUTES.ACCOUNTS);
@@ -69,7 +69,7 @@ return (
                       name={field.name}
                       placeholder={isLoadingBanks ? "Loading banks..." : field.placeholder}
                       disabled={isLoading || isLoadingBanks}
-                      value={values.bank_id === 0 ? "" : values.bank_id}
+                      value={values.bankId === 0 ? "" : values.bankId}
                       onChange={handleChange}
                       options={(banksData ?? []).map((bank) => ({
                         label: bank.name,
@@ -105,8 +105,8 @@ return (
               isLoading={isLoading}
               disabled={
                 isLoading ||
-                !values.owner_name.trim() ||
-                !values.bank_id ||
+                !values.ownerName.trim() ||
+                !values.bankId ||
                 values.pin.length !== 4
               }
               className="w-full"

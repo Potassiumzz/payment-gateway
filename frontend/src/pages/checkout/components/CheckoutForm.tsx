@@ -32,8 +32,8 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 
 	const [values, setValues] = React.useState({
 		payment_intent_id: intentDetail.id,
-		sender_account_number: sender?.account_number ?? 0,
-    receiver_account_number: intentDetail.receiver_account_number ?? receiver?.account_number ?? 0,
+		sender_account_number: sender?.accountNumber ?? 0,
+    receiver_account_number: intentDetail.receiver_account_number ?? receiver?.accountNumber ?? 0,
 		security_pin: "",
 	} satisfies CreateTransactionPayload);
 
@@ -59,10 +59,10 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
       (cache) => ({
         ...cache,
         items: cache.items.map((acc) => {
-          if (acc.account_number === sender?.account_number) {
+          if (acc.accountNumber === sender?.accountNumber) {
             return { ...acc, balance: acc.balance - amount };
           }
-          if (acc.account_number === receiver?.account_number) {
+          if (acc.accountNumber === receiver?.accountNumber) {
             return { ...acc, balance: acc.balance + amount };
           }
           return acc;
