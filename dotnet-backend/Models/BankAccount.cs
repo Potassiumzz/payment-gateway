@@ -4,7 +4,7 @@ namespace Ntay.Models;
 
 public class BankAccount
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required int AccountNumber { get; set; }
     public required decimal Balance { get; set; }
     public required string OwnerName { get; set; }
