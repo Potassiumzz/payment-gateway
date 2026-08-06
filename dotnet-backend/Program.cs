@@ -16,6 +16,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddScoped<BankService>();
+builder.Services.AddScoped<BankAccountService>();
 
 var app = builder.Build();
 
