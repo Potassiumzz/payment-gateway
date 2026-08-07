@@ -18,6 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<BankService>();
 builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<AccountPinService>();
+builder.Services.AddScoped<PaymentIntentService>();
 
 var app = builder.Build();
 
