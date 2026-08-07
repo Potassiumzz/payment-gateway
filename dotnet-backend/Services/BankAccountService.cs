@@ -14,10 +14,12 @@ namespace Ntay.Services;
 public class BankAccountService
 {
     private readonly AppDbContext _dbContext;
+    private readonly AccountPinService _accountPinService;
 
-    public BankAccountService(AppDbContext context)
+    public BankAccountService(AppDbContext context, AccountPinService accountPinService)
     {
         _dbContext = context;
+        _accountPinService = accountPinService;
     }
 
     private async Task<int> GenerateAccountNumber(int bankId)
@@ -92,6 +94,7 @@ public class BankAccountService
         {
             _dbContext.BankAccounts.Add(account);
             await _dbContext.SaveChangesAsync();
+            await _accountPinService.CreatePinAsync(account.Id, request.Pin);
             await createAccountTransaction.CommitAsync();
         }
         catch (Exception)
