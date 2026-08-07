@@ -59,6 +59,7 @@ public class PaymentIntentService
             Status = intent.Status,
             ReturnUrl = intent.ReturnUrl,
             ReceiverAccountNumber = receiverAccount?.AccountNumber,
+            AttemptCount = intent.AttemptCount,
             CheckoutUrl = $"{_checkoutUrl}/{intent.Id}",
         };
     }
@@ -74,6 +75,7 @@ public class PaymentIntentService
                 Status = i.Status,
                 ReturnUrl = i.ReturnUrl,
                 ReceiverAccountNumber = i.ReceiverAccountId,
+                AttemptCount = i.AttemptCount,
                 CheckoutUrl = $"{_checkoutUrl}/{i.Id}",
             })
             .SingleOrDefaultAsync();

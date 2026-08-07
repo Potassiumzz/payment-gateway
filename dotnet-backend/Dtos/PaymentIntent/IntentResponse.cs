@@ -8,4 +8,5 @@ public record IntentResponse
     public required string? ReturnUrl { get; init; }
     public required int? ReceiverAccountNumber { get; init; }
     public required string CheckoutUrl { get; init; }
+    public required int AttemptCount { get; init; }
 }
