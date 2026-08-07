@@ -1,3 +1,5 @@
+using Ntay.Dtos.Transaction;
+
 namespace Ntay.Dtos.Idempotency;
 
 public record CreateIdempotencyRequest

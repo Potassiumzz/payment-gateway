@@ -1,4 +1,5 @@
 using System;
+using Ntay.Dtos.Transaction;
 
 namespace Ntay.Dtos.Idempotency;
 

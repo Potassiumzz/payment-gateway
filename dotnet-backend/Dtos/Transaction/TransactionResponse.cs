@@ -1,6 +1,6 @@
 using System;
 
-namespace Ntay.Dtos;
+namespace Ntay.Dtos.Transaction;
 
 public record TransactionResponse
 {

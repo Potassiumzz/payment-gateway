@@ -1,5 +1,5 @@
 using System;
-using Ntay.Dtos;
+using Ntay.Dtos.Transaction;
 
 namespace Ntay.Models;
 
