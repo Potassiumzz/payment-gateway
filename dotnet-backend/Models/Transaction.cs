@@ -4,11 +4,11 @@ namespace Ntay.Models;
 
 public class Transaction
 {
-    public required int Id { get; set; }
+    public int Id { get; set; }
     public required decimal AmountTransferred { get; set; }
     public required TransactionStatus Status { get; set; }
-    public string? FailureReason { get; set; }
-    public required DateTime Timestamp { get; set; }
+    public required string? FailureReason { get; set; }
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
 
     public required int SenderAccountId { get; set; }
     public BankAccount SenderAccount { get; set; } = null!;
