@@ -20,6 +20,7 @@ builder.Services.AddScoped<BankAccountService>();
 builder.Services.AddScoped<AccountPinService>();
 builder.Services.AddScoped<PaymentIntentService>();
 builder.Services.AddScoped<IdempotencyService>();
+builder.Services.AddScoped<TransactionService>();
 
 var app = builder.Build();
 
