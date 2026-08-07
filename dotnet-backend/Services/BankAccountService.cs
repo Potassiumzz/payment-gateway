@@ -70,6 +70,13 @@ public class BankAccountService
             .SingleOrDefaultAsync();
     }
 
+    public async Task<BankAccount?> GetMutableAccountByNumberAsync(int accountNumber)
+    {
+        return await _dbContext
+            .BankAccounts.Where(b => b.AccountNumber == accountNumber)
+            .SingleOrDefaultAsync();
+    }
+
     public async Task<BankAccountResponse> CreateAccountAsync(CreateAccountRequest request)
     {
         Bank? bank = await _dbContext.Banks.SingleOrDefaultAsync(b => b.Id == request.BankId);

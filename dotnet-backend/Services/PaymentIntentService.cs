@@ -80,4 +80,9 @@ public class PaymentIntentService
             })
             .SingleOrDefaultAsync();
     }
+
+    public async Task<PaymentIntent?> GetMutableIntentAsync(string id)
+    {
+        return await _dbContext.PaymentIntents.SingleOrDefaultAsync(p => p.Id == id);
+    }
 }
