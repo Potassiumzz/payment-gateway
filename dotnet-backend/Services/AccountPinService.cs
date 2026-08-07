@@ -32,14 +32,14 @@ public class AccountPinService
         return;
     }
 
-    public async Task<bool> ValidatePinAsync(int accountId, string pinValue)
+    public async Task ValidatePinAsync(int accountId, string pinValue)
     {
         AccountPin? pin = await _dbContext.AccountPins.SingleOrDefaultAsync(p =>
             p.BankAccountId == accountId
         );
 
         if (pin is null)
-            return false;
+            throw new InvalidOperationException("Security PIN not set for this account");
 
         DateTime now = DateTime.UtcNow;
 
@@ -69,7 +69,5 @@ public class AccountPinService
         pin.LockedUntil = null;
 
         await _dbContext.SaveChangesAsync();
-
-        return true;
     }
 }
