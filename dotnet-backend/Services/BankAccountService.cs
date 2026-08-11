@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
+using Ntay.Dtos.AccountPin;
 using Ntay.Dtos.Bank;
 using Ntay.Dtos.BankAccount;
 using Ntay.Mapping;
@@ -101,7 +102,9 @@ public class BankAccountService
         {
             _dbContext.BankAccounts.Add(account);
             await _dbContext.SaveChangesAsync();
-            await _accountPinService.CreatePinAsync(account.Id, request.Pin);
+            await _accountPinService.CreatePinAsync(
+                new CreatePinRequest { AccountId = account.Id, Pin = request.Pin }
+            );
             await createAccountTransaction.CommitAsync();
         }
         catch (Exception)

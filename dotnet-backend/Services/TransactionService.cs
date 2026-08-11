@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
+using Ntay.Dtos.AccountPin;
 using Ntay.Dtos.Idempotency;
 using Ntay.Dtos.Transaction;
 using Ntay.Models;
@@ -102,7 +103,9 @@ public class TransactionService(
         if (sender is null)
             throw new InvalidOperationException("Sender's bank account not found.");
 
-        await pinService.ValidatePinAsync(sender.Id, securityPin);
+        await pinService.ValidatePinAsync(
+            new ValidatePinRequest { AccountId = sender.Id, Pin = securityPin }
+        );
 
         return sender;
     }

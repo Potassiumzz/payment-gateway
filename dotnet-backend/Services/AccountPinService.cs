@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
+using Ntay.Dtos.AccountPin;
 using Ntay.Models;
 using Ntay.Security;
 
@@ -20,22 +21,22 @@ public class AccountPinService
         _dbContext = dbContext;
     }
 
-    public async Task CreatePinAsync(int accountId, string pinValue)
+    public async Task CreatePinAsync(CreatePinRequest request)
     {
         AccountPin pin = new AccountPin
         {
-            BankAccountId = accountId,
-            PinHash = PinHasher.HashPin(pinValue),
+            BankAccountId = request.AccountId,
+            PinHash = PinHasher.HashPin(request.Pin),
         };
         _dbContext.AccountPins.Add(pin);
         await _dbContext.SaveChangesAsync();
         return;
     }
 
-    public async Task ValidatePinAsync(int accountId, string pinValue)
+    public async Task ValidatePinAsync(ValidatePinRequest request)
     {
         AccountPin? pin = await _dbContext.AccountPins.SingleOrDefaultAsync(p =>
-            p.BankAccountId == accountId
+            p.BankAccountId == request.AccountId
         );
 
         if (pin is null)
@@ -48,7 +49,7 @@ public class AccountPinService
                 "Account temporarily locked due to failed PIN attempts."
             );
 
-        if (!PinHasher.VerifyPin(pinValue, pin.PinHash))
+        if (!PinHasher.VerifyPin(request.Pin, pin.PinHash))
         {
             pin.FailedAttempts += 1;
 
