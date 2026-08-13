@@ -20,13 +20,13 @@ export const createAccountFormFields: FormField[] = [
 		label: "Owner name",
 		inputType: "text",
 		placeholder: "Enter a fake name",
-		name: "owner_name",
+		name: "ownerName",
 	},
 	{
 		type: "select",
 		label: "Bank",
 		placeholder: "Select a bank",
-		name: "bank_id",
+		name: "bankId",
 	},
 	{
 		type: "input",
