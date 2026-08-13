@@ -31,10 +31,10 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
   };
 
 	const [values, setValues] = React.useState({
-		payment_intent_id: intentDetail.id,
-		sender_account_number: sender?.accountNumber ?? 0,
-    receiver_account_number: intentDetail.receiverAccountNumber ?? receiver?.accountNumber ?? 0,
-		security_pin: "",
+		paymentIntentId: intentDetail.id,
+		senderAccountNumber: sender?.accountNumber ?? 0,
+    receiverAccountNumber: intentDetail.receiverAccountNumber ?? receiver?.accountNumber ?? 0,
+		securityPin: "",
 	} satisfies CreateTransactionPayload);
 
 	const { createTransaction, error, isLoading } = useCreateTransaction();
@@ -74,13 +74,13 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
 	async function handlePaySubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 
-    if (values.security_pin.length < 4 || !values.sender_account_number || !values.receiver_account_number) return;
+    if (values.securityPin.length < 4 || !values.senderAccountNumber || !values.receiverAccountNumber) return;
 
 		try {
       const res = await createTransaction(values);
 
-      if (!res.failure_reason && intentDetail.status !== PaymentIntentStatus.SUCCEEDED) {
-        const amount = parseFloat(res.amount_transferred);
+      if (!res.failureReason && intentDetail.status !== PaymentIntentStatus.SUCCEEDED) {
+        const amount = parseFloat(res.amountTransferred);
         handleDefaultCardBalanceUpdate(amount);
         handleAccountListCacheUpdate(amount);
       }
@@ -133,9 +133,9 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
             isLoading={isLoading}
             disabled={
               isLoading ||
-              !values.security_pin ||
-              !values.receiver_account_number ||
-              values.security_pin.length < 4
+              !values.securityPin ||
+              !values.receiverAccountNumber ||
+              values.securityPin.length < 4
             }
             className="w-full"
           >

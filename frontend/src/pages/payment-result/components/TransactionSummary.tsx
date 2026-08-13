@@ -21,7 +21,7 @@ export function TransactionSummary({ transactionDetail }: TransactionSummaryProp
         <div className="flex justify-between">
           <span className="text-text-muted">Amount paid</span>
           <span className="text-text-primary font-semibold">
-            ${parseFloat(transactionDetail.amount_transferred).toFixed(2)}
+            ${parseFloat(transactionDetail.amountTransferred).toFixed(2)}
           </span>
         </div>
       )}

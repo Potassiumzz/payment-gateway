@@ -38,9 +38,9 @@ export default function PaymentResultPage() {
       <div className="relative w-full max-w-md space-y-6 text-center">
         {transactionDetail && (
           <>
-            <ResultHeader isSuccess={isSuccess} failureReason={transactionDetail.failure_reason}/>
+            <ResultHeader isSuccess={isSuccess} failureReason={transactionDetail.failureReason}/>
             <TransactionSummary transactionDetail={transactionDetail} />
-            <ResultActions isSuccess={isSuccess} id={transactionDetail?.payment_intent_id} returnUrl={transactionDetail?.return_url} />
+            <ResultActions isSuccess={isSuccess} id={transactionDetail?.paymentIntentId} returnUrl={transactionDetail?.returnUrl} />
           </>
         )}
       </div>

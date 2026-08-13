@@ -14,13 +14,13 @@ export function useCreateTransaction() {
 				"Idempotency-Key": "",
 			};
 
-			const idempotencyKey = localStorage.getItem(data.payment_intent_id);
+			const idempotencyKey = localStorage.getItem(data.paymentIntentId);
 
 			if (idempotencyKey) {
 				createTransactionRequestHeader["Idempotency-Key"] = idempotencyKey;
 			} else {
 				createTransactionRequestHeader["Idempotency-Key"] = crypto.randomUUID();
-				localStorage.setItem(data.payment_intent_id, `${createTransactionRequestHeader["Idempotency-Key"]}`);
+				localStorage.setItem(data.paymentIntentId, `${createTransactionRequestHeader["Idempotency-Key"]}`);
 			}
 
 			return await mutate({

@@ -14,18 +14,18 @@ export const checkoutFormFields: CheckoutField[] = [
 		label: "Sender Account Number",
 		type: "number",
 		placeholder: "Your account number",
-		name: "sender_account_number",
+		name: "senderAccountNumber",
 	},
 	{
 		label: "Receiver Account Number",
 		type: "number",
 		placeholder: "Receiver's account number",
-		name: "receiver_account_number",
+		name: "receiverAccountNumber",
 	},
 	{
 		label: "Security pin",
 		type: "password",
 		placeholder: "Your security pin",
-		name: "security_pin",
+		name: "securityPin",
 	},
 ];
