@@ -5,8 +5,8 @@ export const CODE_EXAMPLE_JS = `const response = await fetch("${BASE_URL}${BACKE
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
     amount: 50,
-    return_url: "https://your-site.com/payment/success",
-    receiver_account_number: 100001,
+    returnUrl: "https://your-site.com/payment/success",
+    receiverAccountNumber: 100001,
   }),
 });
 
@@ -20,6 +20,6 @@ export const CODE_EXAMPLE_CURL = `curl -X POST ${CURL_BASE_URL}${BACKEND_ENDPOIN
   -H "Content-Type: application/json" \\
   -d '{
     "amount": 50,
-    "return_url": "https://your-site.com/payment/success",
-    "receiver_account_number": 100001
+    returnUrl: "https://your-site.com/payment/success",
+    receiverAccountNumber: 100001,
   }'`;

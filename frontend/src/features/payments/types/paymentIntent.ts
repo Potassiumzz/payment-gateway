@@ -1,16 +1,16 @@
 export interface PaymentIntentPayload {
 	amount: number;
-	return_url?: string;
-	receiver_account_number?: number;
+	returnUrl?: string;
+	receiverAccountNumber?: number;
 }
 
 export interface PaymentIntentResponse {
 	id: string;
 	amount: string;
 	status: PaymentIntentStatusType;
-	return_url?: string;
-	receiver_account_number?: number;
-	checkout_url: string;
+	returnUrl?: string;
+	receiverAccountNumber?: number;
+	checkoutUrl: string;
 }
 
 export const PaymentIntentStatus = {

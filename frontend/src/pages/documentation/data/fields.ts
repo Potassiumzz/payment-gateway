@@ -8,13 +8,13 @@ export const REQUEST_FIELDS: Field[] = [
 		description: "Amount to charge in USD (e.g. 29.99). This sandbox only supports USD.",
 	},
 	{
-		name: "return_url",
+		name: "returnUrl",
 		type: "string",
 		required: false,
 		description: "URL to redirect the user to after a successful payment.",
 	},
 	{
-		name: "receiver_account_number",
+		name: "receiverAccountNumber",
 		type: "number",
 		required: false,
 		description:
@@ -37,20 +37,20 @@ export const RESPONSE_FIELDS: Field[] = [
 		description: "Status of the intent: Pending, Succeeded, RequiresPayment, Failed.",
 	},
 	{
-		name: "checkout_url",
+		name: "checkoutUrl",
 		type: "string",
 		required: true,
 		description:
 			"The checkout URL where the application is supposed to re-direct to complete the transaction.",
 	},
 	{
-		name: "return_url",
+		name: "returnUrl",
 		type: "string",
 		required: false,
 		description: "The return URL provided at creation, if any.",
 	},
 	{
-		name: "receiver_account_number",
+		name: "receiverAccountNumber",
 		type: "number",
 		required: false,
 		description: "The receiver account number, if provided at creation.",
