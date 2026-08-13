@@ -44,7 +44,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 	async function handlePinSubmit(e: React.SubmitEvent<HTMLFormElement>) {
 		e.preventDefault();
 		try {
-			await validatePin({ pin, account_number: account.accountNumber });
+			await validatePin({ pin, accountNumber: account.accountNumber });
 			markAccountUnlocked(account.accountNumber );
 			setState("unlocked");
 		} catch (e) {

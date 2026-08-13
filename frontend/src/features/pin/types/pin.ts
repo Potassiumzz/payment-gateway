@@ -1,9 +1,9 @@
 export interface ValidatePinPayload {
 	pin: string;
-	account_number: number;
+	accountNumber: number;
 }
 
 export interface ValidatePinResponse {
-	response_code: number;
-	response_msg: string;
+	responseCode: number;
+	responseMsg: string;
 }
