@@ -1,7 +1,7 @@
 services:
   frontend:
     build: ./frontend
-    image:  ntay-frontend
+    image: ntay-frontend
     ports: 
       - "4444:4444"
     volumes:
@@ -10,15 +10,29 @@ services:
     environment:
       - VITE_API_URL=http://localhost:8888
 
-  backend:
-    build: ./backend
-    image: ntay-backend
+  backend-fastapi:
+    profiles: ["fastapi"]
+    build: ./python-backend/
+    image: ntay-backend-fastapi
     ports:
       - "8888:8888"
     volumes:
-      - ./backend:/app
+      - ./python-backend:/app
     environment:
-      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/gateway
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@postgres:5432/ntay_db
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  backend-dotnet:
+    profiles: ["dotnet"]
+    build: ./dotnet-backend
+    image: ntay-backend-dotnet
+    ports:
+      - "8888:8080"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__DefaultConnection: "Host=postgres;Port=5432;Database=ntay_db;Username=postgres;Password=postgres"
     depends_on:
       postgres:
         condition: service_healthy
