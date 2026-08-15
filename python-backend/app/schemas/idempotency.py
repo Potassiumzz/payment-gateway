@@ -1,13 +1,10 @@
 from typing import Any
 
-from pydantic import BaseModel, ConfigDict
-
 from app.globals.enums import TransactionStatus
+from app.schemas.base import CamelModel
 
 
-class IdempotencyRequest(BaseModel):
-	model_config = ConfigDict(from_attributes=True)
-
+class IdempotencyRequest(CamelModel):
 	key: str
 	endpoint: str
 	response_body: dict[str, Any]

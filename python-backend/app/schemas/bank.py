@@ -1,13 +1,10 @@
-from pydantic import BaseModel, ConfigDict
+from app.schemas.base import CamelModel, CamelResponseModel
 
 
-class BankCreate(BaseModel):
+class BankCreate(CamelModel):
 	name: str
 
 
-class BankResponse(BaseModel):
+class BankResponse(CamelResponseModel):
 	id: int
 	name: str
-
-	class Config:
-		model_config = ConfigDict(from_attributes=True)

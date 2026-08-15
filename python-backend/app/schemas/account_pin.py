@@ -1,14 +1,11 @@
-from pydantic import BaseModel, ConfigDict
+from app.schemas.base import CamelModel, CamelResponseModel
 
 
-class ValidatePinValues(BaseModel):
+class ValidatePinValues(CamelModel):
 	pin: str
 	account_number: int
 
 
-class AccountPinValidationResponse(BaseModel):
+class AccountPinValidationResponse(CamelResponseModel):
 	response_code: int
 	response_msg: str
-
-	class Config:
-		model_config = ConfigDict(from_attributes=True)

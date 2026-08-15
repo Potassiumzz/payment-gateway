@@ -1,17 +1,19 @@
 from datetime import datetime
 from decimal import Decimal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
+
+from app.schemas.base import CamelModel, CamelResponseModel
 
 
-class TransactionCreate(BaseModel):
+class TransactionCreate(CamelModel):
 	payment_intent_id: str
 	sender_account_number: int
 	receiver_account_number: int
 	security_pin: str
 
 
-class TransactionResponse(BaseModel):
+class TransactionResponse(CamelResponseModel):
 	id: int
 	payment_intent_id: str
 	sender_account_number: int
@@ -27,6 +29,3 @@ class TransactionResponse(BaseModel):
 	amount_transferred: Decimal = Field(..., examples=["50.00"])
 	timestamp: datetime
 	return_url: str | None
-
-	class Config:
-		model_config = ConfigDict(from_attributes=True)
