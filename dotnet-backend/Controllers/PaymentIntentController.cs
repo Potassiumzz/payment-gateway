@@ -6,7 +6,7 @@ using Ntay.Services;
 namespace Ntay.Controllers;
 
 [ApiController]
-[Route("/api/payment-intents")]
+[Route("/payment-intents")]
 public class PaymentIntentController(PaymentIntentService _intentService) : ControllerBase
 {
     [HttpPost]

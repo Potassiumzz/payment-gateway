@@ -7,7 +7,7 @@ using Ntay.Services;
 namespace Ntay.Controllers;
 
 [ApiController]
-[Route("/api/transactions")]
+[Route("/transactions")]
 public class TransactionController(TransactionService _transactionService) : ControllerBase
 {
     [HttpPost]

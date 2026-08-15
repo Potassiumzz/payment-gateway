@@ -6,7 +6,7 @@ using Ntay.Services;
 namespace Ntay.Controllers;
 
 [ApiController]
-[Route("/api/pin")]
+[Route("/pin")]
 public class AccountPinController(AccountPinService _pinService) : ControllerBase
 {
     [HttpPost]

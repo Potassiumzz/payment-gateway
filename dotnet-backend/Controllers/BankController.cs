@@ -8,7 +8,7 @@ using Ntay.Services;
 namespace Ntay.Controllers;
 
 [ApiController]
-[Route("/api/banks")]
+[Route("/banks")]
 public class BankController : ControllerBase
 {
     private readonly BankService _bankService;
