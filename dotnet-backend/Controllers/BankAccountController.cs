@@ -1,22 +1,27 @@
 using System;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ntay.Dtos.BankAccount;
 using Ntay.Dtos.Pagination;
+using Ntay.Events;
 using Ntay.Services;
 
 namespace Ntay.Controllers;
 
 [ApiController]
 [Route("/accounts")]
-public class BankAccountController : ControllerBase
+public class BankAccountController(
+    BankAccountService _accountService,
+    AccountEventBroadcaster _broadcaster
+) : ControllerBase
 {
-    private readonly BankAccountService _accountService;
-
-    public BankAccountController(BankAccountService accountService)
+    private static readonly JsonSerializerOptions JsonOptions = new()
     {
-        _accountService = accountService;
-    }
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+    };
 
     [HttpGet]
     public async Task<ActionResult<PagedResponse<BankAccountResponse>>> GetAccounts(
@@ -74,5 +79,42 @@ public class BankAccountController : ControllerBase
     {
         bool account = await _accountService.DeactivateAccountAsync(id);
         return account ? NoContent() : NotFound();
+    }
+
+    [HttpGet("sse")]
+    public async Task GetAccountEvents(CancellationToken cancellationToken)
+    {
+        Response.Headers.Append("Content-Type", "text/event-stream");
+        Response.Headers.Append("Cache-Control", "no-cache");
+        Response.Headers.Append("X-Accel-Buffering", "no");
+
+        var (id, reader) = _broadcaster.Subscribe();
+        try
+        {
+            while (!cancellationToken.IsCancellationRequested)
+            {
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(
+                    cancellationToken
+                );
+                timeoutCts.CancelAfter(TimeSpan.FromSeconds(30));
+
+                try
+                {
+                    var evt = await reader.ReadAsync(timeoutCts.Token);
+                    var json = JsonSerializer.Serialize(evt, JsonOptions);
+                    await Response.WriteAsync($"data: {json}\n\n", cancellationToken);
+                    await Response.Body.FlushAsync(cancellationToken);
+                }
+                catch (OperationCanceledException) when (!cancellationToken.IsCancellationRequested)
+                {
+                    await Response.WriteAsync(": keepalive\n\n", cancellationToken);
+                    await Response.Body.FlushAsync(cancellationToken);
+                }
+            }
+        }
+        finally
+        {
+            _broadcaster.Unsubscribe(id);
+        }
     }
 }

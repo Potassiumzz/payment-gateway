@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ntay.Data;
+using Ntay.Events;
 using Ntay.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,9 @@ builder.Services.AddScoped<AccountPinService>();
 builder.Services.AddScoped<PaymentIntentService>();
 builder.Services.AddScoped<IdempotencyService>();
 builder.Services.AddScoped<TransactionService>();
+
+builder.Services.AddSingleton<AccountEventBroadcaster>();
+builder.Services.AddHostedService<AccountExpiryBackgroundService>();
 
 builder.Services.AddCors(options =>
 {

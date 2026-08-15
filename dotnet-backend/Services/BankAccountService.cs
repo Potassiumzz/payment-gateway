@@ -12,17 +12,8 @@ using Ntay.Models;
 
 namespace Ntay.Services;
 
-public class BankAccountService
+public class BankAccountService(AppDbContext _dbContext, AccountPinService _accountPinService)
 {
-    private readonly AppDbContext _dbContext;
-    private readonly AccountPinService _accountPinService;
-
-    public BankAccountService(AppDbContext context, AccountPinService accountPinService)
-    {
-        _dbContext = context;
-        _accountPinService = accountPinService;
-    }
-
     private async Task<int> GenerateAccountNumber(int bankId)
     {
         int? maxAccountNumber = await _dbContext
