@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +6,7 @@ using Ntay.Data;
 using Ntay.Dtos.AccountPin;
 using Ntay.Dtos.Bank;
 using Ntay.Dtos.BankAccount;
+using Ntay.Dtos.Pagination;
 using Ntay.Mapping;
 using Ntay.Models;
 
@@ -36,10 +36,35 @@ public class BankAccountService
         return maxAccountNumber.Value + 1;
     }
 
-    public async Task<List<BankAccountResponse>> GetAccountsAsync()
+    public async Task<PagedResponse<BankAccountResponse>> GetAccountsAsync(
+        string? search,
+        int page,
+        int limit
+    )
     {
-        return await _dbContext
-            .BankAccounts.Select(account => new BankAccountResponse
+        var now = DateTime.UtcNow;
+
+        var query = _dbContext
+            .BankAccounts.Where(a => a.IsActive)
+            .Where(a => a.ExpiresAt == null || a.ExpiresAt > now);
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            query = query.Where(a =>
+                EF.Functions.ILike(a.OwnerName, $"%{search}%")
+                || EF.Functions.ILike(a.AccountNumber.ToString(), $"%{search}%")
+            );
+        }
+
+        var total = await query.CountAsync();
+
+        var offset = (page - 1) * limit;
+
+        var items = await query
+            .OrderByDescending(a => a.Id)
+            .Skip(offset)
+            .Take(limit)
+            .Select(account => new BankAccountResponse
             {
                 Id = account.Id,
                 AccountNumber = account.AccountNumber,
@@ -51,6 +76,14 @@ public class BankAccountService
                 Bank = new BankResponse { Id = account.Bank.Id, Name = account.Bank.Name },
             })
             .ToListAsync();
+
+        return new PagedResponse<BankAccountResponse>
+        {
+            Items = items,
+            Total = total,
+            Page = page,
+            Limit = limit,
+        };
     }
 
     public async Task<BankAccountResponse?> GetAccountById(int id)

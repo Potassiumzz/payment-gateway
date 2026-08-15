@@ -1,8 +1,8 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Ntay.Dtos.BankAccount;
+using Ntay.Dtos.Pagination;
 using Ntay.Services;
 
 namespace Ntay.Controllers;
@@ -19,9 +19,16 @@ public class BankAccountController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<BankAccountResponse>>> GetAccounts()
+    public async Task<ActionResult<PagedResponse<BankAccountResponse>>> GetAccounts(
+        [FromQuery] int page = 1,
+        [FromQuery] int limit = 10,
+        [FromQuery] string? search = null
+    )
     {
-        return Ok(await _accountService.GetAccountsAsync());
+        if (page < 1 || limit < 1 || limit > 100)
+            return BadRequest("page must be >= 1, limit must be between 1 and 100.");
+
+        return Ok(await _accountService.GetAccountsAsync(search, page, limit));
     }
 
     [HttpGet("{id}")]
