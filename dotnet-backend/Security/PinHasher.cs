@@ -14,7 +14,7 @@ public static class PinHasher
     {
         var config = new Argon2Config
         {
-            Type = Argon2Type.DataIndependentAddressing, // this is Argon2id
+            Type = Argon2Type.HybridAddressing, // this is Argon2id
             TimeCost = TimeCost,
             MemoryCost = MemoryCost,
             Lanes = Parallelism,
