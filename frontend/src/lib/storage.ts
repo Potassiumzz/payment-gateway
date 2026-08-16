@@ -27,7 +27,7 @@ export function getUnlockedAccounts(): Set<number> {
  * Marks an account as unlocked for the current session by adding it to the
  * unlocked set and persisting the updated set back to sessionStorage.
  *
- * @param accountNumber - The account's number (not its ID) to unlock.
+ * @param accountNumber - The account's number to unlock.
  */
 export function markAccountUnlocked(accountNumber: number): void {
 	const current = getUnlockedAccounts();
@@ -39,7 +39,7 @@ export function markAccountUnlocked(accountNumber: number): void {
  * Removes an account from the unlocked set (e.g. on delete/expiry), clearing
  * the sessionStorage key entirely if no unlocked accounts remain.
  *
- * @param accountNumber - The account's number (not its ID) to lock again.
+ * @param accountNumber - The account's number to lock again.
  */
 export function removeUnlockedAccount(accountNumber: number): void {
 	try {

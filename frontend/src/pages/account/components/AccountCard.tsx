@@ -54,7 +54,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 
 	async function handleDelete() {
 		try {
-			await deleteAccount(account.id);
+			await deleteAccount(account.accountNumber);
 			if (!deleteLoading) {
 				onDelete?.();
 			}
@@ -68,7 +68,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
     if (account.balance >= 500) return;
 
     try {
-      const res = await refillBalance(account.id);
+      const res = await refillBalance(account.accountNumber);
       if(!refillLoading) {
         onRefill?.(res)
       }

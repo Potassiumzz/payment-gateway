@@ -37,22 +37,22 @@ export function AccountListPage() {
     setPage(1); // reset to page 1 on new search
   }
 
-  function handleAccountExpired(accountId: number, accountNumber: number) {
+  function handleAccountExpired(accountNumber: number) {
     removeSenderAndReceiver(accountNumber);
-    removeUnlockedAccount(accountId);
+    removeUnlockedAccount(accountNumber);
     invalidateCache(QUERY_KEYS.ACCOUNT_LIST(page, search));
-    setAccounts((prev) => prev ? prev.filter((acc) => acc.id !== accountId) : prev);
+    setAccounts((prev) => prev ? prev.filter((acc) => acc.accountNumber !== accountNumber) : prev);
   }
 
   function handleAccountSSERefetch(data: SSEResponse) {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
-      handleAccountExpired(data.account_id, data.account_number);
+      handleAccountExpired(data.account_number);
     }
   }
 
   function handleAccountRefilled(updated: AccountResponse) {
     setAccounts((prev) =>
-      prev ? prev.map((acc) => (acc.id === updated.id ? updated : acc)) : prev
+      prev ? prev.map((acc) => (acc.accountNumber === updated.accountNumber ? updated : acc)) : prev
     );
 
     const cached = getCache<{ items: AccountResponse[] }>(
@@ -63,7 +63,7 @@ export function AccountListPage() {
       QUERY_KEY_PREFIX.ACCOUNT_LIST, 
       (cache) => (
         {...cache, 
-          items: cache.items.map((acc) => (acc.id === updated.id ? updated: acc))
+          items: cache.items.map((acc) => (acc.accountNumber === updated.accountNumber ? updated: acc))
         }
     ))
   }
@@ -80,7 +80,7 @@ export function AccountListPage() {
       (acc) => acc.expiresAt && new Date(acc.expiresAt).getTime() <= now && acc.isActive
     );
 
-    expiredOnes.forEach((acc) => handleAccountExpired(acc.id, acc.accountNumber));
+    expiredOnes.forEach((acc) => handleAccountExpired(acc.accountNumber));
   }, [accountList])
 
   React.useEffect(() => {
@@ -185,7 +185,7 @@ export function AccountListPage() {
                   onSetReceiver={setReceiver}
                   onDelete={() => {
                     invalidateCacheByPrefix(QUERY_KEY_PREFIX.ACCOUNT_LIST);
-                    handleAccountExpired(account.id, account.accountNumber);
+                    handleAccountExpired(account.accountNumber);
                   }}
                   onRefill={handleAccountRefilled}
                 />

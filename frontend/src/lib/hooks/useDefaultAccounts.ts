@@ -23,12 +23,12 @@ export function useDefaultAccounts() {
 		setReceiverState(account);
 	}
 
-	function removeSenderAndReceiver(accountId: number) {
-		if (sender?.id === accountId) {
+	function removeSenderAndReceiver(accountNumber: number) {
+		if (sender?.accountNumber === accountNumber) {
 			removeDefaultSender();
 			setSender(null);
 		}
-		if (receiver?.id === accountId) {
+		if (receiver?.accountNumber === accountNumber) {
 			removeDefaultReceiver();
 			setReceiver(null);
 		}

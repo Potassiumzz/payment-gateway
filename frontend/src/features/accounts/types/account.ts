@@ -5,7 +5,6 @@ export interface CreateAccountPayload {
 }
 
 export interface AccountResponse {
-	id: number;
 	accountNumber: number;
 	ownerName: string;
 	balance: number;
