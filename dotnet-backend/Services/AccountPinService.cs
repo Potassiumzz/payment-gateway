@@ -36,7 +36,7 @@ public class AccountPinService
     public async Task ValidatePinAsync(ValidatePinRequest request)
     {
         AccountPin? pin = await _dbContext.AccountPins.SingleOrDefaultAsync(p =>
-            p.BankAccountId == request.AccountId
+            p.BankAccount.AccountNumber == request.AccountNumber
         );
 
         if (pin is null)

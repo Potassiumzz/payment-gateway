@@ -104,7 +104,7 @@ public class TransactionService(
             throw new InvalidOperationException("Sender's bank account not found.");
 
         await pinService.ValidatePinAsync(
-            new ValidatePinRequest { AccountId = sender.Id, Pin = securityPin }
+            new ValidatePinRequest { AccountNumber = sender.AccountNumber, Pin = securityPin }
         );
 
         return sender;
