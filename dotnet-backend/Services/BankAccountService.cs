@@ -57,7 +57,6 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
             .Take(limit)
             .Select(account => new BankAccountResponse
             {
-                Id = account.Id,
                 AccountNumber = account.AccountNumber,
                 OwnerName = account.OwnerName,
                 IsActive = account.IsActive,
@@ -77,13 +76,12 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
         };
     }
 
-    public async Task<BankAccountResponse?> GetAccountById(int id)
+    public async Task<BankAccountResponse?> GetAccountById(int accountNumber)
     {
         return await _dbContext
-            .BankAccounts.Where(a => a.Id == id)
+            .BankAccounts.Where(a => a.AccountNumber == accountNumber)
             .Select(a => new BankAccountResponse
             {
-                Id = a.Id,
                 AccountNumber = a.AccountNumber,
                 OwnerName = a.OwnerName,
                 IsActive = a.IsActive,
@@ -154,9 +152,11 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
         return account.ToBankAccountResponse();
     }
 
-    public async Task<bool> DeactivateAccountAsync(int id)
+    public async Task<bool> DeactivateAccountAsync(int accountNumber)
     {
-        BankAccount? account = await _dbContext.BankAccounts.FindAsync(id);
+        BankAccount? account = await _dbContext
+            .BankAccounts.Where(a => a.AccountNumber == accountNumber)
+            .SingleOrDefaultAsync();
         if (account is null)
             return false;
 

@@ -14,7 +14,6 @@ public static class BankAccountMapper
     public static BankAccountResponse ToBankAccountResponse(this BankAccount account) =>
         new()
         {
-            Id = account.Id,
             AccountNumber = account.AccountNumber,
             OwnerName = account.OwnerName,
             IsActive = account.IsActive,
