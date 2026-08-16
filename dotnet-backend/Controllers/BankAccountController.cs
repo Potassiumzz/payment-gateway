@@ -36,10 +36,10 @@ public class BankAccountController(
         return Ok(await _accountService.GetAccountsAsync(search, page, limit));
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<BankAccountResponse>> GetAccount(int id)
+    [HttpGet("{accountNumber}")]
+    public async Task<ActionResult<BankAccountResponse>> GetAccount(int accountNumber)
     {
-        BankAccountResponse? account = await _accountService.GetAccountById(id);
+        BankAccountResponse? account = await _accountService.GetAccountByNumber(accountNumber);
         return account is not null ? Ok(account) : NotFound();
     }
 
@@ -49,7 +49,11 @@ public class BankAccountController(
         try
         {
             BankAccountResponse account = await _accountService.CreateAccountAsync(request);
-            return CreatedAtAction(nameof(GetAccount), new { id = account.Id }, account);
+            return CreatedAtAction(
+                nameof(GetAccount),
+                new { accountNumber = account.AccountNumber },
+                account
+            );
         }
         catch (InvalidOperationException e)
         {
@@ -57,15 +61,18 @@ public class BankAccountController(
         }
     }
 
-    [HttpPut("{id}")]
+    [HttpPut("{accountNumber}")]
     public async Task<ActionResult<BankAccountResponse>> UpdateAccount(
-        int id,
+        int accountNumber,
         UpdateAccountRequest request
     )
     {
         try
         {
-            BankAccountResponse? account = await _accountService.UpdateAccountAsync(id, request);
+            BankAccountResponse? account = await _accountService.UpdateAccountAsync(
+                accountNumber,
+                request
+            );
             return account is not null ? Ok(account) : NotFound();
         }
         catch (InvalidOperationException e)
@@ -74,10 +81,10 @@ public class BankAccountController(
         }
     }
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAccount(int id)
+    [HttpDelete("{accountNumber}")]
+    public async Task<IActionResult> DeleteAccount(int accountNumber)
     {
-        bool account = await _accountService.DeactivateAccountAsync(id);
+        bool account = await _accountService.DeactivateAccountAsync(accountNumber);
         return account ? NoContent() : NotFound();
     }
 

@@ -76,7 +76,7 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
         };
     }
 
-    public async Task<BankAccountResponse?> GetAccountById(int accountNumber)
+    public async Task<BankAccountResponse?> GetAccountByNumber(int accountNumber)
     {
         return await _dbContext
             .BankAccounts.Where(a => a.AccountNumber == accountNumber)
