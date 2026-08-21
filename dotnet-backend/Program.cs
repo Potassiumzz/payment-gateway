@@ -48,6 +48,8 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+
 using (var scope = app.Services.CreateScope())
 {
     SeedDatabase seeder = scope.ServiceProvider.GetRequiredService<SeedDatabase>();
@@ -63,8 +65,6 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
-
-app.UseExceptionHandler();
 
 app.UseAuthorization();
 

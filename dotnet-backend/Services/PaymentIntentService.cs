@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ntay.Data;
 using Ntay.Dtos.PaymentIntent;
+using Ntay.Exceptions;
 using Ntay.Models;
 
 namespace Ntay.Services;
@@ -30,14 +31,14 @@ public class PaymentIntentService
             a.AccountNumber == accountNumber
         );
         if (receiverAccount is null)
-            throw new InvalidOperationException("Receiver account not found");
+            throw new NotFoundException("Receiver account not found");
         return receiverAccount;
     }
 
     public async Task<IntentResponse> CreateIntentAsync(CreateIntentRequest request)
     {
         if (request.Amount > MaxAmount)
-            throw new InvalidOperationException("Amount exceeds maximum allowed value.");
+            throw new BadRequestException("Amount exceeds maximum allowed value.");
 
         BankAccount? receiverAccount = request.ReceiverAccountNumber is { } accountNumber
             ? await GetReceiverAccount(accountNumber)

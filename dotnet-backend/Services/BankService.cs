@@ -1,10 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
 using Ntay.Dtos.Bank;
+using Ntay.Exceptions;
 using Ntay.Models;
 
 namespace Ntay.Services;
@@ -24,11 +24,11 @@ public class BankService
         return banks.Select(b => new BankResponse { Id = b.Id, Name = b.Name }).ToList();
     }
 
-    public async Task<BankResponse?> GetBankByIdAsync(int id)
+    public async Task<BankResponse> GetBankByIdAsync(int id)
     {
-        var bank = await _dbContext.Banks.FindAsync(id);
-        if (bank is null)
-            return null;
+        var bank =
+            await _dbContext.Banks.FindAsync(id)
+            ?? throw new NotFoundException($"Bank {id} not found.");
         return new BankResponse { Id = bank.Id, Name = bank.Name };
     }
 
@@ -36,7 +36,7 @@ public class BankService
     {
         var nameExists = await _dbContext.Banks.AnyAsync(b => b.Name == request.Name);
         if (nameExists)
-            throw new InvalidOperationException($"Bank with name '{request.Name}' already exists.");
+            throw new ConflictException($"Bank with name '{request.Name}' already exists.");
 
         var bank = new Bank { Name = request.Name };
         _dbContext.Banks.Add(bank);
@@ -46,27 +46,25 @@ public class BankService
 
     public async Task<BankResponse?> UpdateBankAsync(int id, UpdateBankRequest request)
     {
-        var bank = await _dbContext.Banks.FindAsync(id);
-        if (bank is null)
-            return null;
+        var bank =
+            await _dbContext.Banks.FindAsync(id)
+            ?? throw new NotFoundException($"Bank {id} not found.");
 
-        var nameExists = await _dbContext.Banks.AnyAsync(b => b.Name == request.Name);
-        if (nameExists)
-            throw new InvalidOperationException($"Bank with name '{request.Name}' already exists.");
+        if (await _dbContext.Banks.AnyAsync(b => b.Name == request.Name))
+            throw new ConflictException($"Bank with name '{request.Name}' already exists.");
 
         bank.Name = request.Name;
         await _dbContext.SaveChangesAsync();
         return new BankResponse { Id = bank.Id, Name = bank.Name };
     }
 
-    public async Task<bool> DeleteBankAsync(int id)
+    public async Task DeleteBankAsync(int id)
     {
-        var bank = await _dbContext.Banks.FindAsync(id);
-        if (bank is null)
-            return false;
+        var bank =
+            await _dbContext.Banks.FindAsync(id)
+            ?? throw new NotFoundException($"Bank {id} not found.");
 
         _dbContext.Banks.Remove(bank);
         await _dbContext.SaveChangesAsync();
-        return true;
     }
 }

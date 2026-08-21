@@ -39,26 +39,18 @@ public class BankAccountController(
     [HttpGet("{accountNumber}")]
     public async Task<ActionResult<BankAccountResponse>> GetAccount(int accountNumber)
     {
-        BankAccountResponse? account = await _accountService.GetAccountByNumber(accountNumber);
-        return account is not null ? Ok(account) : NotFound();
+        return Ok(await _accountService.GetAccountByNumber(accountNumber));
     }
 
     [HttpPost]
     public async Task<ActionResult<BankAccountResponse>> CreateAccount(CreateAccountRequest request)
     {
-        try
-        {
-            BankAccountResponse account = await _accountService.CreateAccountAsync(request);
-            return CreatedAtAction(
-                nameof(GetAccount),
-                new { accountNumber = account.AccountNumber },
-                account
-            );
-        }
-        catch (InvalidOperationException e)
-        {
-            return BadRequest(new { error = e.Message });
-        }
+        BankAccountResponse account = await _accountService.CreateAccountAsync(request);
+        return CreatedAtAction(
+            nameof(GetAccount),
+            new { accountNumber = account.AccountNumber },
+            account
+        );
     }
 
     [HttpPut("{accountNumber}")]
@@ -67,25 +59,13 @@ public class BankAccountController(
         UpdateAccountRequest request
     )
     {
-        try
-        {
-            BankAccountResponse? account = await _accountService.UpdateAccountAsync(
-                accountNumber,
-                request
-            );
-            return account is not null ? Ok(account) : NotFound();
-        }
-        catch (InvalidOperationException e)
-        {
-            return NotFound(new { error = e.Message });
-        }
+        return Ok(await _accountService.UpdateAccountAsync(accountNumber, request));
     }
 
     [HttpDelete("{accountNumber}")]
     public async Task<IActionResult> DeleteAccount(int accountNumber)
     {
-        bool account = await _accountService.DeactivateAccountAsync(accountNumber);
-        return account ? NoContent() : NotFound();
+        return Ok(await _accountService.DeactivateAccountAsync(accountNumber));
     }
 
     [HttpGet("sse")]

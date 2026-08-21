@@ -18,7 +18,6 @@ public class PaymentIntentController(PaymentIntentService _intentService) : Cont
     [HttpGet("{id}")]
     public async Task<ActionResult<IntentResponse>> GetPaymentIntent(string id)
     {
-        var intentDetail = await _intentService.GetIntentDetailsAsync(id);
-        return intentDetail is not null ? Ok(intentDetail) : NotFound();
+        return Ok(await _intentService.GetIntentDetailsAsync(id));
     }
 }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -19,57 +18,28 @@ public class BankController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<BankResponse>>> GetBanks()
-    {
-        var banks = await _bankService.GetBanksAsync();
-        return Ok(banks);
-    }
+    public async Task<ActionResult<List<BankResponse>>> GetBanks() =>
+        Ok(await _bankService.GetBanksAsync());
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<BankResponse>> GetBank(int id)
-    {
-        var bank = await _bankService.GetBankByIdAsync(id);
-        if (bank is null)
-            return NotFound();
-        return Ok(bank);
-    }
+    public async Task<ActionResult<BankResponse>> GetBank(int id) =>
+        Ok(await _bankService.GetBankByIdAsync(id));
 
     [HttpPost]
     public async Task<ActionResult<BankResponse>> CreateBank(CreateBankRequest request)
     {
-        try
-        {
-            var bank = await _bankService.CreateBankAsync(request);
-            return CreatedAtAction(nameof(GetBank), new { id = bank.Id }, bank);
-        }
-        catch (InvalidOperationException e)
-        {
-            return Conflict(new { error = e.Message });
-        }
+        var bank = await _bankService.CreateBankAsync(request);
+        return CreatedAtAction(nameof(GetBank), new { id = bank.Id }, bank);
     }
 
     [HttpPut("{id}")]
-    public async Task<ActionResult<BankResponse>> UpdateBank(int id, UpdateBankRequest request)
-    {
-        try
-        {
-            var bank = await _bankService.UpdateBankAsync(id, request);
-            if (bank is null)
-                return NotFound();
-            return Ok(bank);
-        }
-        catch (InvalidOperationException e)
-        {
-            return Conflict(new { error = e.Message });
-        }
-    }
+    public async Task<ActionResult<BankResponse>> UpdateBank(int id, UpdateBankRequest request) =>
+        Ok(await _bankService.UpdateBankAsync(id, request));
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBank(int id)
     {
         var deleted = await _bankService.DeleteBankAsync(id);
-        if (!deleted)
-            return NotFound();
         return NoContent();
     }
 }

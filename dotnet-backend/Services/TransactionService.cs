@@ -7,6 +7,7 @@ using Ntay.Data;
 using Ntay.Dtos.AccountPin;
 using Ntay.Dtos.Idempotency;
 using Ntay.Dtos.Transaction;
+using Ntay.Exceptions;
 using Ntay.Models;
 
 namespace Ntay.Services;
@@ -43,7 +44,7 @@ public class TransactionService(
         var receiver = await GetReceiverAsync(request.ReceiverAccountNumber);
 
         if (sender.AccountNumber == receiver.AccountNumber)
-            throw new InvalidOperationException("Self-transfer is not permitted.");
+            throw new BadRequestException("Self-transfer is not permitted.");
 
         var (status, failureReason) = DetermineStatus(sender, intent.Amount);
 
@@ -101,7 +102,7 @@ public class TransactionService(
     {
         var sender = await accountService.GetMutableAccountByNumberAsync(accountNumber);
         if (sender is null)
-            throw new InvalidOperationException("Sender's bank account not found.");
+            throw new NotFoundException("Sender's bank account not found.");
 
         await pinService.ValidatePinAsync(
             new ValidatePinRequest { AccountNumber = sender.AccountNumber, Pin = securityPin }
@@ -114,9 +115,9 @@ public class TransactionService(
     {
         var intent = await intentService.GetMutableIntentAsync(paymentIntentId);
         if (intent is null)
-            throw new InvalidOperationException("Payment intent not found.");
+            throw new NotFoundException("Payment intent not found.");
         if (intent.Status != PaymentIntentStatus.RequiresPayment)
-            throw new InvalidOperationException("Payment intent was already processed, try again.");
+            throw new BadRequestException("Payment intent was already processed, try again.");
 
         return intent;
     }
@@ -125,7 +126,7 @@ public class TransactionService(
     {
         var receiver = await accountService.GetMutableAccountByNumberAsync(accountNumber);
         if (receiver is null)
-            throw new InvalidOperationException("Receiver's bank account not found.");
+            throw new NotFoundException("Receiver's bank account not found.");
 
         return receiver;
     }

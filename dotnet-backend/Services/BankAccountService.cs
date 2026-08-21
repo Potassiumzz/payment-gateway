@@ -7,6 +7,7 @@ using Ntay.Dtos.AccountPin;
 using Ntay.Dtos.Bank;
 using Ntay.Dtos.BankAccount;
 using Ntay.Dtos.Pagination;
+using Ntay.Exceptions;
 using Ntay.Mapping;
 using Ntay.Models;
 
@@ -76,35 +77,37 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
         };
     }
 
-    public async Task<BankAccountResponse?> GetAccountByNumber(int accountNumber)
+    public async Task<BankAccountResponse> GetAccountByNumber(int accountNumber)
     {
         return await _dbContext
-            .BankAccounts.Where(a => a.AccountNumber == accountNumber)
-            .Select(a => new BankAccountResponse
-            {
-                AccountNumber = a.AccountNumber,
-                OwnerName = a.OwnerName,
-                IsActive = a.IsActive,
-                IsDefault = a.IsDefault,
-                Balance = a.Balance,
-                ExpiresAt = a.ExpiresAt,
-                Bank = new BankResponse { Id = a.Bank.Id, Name = a.Bank.Name },
-            })
-            .SingleOrDefaultAsync();
+                .BankAccounts.Where(a => a.AccountNumber == accountNumber)
+                .Select(a => new BankAccountResponse
+                {
+                    AccountNumber = a.AccountNumber,
+                    OwnerName = a.OwnerName,
+                    IsActive = a.IsActive,
+                    IsDefault = a.IsDefault,
+                    Balance = a.Balance,
+                    ExpiresAt = a.ExpiresAt,
+                    Bank = new BankResponse { Id = a.Bank.Id, Name = a.Bank.Name },
+                })
+                .SingleOrDefaultAsync()
+            ?? throw new NotFoundException($"Account number {accountNumber} not found.");
     }
 
-    public async Task<BankAccount?> GetMutableAccountByNumberAsync(int accountNumber)
+    public async Task<BankAccount> GetMutableAccountByNumberAsync(int accountNumber)
     {
         return await _dbContext
-            .BankAccounts.Where(b => b.AccountNumber == accountNumber)
-            .SingleOrDefaultAsync();
+                .BankAccounts.Where(b => b.AccountNumber == accountNumber)
+                .SingleOrDefaultAsync()
+            ?? throw new NotFoundException($"Account number {accountNumber} not found.");
     }
 
     public async Task<BankAccountResponse> CreateAccountAsync(CreateAccountRequest request)
     {
         Bank? bank = await _dbContext.Banks.SingleOrDefaultAsync(b => b.Id == request.BankId);
         if (bank is null)
-            throw new InvalidOperationException("Bank does not exist.");
+            throw new NotFoundException("Bank does not exist.");
 
         BankAccount account = new BankAccount
         {
@@ -129,22 +132,25 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
             );
             await createAccountTransaction.CommitAsync();
         }
-        catch (Exception)
+        catch (Exception e)
         {
             await createAccountTransaction.RollbackAsync();
-            throw;
+            throw e;
         }
 
         return account.ToBankAccountResponse();
     }
 
-    public async Task<BankAccountResponse?> UpdateAccountAsync(int id, UpdateAccountRequest request)
+    public async Task<BankAccountResponse> UpdateAccountAsync(
+        int accountNumber,
+        UpdateAccountRequest request
+    )
     {
-        BankAccount? account = await _dbContext
-            .BankAccounts.Include(a => a.Bank)
-            .SingleOrDefaultAsync(a => a.Id == id);
-        if (account is null)
-            return null;
+        BankAccount? account =
+            await _dbContext
+                .BankAccounts.Include(a => a.Bank)
+                .SingleOrDefaultAsync(a => a.Id == accountNumber)
+            ?? throw new NotFoundException($"Account number {accountNumber} not found.");
 
         account.OwnerName = request.OwnerName;
         await _dbContext.SaveChangesAsync();
@@ -154,11 +160,11 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
 
     public async Task<bool> DeactivateAccountAsync(int accountNumber)
     {
-        BankAccount? account = await _dbContext
-            .BankAccounts.Where(a => a.AccountNumber == accountNumber)
-            .SingleOrDefaultAsync();
-        if (account is null)
-            return false;
+        BankAccount? account =
+            await _dbContext
+                .BankAccounts.Where(a => a.AccountNumber == accountNumber)
+                .SingleOrDefaultAsync()
+            ?? throw new NotFoundException($"Account number {accountNumber} not found.");
 
         account.IsActive = false;
         await _dbContext.SaveChangesAsync();

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
 using Ntay.Dtos.AccountPin;
+using Ntay.Exceptions;
 using Ntay.Models;
 using Ntay.Security;
 
@@ -40,14 +41,12 @@ public class AccountPinService
         );
 
         if (pin is null)
-            throw new InvalidOperationException("Security PIN not set for this account");
+            throw new NotFoundException("Security PIN not set for this account");
 
         DateTime now = DateTime.UtcNow;
 
         if (pin.LockedUntil != null && pin.LockedUntil >= now)
-            throw new InvalidOperationException(
-                "Account temporarily locked due to failed PIN attempts."
-            );
+            throw new LockedException("Account temporarily locked due to failed PIN attempts.");
 
         if (!PinHasher.VerifyPin(request.Pin, pin.PinHash))
         {
@@ -57,13 +56,11 @@ public class AccountPinService
             {
                 pin.LockedUntil = now + LockTime;
                 await _dbContext.SaveChangesAsync();
-                throw new InvalidOperationException(
-                    "Account temporarily locked due to failed PIN attempts."
-                );
+                throw new LockedException("Account temporarily locked due to failed PIN attempts.");
             }
 
             await _dbContext.SaveChangesAsync();
-            throw new InvalidOperationException("Invalid security PIN.");
+            throw new UnauthorisedException("Invalid security PIN.");
         }
 
         pin.FailedAttempts = 0;

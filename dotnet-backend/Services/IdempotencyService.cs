@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Ntay.Data;
 using Ntay.Dtos.Idempotency;
+using Ntay.Exceptions;
 using Ntay.Mapping;
 using Ntay.Models;
 
@@ -49,11 +50,11 @@ public class IdempotencyService
         return idempotency.ToIdempotencyResponse();
     }
 
-    public async Task<IdempotencyResponse?> UpdateResponseAsync(UpdateIdempotencyRequest request)
+    public async Task<IdempotencyResponse> UpdateResponseAsync(UpdateIdempotencyRequest request)
     {
-        IdempotencyKey? idempotency = await _dbContext.IdempotencyKeys.FindAsync(request.Key);
-        if (idempotency is null)
-            return null;
+        IdempotencyKey idempotency =
+            await _dbContext.IdempotencyKeys.FindAsync(request.Key)
+            ?? throw new NotFoundException("Idempotency key not found.");
 
         idempotency.ResponseBody = request.ResponseBody;
         idempotency.Status = request.Status;
