@@ -33,6 +33,18 @@ public static class PinHasher
         return config.EncodeString(hash.Buffer);
     }
 
-    public static bool VerifyPin(string pin, string pinHash) =>
-        Argon2.Verify(pinHash, pin, Parallelism);
+    public static bool VerifyPin(string pin, string pinHash)
+    {
+        if (string.IsNullOrWhiteSpace(pinHash) || !pinHash.StartsWith("$argon2"))
+            return false;
+
+        try
+        {
+            return Argon2.Verify(pinHash, pin, Parallelism);
+        }
+        catch (Exception ex) when (ex is IndexOutOfRangeException or FormatException)
+        {
+            return false;
+        }
+    }
 }
