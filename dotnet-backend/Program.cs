@@ -4,10 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ntay.Data;
+using Ntay.Data.Seed;
 using Ntay.Events;
 using Ntay.Services;
 
-var builder = WebApplication.CreateBuilder(args);
+WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
 
 // Add services to the container.
@@ -25,6 +26,7 @@ builder.Services.AddScoped<AccountPinService>();
 builder.Services.AddScoped<PaymentIntentService>();
 builder.Services.AddScoped<IdempotencyService>();
 builder.Services.AddScoped<TransactionService>();
+builder.Services.AddScoped<SeedDatabase>();
 
 builder.Services.AddSingleton<AccountEventBroadcaster>();
 builder.Services.AddHostedService<AccountExpiryBackgroundService>();
@@ -41,6 +43,12 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    SeedDatabase seeder = scope.ServiceProvider.GetRequiredService<SeedDatabase>();
+    seeder.SeedDefaults();
+}
 
 app.UseCors("Default");
 
