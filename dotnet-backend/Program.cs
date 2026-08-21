@@ -6,10 +6,14 @@ using Microsoft.Extensions.Hosting;
 using Ntay.Data;
 using Ntay.Data.Seed;
 using Ntay.Events;
+using Ntay.Exceptions;
 using Ntay.Services;
 
 WebApplicationBuilder? builder = WebApplication.CreateBuilder(args);
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 // Add services to the container.
 
@@ -59,6 +63,8 @@ if (app.Environment.IsDevelopment())
 }
 
 // app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.UseAuthorization();
 
