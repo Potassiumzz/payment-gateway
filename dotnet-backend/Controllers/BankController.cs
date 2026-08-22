@@ -39,7 +39,7 @@ public class BankController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteBank(int id)
     {
-        var deleted = await _bankService.DeleteBankAsync(id);
+        await _bankService.DeleteBankAsync(id);
         return NoContent();
     }
 }

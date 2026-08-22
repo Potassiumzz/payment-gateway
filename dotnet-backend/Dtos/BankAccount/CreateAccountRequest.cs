@@ -1,13 +1,15 @@
 using System.ComponentModel.DataAnnotations;
+using Ntay.Dtos.Common;
 
 namespace Ntay.Dtos.BankAccount;
 
 public record CreateAccountRequest
 {
+    [Required]
     public required string OwnerName { get; init; }
+
     public required int BankId { get; init; }
 
-    [StringLength(4, MinimumLength = 4, ErrorMessage = "Pin must be exactly 4 digits.")]
-    [RegularExpression(@"^\d{4}$", ErrorMessage = "Pin must be numeric.")]
+    [Pin]
     public required string Pin { get; init; }
 }
