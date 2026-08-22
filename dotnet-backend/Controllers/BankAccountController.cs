@@ -25,16 +25,8 @@ public class BankAccountController(
 
     [HttpGet]
     public async Task<ActionResult<PagedResponse<BankAccountResponse>>> GetAccounts(
-        [FromQuery] int page = 1,
-        [FromQuery] int limit = 10,
-        [FromQuery] string? search = null
-    )
-    {
-        if (page < 1 || limit < 1 || limit > 100)
-            return BadRequest("page must be >= 1, limit must be between 1 and 100.");
-
-        return Ok(await _accountService.GetAccountsAsync(search, page, limit));
-    }
+        [FromQuery] PagedRequest request
+    ) => Ok(await _accountService.GetAccountsAsync(request.Search, request.Page, request.Limit));
 
     [HttpGet("{accountNumber}")]
     public async Task<ActionResult<BankAccountResponse>> GetAccount(int accountNumber)
