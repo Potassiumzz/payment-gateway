@@ -98,6 +98,29 @@ public class TransactionService(
             .ToListAsync();
     }
 
+    public async Task<TransactionResponse> GetTransactionByIntentIdAsync(string intentId)
+    {
+        return await _dbContext
+                .Transactions.Where(t => t.PaymentIntentId == intentId)
+                .Select(t => new TransactionResponse
+                {
+                    Id = t.Id,
+                    PaymentIntentId = t.PaymentIntentId,
+                    SenderAccountNumber = t.SenderAccount.AccountNumber,
+                    SenderOwnerName = t.SenderAccount.OwnerName,
+                    SenderBankName = t.SenderAccount.Bank.Name,
+                    ReceiverAccountNumber = t.ReceiverAccount.AccountNumber,
+                    ReceiverOwnerName = t.ReceiverAccount.OwnerName,
+                    ReceiverBankName = t.ReceiverAccount.Bank.Name,
+                    Status = t.Status,
+                    FailureReason = t.FailureReason,
+                    AmountTransferred = t.AmountTransferred,
+                    Timestamp = t.Timestamp,
+                })
+                .SingleOrDefaultAsync()
+            ?? throw new NotFoundException($"Transaction with ID {intentId} not found.");
+    }
+
     private async Task<BankAccount> GetValidatedSenderAsync(int accountNumber, string securityPin)
     {
         var sender = await accountService.GetMutableAccountByNumberAsync(accountNumber);

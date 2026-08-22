@@ -24,4 +24,10 @@ public class TransactionController(TransactionService _transactionService) : Con
     {
         return Ok(await _transactionService.GetTransactionsAsync());
     }
+
+    [HttpGet("{intentId}")]
+    public async Task<ActionResult<TransactionResponse>> GetTransactionByIntentId(string intentId)
+    {
+        return Ok(await _transactionService.GetTransactionByIntentIdAsync(intentId));
+    }
 }
