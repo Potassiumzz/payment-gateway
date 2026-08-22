@@ -98,7 +98,8 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
     public async Task<BankAccount> GetMutableAccountByNumberAsync(int accountNumber)
     {
         return await _dbContext
-                .BankAccounts.Where(b => b.AccountNumber == accountNumber)
+                .BankAccounts.Include(b => b.Bank)
+                .Where(b => b.AccountNumber == accountNumber)
                 .SingleOrDefaultAsync()
             ?? throw new NotFoundException($"Account number {accountNumber} not found.");
     }
