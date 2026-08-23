@@ -1,12 +1,6 @@
 import React from "react";
 import { BACKEND_ENDPOINTS, BASE_URL } from "@/constants/endpoints";
-import type { SSEKey } from "@/api/constants/sseKeys";
-
-export interface SSEResponse {
-	type: SSEKey;
-	account_id: number;
-	account_number: number;
-}
+import type { SSEResponse } from "../types/account";
 
 export function useAccountSSE(onMessage: (data: SSEResponse) => void) {
 	React.useEffect(() => {

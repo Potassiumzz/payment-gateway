@@ -1,3 +1,5 @@
+import type { SSEKey } from "@/api/constants/sseKeys";
+
 export interface CreateAccountPayload {
 	ownerName: string;
 	bankId: number;
@@ -24,4 +26,10 @@ export interface AccountListResponse {
 export interface BankResponse {
 	id: number;
 	name: string;
+}
+
+export interface SSEResponse {
+	type: SSEKey;
+	accountId: number;
+	accountNumber: number;
 }

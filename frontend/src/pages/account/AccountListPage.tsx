@@ -13,12 +13,12 @@ import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { Button } from "@/components/ui/Button";
 import { PaginationBar } from "@/components/ui/PaginationBar";
 import { removeDefaultReceiver, removeDefaultSender, removeUnlockedAccount } from "@/lib/storage";
-import { useAccountSSE, type SSEResponse } from "@/features/accounts/hooks/useAccountSSE";
+import { useAccountSSE } from "@/features/accounts/hooks/useAccountSSE";
 import { getCache, invalidateCache, invalidateCacheByPrefix, updateEachCacheEntry } from "@/cache/queryCache";
 import { InputProgressBar } from "@/components/ui/InputProgressBar";
 import { QUERY_KEY_PREFIX, QUERY_KEYS } from "@/cache/queryKeys";
 import { SSE_KEYS } from "@/api/constants/sseKeys";
-import { type AccountResponse } from "@/features/accounts/types/account";
+import { type AccountResponse, type SSEResponse } from "@/features/accounts/types/account";
 
 export function AccountListPage() {
   const [search, setSearch] = React.useState("");
@@ -46,7 +46,7 @@ export function AccountListPage() {
 
   function handleAccountSSERefetch(data: SSEResponse) {
     if (data.type === SSE_KEYS.ACCOUNT_EXPIRED) {
-      handleAccountExpired(data.account_number);
+      handleAccountExpired(data.accountNumber);
     }
   }
 
