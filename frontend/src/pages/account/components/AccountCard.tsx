@@ -9,6 +9,7 @@ import { useValidatePin } from "@/features/pin/hooks/useValidatePin";
 import { getUnlockedAccounts, markAccountUnlocked } from "@/lib/storage";
 import { useDeleteAccount } from "@/features/accounts/hooks/useDeleteAccount";
 import { useRefillAccountBalance } from "@/features/accounts/hooks/useRefillAccountBalance";
+import { MAX_PIN_DIGITS } from "@/constants/config";
 
 type AccountCardProps = {
 	account: AccountResponse;
@@ -148,7 +149,7 @@ export function AccountCard({ account, onSetReceiver, onSetSender, onDelete, onR
 											onChange={(e) => setPin(e.target.value)}
 											className="max-w-[120px]"
 										/>
-										<Button type="submit" size="sm" disabled={isLoading || pin.length < 4}>
+										<Button type="submit" size="sm" disabled={isLoading || pin.length < MAX_PIN_DIGITS}>
 											{isLoading ? "Verifying..." : "Unlock"}
 										</Button>
 									</div>

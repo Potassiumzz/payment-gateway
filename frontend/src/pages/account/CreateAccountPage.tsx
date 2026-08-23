@@ -12,6 +12,7 @@ import { NAVIGATION_ROUTES } from "@/constants/routes";
 import { invalidateCacheByPrefix } from "@/cache/queryCache";
 import { useGetBanks } from "@/features/banks/hooks/useGetBanks";
 import { Select } from "@/components/ui/Select";
+import { MAX_PIN_DIGITS } from "@/constants/config";
 
 export default function CreateAccountPage() {
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ return (
                 isLoading ||
                 !values.ownerName.trim() ||
                 !values.bankId ||
-                values.pin.length !== 4
+                values.pin.length !== MAX_PIN_DIGITS
               }
               className="w-full"
             >

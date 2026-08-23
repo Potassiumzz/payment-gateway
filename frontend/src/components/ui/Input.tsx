@@ -1,3 +1,4 @@
+import { MAX_INPUT_LENGTH, MAX_PIN_DIGITS } from "@/constants/config";
 import { cn } from "@/lib/utils";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import React from "react";
@@ -36,7 +37,7 @@ export function Input({
 				onChange={onChange}
 				onKeyDown={handleKeyDown}
         type={inputType}
-        maxLength={isPasswordField ? 6 : 128}
+        maxLength={isPasswordField ? MAX_PIN_DIGITS : MAX_INPUT_LENGTH}
         autoComplete={isPasswordField ? "one-time-code" : "off"}
         pattern={isPasswordField ? "[0-9]*" : undefined}
         inputMode={isPasswordField ? "numeric" : undefined}
