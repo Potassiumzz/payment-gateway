@@ -45,14 +45,7 @@ export async function API<TInput, TResult>({
 
 		if (!res.ok) {
 			const errorData = await res.json();
-
-			throw new ApiError(
-				res.status,
-				Array.isArray(errorData.detail)
-					? errorData.detail.map((e: any) => e.msg).join(", ")
-					: (errorData.detail ?? `Response status: ${res.status}`),
-				errorData.detail,
-			);
+			throw new ApiError(res.status, errorData.title ?? `Response status: ${res.status}`, errorData.detail);
 		}
 
 		if (res.status === 204) return null as TResult;
