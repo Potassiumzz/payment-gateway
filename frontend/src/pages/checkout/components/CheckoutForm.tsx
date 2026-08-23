@@ -85,7 +85,7 @@ export default function CheckoutForm({ intentDetail }: CheckoutFormProps) {
         handleAccountListCacheUpdate(amount);
       }
 
-      if (!isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}${res.id}`);
+      if (!isLoading) navigate(`${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}${res.paymentIntentId}`);
     } catch(err) {
       console.log(err);
     }

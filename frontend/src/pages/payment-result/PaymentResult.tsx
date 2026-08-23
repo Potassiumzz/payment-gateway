@@ -9,8 +9,8 @@ import { EllipsisLoader } from "@/components/ui/Loader";
 import ErrorPage from "@/components/page/ErrorPage";
 
 export default function PaymentResultPage() {
-  const { id } = useParams();
-  const { transactionDetail, error, isLoading, errorStatus } = useGetTransactionByID(id!);
+  const { intentId } = useParams();
+  const { transactionDetail, error, isLoading, errorStatus } = useGetTransactionByID(intentId!);
 
   if (isLoading) {
     return <EllipsisLoader value="Verifying transaction"/>
@@ -26,7 +26,7 @@ export default function PaymentResultPage() {
     );
   }
 
-  const isSuccess = !!id && !error && !!transactionDetail && transactionDetail.status === TransactionStatus.Successful;
+  const isSuccess = !!intentId && !error && !!transactionDetail && transactionDetail.status === TransactionStatus.Successful;
   const glowColor = isSuccess ? "bg-secondary/5" : "bg-red-500/9";
 
   return (
