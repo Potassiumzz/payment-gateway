@@ -172,4 +172,15 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
 
         return true;
     }
+
+    public async Task<BankAccountResponse> RefillBalanceAsync(int accountNumber)
+    {
+        BankAccount? account = await GetMutableAccountByNumberAsync(accountNumber);
+
+        if (account.Balance < 500)
+            account.Balance = 500;
+        await _dbContext.SaveChangesAsync();
+
+        return account.ToBankAccountResponse();
+    }
 }

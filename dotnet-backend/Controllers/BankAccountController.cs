@@ -60,6 +60,12 @@ public class BankAccountController(
         return Ok(await _accountService.DeactivateAccountAsync(accountNumber));
     }
 
+    [HttpPut("refill/{accountNumber}")]
+    public async Task<ActionResult<BankAccountResponse>> RefillBalance(int accountNumber)
+    {
+        return Ok(await _accountService.RefillBalanceAsync(accountNumber));
+    }
+
     [HttpGet("sse")]
     public async Task GetAccountEvents(CancellationToken cancellationToken)
     {
