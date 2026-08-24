@@ -7,7 +7,7 @@ export function useRefillAccountBalance() {
 
 	return {
 		refillBalance: (id: number) =>
-			mutate({ url: `${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}refill/`, id, method: "PUT" }),
+			mutate({ url: `${BACKEND_ENDPOINTS.ACCOUNT_ENDPOINT}refill/`, id, method: "PATCH" }),
 		error,
 		isLoading,
 	};

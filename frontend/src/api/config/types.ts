@@ -1,6 +1,6 @@
 import type { BACKEND_ENDPOINTS } from "@/constants/endpoints";
 
-export type APIMethods = "GET" | "POST" | "PUT" | "DELETE";
+export type APIMethods = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 export type Endpoint = (typeof BACKEND_ENDPOINTS)[keyof typeof BACKEND_ENDPOINTS] | AccountEndpoint;
 
 type AccountEndpoint =

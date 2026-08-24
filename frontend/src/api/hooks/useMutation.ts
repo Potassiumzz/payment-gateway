@@ -39,6 +39,13 @@ export function useMutation<TInput, TResult>() {
 						input: input,
 						id: id,
 					});
+				case "PATCH":
+					return await API<TInput, TResult>({
+						method: "PATCH",
+						endpoint: url,
+						input: input,
+						id: id,
+					});
 				case "DELETE":
 					return await API<TInput, TResult>({
 						method: "DELETE",
