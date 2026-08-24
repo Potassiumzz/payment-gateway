@@ -51,6 +51,13 @@ export function AccountListPage() {
   }
 
   function handleAccountRefilled(updated: AccountResponse) {
+    if (sender?.accountNumber === updated.accountNumber) {
+        setSender({ ...sender, balance: updated.balance });
+    }
+
+    if (receiver?.accountNumber === updated.accountNumber) {
+        setReceiver({ ...receiver, balance: updated.balance });
+    }
     setAccounts((prev) =>
       prev ? prev.map((acc) => (acc.accountNumber === updated.accountNumber ? updated : acc)) : prev
     );
