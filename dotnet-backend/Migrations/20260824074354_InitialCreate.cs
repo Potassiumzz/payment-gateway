@@ -26,27 +26,19 @@ namespace Ntay.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "transaction_response",
+                name: "idempotency_keys",
                 columns: table => new
                 {
-                    id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    payment_intent_id = table.Column<string>(type: "text", nullable: false),
-                    sender_account_number = table.Column<int>(type: "integer", nullable: false),
-                    sender_owner_name = table.Column<string>(type: "text", nullable: false),
-                    sender_bank_name = table.Column<string>(type: "text", nullable: false),
-                    receiver_account_number = table.Column<int>(type: "integer", nullable: false),
-                    receiver_owner_name = table.Column<string>(type: "text", nullable: false),
-                    receiver_bank_name = table.Column<string>(type: "text", nullable: false),
+                    key = table.Column<string>(type: "text", nullable: false),
+                    endpoint = table.Column<string>(type: "text", nullable: false),
                     status = table.Column<int>(type: "integer", nullable: false),
                     failure_reason = table.Column<string>(type: "text", nullable: true),
-                    amount_transferred = table.Column<decimal>(type: "numeric", nullable: false),
-                    timestamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    return_url = table.Column<string>(type: "text", nullable: true)
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    response_body = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("p_k_transaction_response", x => x.id);
+                    table.PrimaryKey("p_k_idempotency_keys", x => x.key);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,28 +64,6 @@ namespace Ntay.Migrations
                         principalTable: "banks",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "idempotency_keys",
-                columns: table => new
-                {
-                    key = table.Column<string>(type: "text", nullable: false),
-                    endpoint = table.Column<string>(type: "text", nullable: false),
-                    response_body_id = table.Column<int>(type: "integer", nullable: false),
-                    status = table.Column<int>(type: "integer", nullable: false),
-                    failure_reason = table.Column<string>(type: "text", nullable: true),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("p_k_idempotency_keys", x => x.key);
-                    table.ForeignKey(
-                        name: "f_k_idempotency_keys_transaction_response_response_body_id",
-                        column: x => x.response_body_id,
-                        principalTable: "transaction_response",
-                        principalColumn: "id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,11 +166,6 @@ namespace Ntay.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "i_x_idempotency_keys_response_body_id",
-                table: "idempotency_keys",
-                column: "response_body_id");
-
-            migrationBuilder.CreateIndex(
                 name: "i_x_payment_intents_receiver_account_id",
                 table: "payment_intents",
                 column: "receiver_account_id");
@@ -232,9 +197,6 @@ namespace Ntay.Migrations
 
             migrationBuilder.DropTable(
                 name: "transactions");
-
-            migrationBuilder.DropTable(
-                name: "transaction_response");
 
             migrationBuilder.DropTable(
                 name: "payment_intents");
