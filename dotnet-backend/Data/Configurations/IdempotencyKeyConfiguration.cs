@@ -9,5 +9,12 @@ public class IdempotencyKeyConfiguration : IEntityTypeConfiguration<IdempotencyK
     public void Configure(EntityTypeBuilder<IdempotencyKey> builder)
     {
         builder.HasKey(i => i.Key);
+        builder.ComplexProperty(
+            i => i.ResponseBody,
+            response =>
+            {
+                response.ToJson("response_body");
+            }
+        );
     }
 }
