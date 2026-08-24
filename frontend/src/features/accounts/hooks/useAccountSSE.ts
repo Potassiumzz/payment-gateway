@@ -11,7 +11,10 @@ export function useAccountSSE(onMessage: (data: SSEResponse) => void) {
 			onMessage(data);
 		};
 
-		es.onerror = () => es.close();
+		es.onerror = (e) => {
+			if (es.readyState === EventSource.CLOSED) return; // connection was closed, ignore it in the console log
+			console.error("SSE error", e);
+		};
 
 		return () => es.close();
 	}, []);
