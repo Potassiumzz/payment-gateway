@@ -25,19 +25,19 @@ public class BankController : ControllerBase
     public async Task<ActionResult<BankResponse>> GetBank(int id) =>
         Ok(await _bankService.GetBankByIdAsync(id));
 
-    [HttpPost]
-    public async Task<ActionResult<BankResponse>> CreateBank(CreateBankRequest request)
+    // [HttpPost]
+    private async Task<ActionResult<BankResponse>> CreateBank(CreateBankRequest request)
     {
         var bank = await _bankService.CreateBankAsync(request);
         return CreatedAtAction(nameof(GetBank), new { id = bank.Id }, bank);
     }
 
-    [HttpPut("{id}")]
-    public async Task<ActionResult<BankResponse>> UpdateBank(int id, UpdateBankRequest request) =>
+    // [HttpPut("{id}")]
+    private async Task<ActionResult<BankResponse>> UpdateBank(int id, UpdateBankRequest request) =>
         Ok(await _bankService.UpdateBankAsync(id, request));
 
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteBank(int id)
+    // [HttpDelete("{id}")]
+    private async Task<IActionResult> DeleteBank(int id)
     {
         await _bankService.DeleteBankAsync(id);
         return NoContent();
