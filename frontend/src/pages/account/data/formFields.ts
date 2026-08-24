@@ -21,6 +21,7 @@ export const createAccountFormFields: FormField[] = [
 		inputType: "text",
 		placeholder: "Enter a fake name",
 		name: "ownerName",
+		autoComplete: "username",
 	},
 	{
 		type: "select",
