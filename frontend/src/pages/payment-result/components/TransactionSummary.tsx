@@ -32,7 +32,7 @@ export function TransactionSummary({ transactionDetail }: TransactionSummaryProp
 			<div className="border-t border-border my-2" />
 			<div className="flex justify-between gap-4">
 				<span className="text-text-muted shrink-0">Transaction ID</span>
-				<span className="text-text-secondary truncate font-mono">{transactionDetail.id}</span>
+				<span className="text-text-secondary truncate font-mono">{transactionDetail.paymentIntentId}</span>
 			</div>
 		</div>
 	);

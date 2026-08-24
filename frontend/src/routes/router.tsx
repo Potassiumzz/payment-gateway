@@ -43,7 +43,7 @@ export const router = createBrowserRouter([
 		element: <CheckoutLayout />,
 		children: [
 			{ path: `${NAVIGATION_ROUTES.CHECKOUT_ROUTE}:id`, element: <CheckoutPage /> },
-			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:id`, element: <PaymentResultPage /> },
+			{ path: `${NAVIGATION_ROUTES.PAYMENT_RESULT_ROUTE}:intentId`, element: <PaymentResultPage /> },
 			{ path: "*", element: <NotFoundPage /> },
 		],
 	},
