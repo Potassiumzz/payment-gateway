@@ -15,6 +15,8 @@ namespace Ntay.Services;
 
 public class BankAccountService(AppDbContext _dbContext, AccountPinService _accountPinService)
 {
+    private const decimal RefillBalanceAmount = 500;
+
     private async Task<int> GenerateAccountNumber(int bankId)
     {
         int? maxAccountNumber = await _dbContext
@@ -177,8 +179,8 @@ public class BankAccountService(AppDbContext _dbContext, AccountPinService _acco
     {
         BankAccount? account = await GetMutableAccountByNumberAsync(accountNumber);
 
-        if (account.Balance < 500)
-            account.Balance = 500;
+        if (account.Balance < RefillBalanceAmount)
+            account.Balance = RefillBalanceAmount;
         await _dbContext.SaveChangesAsync();
 
         return account.ToBankAccountResponse();
