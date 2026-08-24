@@ -37,7 +37,7 @@ public class TransactionService(
             idempotencyKey,
             Endpoint
         );
-        if (existingIdempotency is { Status: TransactionStatus.Succeeded })
+        if (existingIdempotency is { Status: TransactionStatus.Successful })
             return existingIdempotency.ResponseBody;
 
         var intent = await GetProcessableIntentAsync(request.PaymentIntentId);
@@ -159,8 +159,8 @@ public class TransactionService(
         decimal amount
     ) =>
         sender.Balance < amount
-            ? (TransactionStatus.Failed, "Low balance")
-            : (TransactionStatus.Succeeded, null);
+            ? (TransactionStatus.Failure, "Low balance")
+            : (TransactionStatus.Successful, null);
 
     private static void ApplyBalanceChanges(
         BankAccount sender,
@@ -169,7 +169,7 @@ public class TransactionService(
         TransactionStatus status
     )
     {
-        if (status == TransactionStatus.Succeeded)
+        if (status == TransactionStatus.Successful)
         {
             sender.Balance -= intent.Amount;
             receiver.Balance += intent.Amount;

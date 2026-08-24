@@ -1,5 +1,5 @@
 public enum TransactionStatus
 {
-    Failed,
-    Succeeded,
+    Failure,
+    Successful,
 }
