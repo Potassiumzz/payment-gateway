@@ -62,17 +62,19 @@ export function AccountListPage() {
       prev ? prev.map((acc) => (acc.accountNumber === updated.accountNumber ? updated : acc)) : prev
     );
 
-    const cached = getCache<{ items: AccountResponse[] }>(
+    getCache<{ items: AccountResponse[] }>(
       QUERY_KEYS.ACCOUNT_LIST(page, debouncedSearch)
-    );
-    if (!cached) return;
-    updateEachCacheEntry<{items: AccountResponse[]}>(
-      QUERY_KEY_PREFIX.ACCOUNT_LIST, 
-      (cache) => (
-        {...cache, 
-          items: cache.items.map((acc) => (acc.accountNumber === updated.accountNumber ? updated: acc))
-        }
-    ))
+    ).then((res) => {
+      if (!res || !res.items) return;
+
+      updateEachCacheEntry<{items: AccountResponse[]}>(
+        QUERY_KEY_PREFIX.ACCOUNT_LIST, 
+        (cache) => (
+          {...cache, 
+            items: cache.items.map((acc) => (acc.accountNumber === updated.accountNumber ? updated: acc))
+          }
+      ))
+    });
   }
 
   useAccountSSE(handleAccountSSERefetch);

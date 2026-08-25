@@ -29,7 +29,7 @@ export function getCache<TResult>(queryKey: QueryKeyType | string): Promise<TRes
  * Sets the value to null so future calls know the cache is invalid.
  */
 export function invalidateCache(queryKey: QueryKeyType): void {
-	queryCache.set(queryKey, null);
+	queryCache.set(queryKey, Promise.resolve(null));
 }
 
 /**
@@ -43,7 +43,7 @@ export function invalidateCache(queryKey: QueryKeyType): void {
 export function invalidateCacheByPrefix(prefix: string): void {
 	for (const key of queryCache.keys()) {
 		if (key.startsWith(prefix)) {
-			queryCache.set(key, null);
+			queryCache.set(key, Promise.resolve(null));
 		}
 	}
 }
@@ -57,11 +57,9 @@ export function invalidateCacheByPrefix(prefix: string): void {
 export function updateEachCacheEntry<T>(prefix: string, updater: (value: T) => T): void {
 	for (const key of queryCache.keys()) {
 		if (!key.startsWith(prefix)) continue;
-		const cached = getCache<T>(key);
-		if (!cached) continue;
-
-		cached.then((c) => {
-			setCache(key, Promise.resolve(updater(c)));
+		getCache<T>(key).then((res) => {
+			if (!res) return;
+			setCache(key, Promise.resolve(updater(res)));
 		});
 	}
 }
