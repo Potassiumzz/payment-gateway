@@ -31,8 +31,9 @@ export function useQuery<TResult>({ url, id, queryKey, config }: QueryOptions) {
 	const [errorStatus, setErrorStatus] = React.useState<number | null>(null);
 	const [refetchAttemptsState, setRefetchAttemptsState] = React.useState<number>(0);
 
-	let refetchTime = INITIAL_FETCH_TIME_MS;
-	let refetchAttempts = 0;
+	const refetchTimeRef = React.useRef(INITIAL_FETCH_TIME_MS);
+	const refetchAttemptsRef = React.useRef(0);
+
 	const queryString = id ? `${queryKey}-${id}` : queryKey;
 
 	async function fetchData(): Promise<void> {
@@ -68,12 +69,12 @@ export function useQuery<TResult>({ url, id, queryKey, config }: QueryOptions) {
 	 */
 	function retryFetching() {
 		invalidateCache(queryString);
-		refetchAttempts++;
+		refetchAttemptsRef.current++;
 
-		if (refetchAttempts < MAX_REFETCH_ATTEMPTS) {
-			refetchTime += refetchTime;
-			setRefetchAttemptsState(refetchAttempts);
-			setTimeout(fetchData, refetchTime);
+		if (refetchAttemptsRef.current <= MAX_REFETCH_ATTEMPTS) {
+			refetchTimeRef.current += refetchTimeRef.current;
+			setRefetchAttemptsState(refetchAttemptsRef.current);
+			setTimeout(fetchData, refetchTimeRef.current);
 		} else {
 			setIsLoading(false);
 		}
