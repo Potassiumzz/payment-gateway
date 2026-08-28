@@ -43,7 +43,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: QueryOptions) {
 			if (cachedData) return setData(cachedData);
 
 			const res = API<any, TResult>({ method: "GET", endpoint: url, headers: config?.headers, id });
-			setCache<TResult>(queryKey, res);
+			setCache<TResult>(queryString, res);
 			const result = await res;
 
 			setData(result);
@@ -67,7 +67,7 @@ export function useQuery<TResult>({ url, id, queryKey, config }: QueryOptions) {
 	 * Refetches until it reaches the max attempts, assigned in `MAX_REFETCH_ATTEMPTS` variable.
 	 */
 	function retryFetching() {
-		invalidateCache(queryKey);
+		invalidateCache(queryString);
 		refetchAttempts++;
 
 		if (refetchAttempts < MAX_REFETCH_ATTEMPTS) {
