@@ -59,9 +59,7 @@ public class AccountExpiryBackgroundService(
 
         foreach (var account in expiredAccounts)
         {
-            broadcaster.Publish(
-                new AccountEvent("account_expired", account.Id, account.AccountNumber)
-            );
+            broadcaster.Publish(new AccountEvent("account_expired", account.AccountNumber));
         }
     }
 }

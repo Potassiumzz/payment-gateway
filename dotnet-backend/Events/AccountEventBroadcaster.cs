@@ -4,7 +4,7 @@ using System.Threading.Channels;
 
 namespace Ntay.Events;
 
-public record AccountEvent(string Type, int AccountId, int AccountNumber);
+public record AccountEvent(string Type, int AccountNumber);
 
 public class AccountEventBroadcaster
 {
