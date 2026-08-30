@@ -30,6 +30,5 @@ export interface BankResponse {
 
 export interface SSEResponse {
 	type: SSEKey;
-	accountId: number;
 	accountNumber: number;
 }
