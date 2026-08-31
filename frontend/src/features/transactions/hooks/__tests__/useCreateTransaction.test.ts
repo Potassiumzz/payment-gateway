@@ -4,27 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CreateTransactionPayload } from "../../types/transaction";
 
 describe("useCreateTransaction", () => {
-	const localStorageMock: Omit<Storage, "key"> = (() => {
-		let store: Record<string, string> = {};
-
-		return {
-			getItem: (key: string): string => store[key] ?? null,
-			setItem: (key: string, value: string): void => {
-				store[key] = value.toString();
-			},
-			removeItem: (key: string): void => {
-				delete store[key];
-			},
-			clear: (): void => {
-				store = {};
-			},
-			length: Object.keys(store).length,
-		};
-	})();
-
 	const idempotencyKeyString = "Idempotency-Key";
 	let useCreateTransaction: typeof import("@/features/transactions/hooks/useCreateTransaction").useCreateTransaction;
-	let originalLocalStorage: Storage;
 
 	const transactionPayload = {
 		paymentIntentId: "paymentIntentId",
@@ -37,13 +18,9 @@ describe("useCreateTransaction", () => {
 		({ useCreateTransaction } = await import("@/features/transactions/hooks/useCreateTransaction"));
 		vi.clearAllMocks();
 		globalThis.fetch = vi.fn();
-		originalLocalStorage = window.localStorage;
-		(window as any).localStorage = localStorageMock;
 	});
 
 	afterEach(() => {
-		localStorage.clear();
-		(window as any).localStorage = originalLocalStorage;
 		vi.resetAllMocks();
 		vi.restoreAllMocks();
 	});
