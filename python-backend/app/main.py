@@ -13,6 +13,7 @@ from fastapi_offline import FastAPIOffline
 
 # from app.db import Base, engine
 from app.db import SessionLocal
+from app.exceptions.exception_handler import register_exception_handlers
 from app.routers import account_pin, bank, bank_account, payment_intent, transaction
 from app.seed import seed_defaults
 from app.services.account_expiry_worker import run_account_expiry_worker
@@ -37,6 +38,8 @@ async def lifespan(app: FastAPI):
 app = FastAPIOffline(docs_url=None, lifespan=lifespan)
 
 app.mount("/static", StaticFiles(directory="app/static"), name="static")
+
+register_exception_handlers(app)
 
 
 @app.get("/docs", include_in_schema=False)
