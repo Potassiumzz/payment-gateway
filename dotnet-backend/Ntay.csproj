@@ -18,4 +18,10 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="Ntay.Tests/**" />
+    <Content Remove="Ntay.Tests/**" />
+    <None Remove="Ntay.Tests/**" />
+  </ItemGroup>
+
 </Project>
