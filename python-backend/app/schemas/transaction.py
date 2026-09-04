@@ -14,7 +14,6 @@ class TransactionCreate(CamelModel):
 
 
 class TransactionResponse(CamelResponseModel):
-	id: int
 	payment_intent_id: str
 	sender_account_number: int
 	sender_owner_name: str
