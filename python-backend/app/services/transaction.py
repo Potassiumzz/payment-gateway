@@ -186,5 +186,5 @@ class TransactionService:
 	def get_all(self) -> list[Transaction]:
 		return self.repository.get_all()
 
-	def get_by_id(self, id: int) -> Transaction:
-		return self.repository.get_by_id(id)
+	def get_by_intent_id(self, id: str) -> Transaction:
+		return self.repository.get_by_intent_id(id)

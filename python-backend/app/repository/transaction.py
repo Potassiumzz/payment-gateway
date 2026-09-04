@@ -26,9 +26,6 @@ class TransactionRepository:
 	def get_all(self) -> list[Transaction]:
 		return self.db.query(Transaction).all()
 
-	def get_by_id(self, id: int) -> Transaction:
-		return self.db.query(Transaction).filter(Transaction.id == id).first()
-
 	def get_by_intent_id(self, id: str) -> Transaction:
 		return (
 			self.db.query(Transaction)

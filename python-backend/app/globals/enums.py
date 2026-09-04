@@ -5,7 +5,7 @@ class RouterPrefix(str, Enum):
 	BANKS = "/banks"
 	ACCOUNTS = "/accounts"
 	TRANSACTIONS = "/transactions"
-	PAYMENT_INTENTS = "/payment_intents"
+	PAYMENT_INTENTS = "/payment-intents"
 	ACCOUNT_PIN = "/pin"
 
 

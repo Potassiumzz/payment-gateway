@@ -57,18 +57,18 @@ def get_all_transactions(
 
 
 @router.get(
-	"/{transaction_id}",
+	"/{intent_id}",
 	response_model=TransactionResponse,
 	description="Get transaction(s) by transaction ID. It can be used to find a transaction's details.",
 )
-def get_transaction_by_id(
-	transaction_id: int,
+def get_transaction_by_intent_id(
+	intent_id: str,
 	service: TransactionService = Depends(TranasctionDependencies.get_service),
 	intent_service: PaymentIntentService = Depends(
 		PaymentIntentDependencies.get_service
 	),
 ):
-	transaction = service.get_by_id(transaction_id)
+	transaction = service.get_by_intent_id(intent_id)
 	intent = intent_service.get_intent(transaction.payment_intent_id)
 	return build_transaction_response(
 		transaction, transaction.sender_account, transaction.receiver_account, intent
