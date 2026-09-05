@@ -77,8 +77,8 @@ body,
 }
 
 [data-theme="light"] {
-  --color-background: #ffffff;
-  --color-surface: #f0f0f0;
+  --color-background: #f0f0f0;
+  --color-surface: #ebebeb;
   --color-surface-hover: #eeeeee;
   --color-surface-raised: #ffffff;
 

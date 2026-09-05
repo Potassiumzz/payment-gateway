@@ -19,7 +19,7 @@ export default function Home() {
           <span className="text-text-muted text-2xl md:text-5xl">Simulation Environment</span>
         </h1>
 
-        <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-10 max-w-lg">
+        <p className="text-text-secondary text-sm md:text-base leading-relaxed mb-10 md:max-w-lg">
           Test and simulate merchant payment flows end-to-end. No real transactions.
           No third-party dependencies. Just raw gateway behavior.
         </p>
@@ -33,7 +33,7 @@ export default function Home() {
             Simulate Merchant
           </Link>
         </div>
-        <p className="text-text-muted text-xs mt-5 mx-auto md:mx-0 md:max-w-md">
+        <p className="text-text-muted text-xs mt-5 mx-auto md:mx-0 md:max-w-lg">
           First time here?{" "}
           <Link
             to={NAVIGATION_ROUTES.ACCOUNTS}
