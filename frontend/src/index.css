@@ -3,7 +3,7 @@
 @theme {
   /* Backgrounds */
   --color-background: #0a0a0a;
-  --color-surface: #111111;
+  --color-surface: #171717;
   --color-surface-hover: #1a1a1a;
   --color-surface-raised: #161616;
 
@@ -78,7 +78,7 @@ body,
 
 [data-theme="light"] {
   --color-background: #ffffff;
-  --color-surface: #f7f7f7;
+  --color-surface: #f0f0f0;
   --color-surface-hover: #eeeeee;
   --color-surface-raised: #ffffff;
 
