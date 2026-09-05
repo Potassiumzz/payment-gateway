@@ -8,7 +8,7 @@ export const NAVIGATION_ROUTES = {
 };
 
 export const EXTERNAL_LINKS = {
-	SOURCE_CODE: "https://github.com/Potassiumzz/payment-gateway",
+	SOURCE_CODE: "https://github.com/eightballk/payment-gateway",
 } as const;
 
 export interface RouteHandle {
