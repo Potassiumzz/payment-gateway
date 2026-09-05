@@ -26,7 +26,7 @@ export function Footer() {
                 to={nav.href}
                 className={cn(
                   "text-sm tracking-wide transition-colors duration-150",
-                  isActive ? "text-white" : "text-zinc-500 hover:text-zinc-200"
+                  isActive ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
                 )}
                 viewTransition
               >

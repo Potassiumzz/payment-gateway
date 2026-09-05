@@ -5,6 +5,7 @@ import { Link, useLocation } from "react-router-dom"
 import { NAV_LINKS } from "./data";
 import { useScrollDirection } from "@/lib/hooks/useScrollDirection";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { Logo } from "./components/Logo";
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -25,9 +26,7 @@ export function Navbar() {
       )}
     >
       <div className="flex items-center justify-between px-8 py-5">
-        <span className="font-mono text-sm tracking-widest text-zinc-500 uppercase cursor-default select-none">
-          ntay
-        </span>
+        <Logo />
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-6 absolute left-1/2 -translate-x-1/2">
