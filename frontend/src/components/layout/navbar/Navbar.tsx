@@ -6,6 +6,8 @@ import { NAV_LINKS } from "./data";
 import { useScrollDirection } from "@/lib/hooks/useScrollDirection";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { Logo } from "./components/Logo";
+import { createPortal } from "react-dom";
+import { MobileMenu } from "./components/MobileMenu";
 
 export function Navbar() {
   const { pathname } = useLocation();
@@ -70,39 +72,10 @@ export function Navbar() {
       </div>
 
       {/* Mobile menu */}
-      {/* Backdrop */}
-      <div
-        className={cn(
-          "fixed inset-x-0 bottom-0 top-[72px] z-10 md:hidden backdrop-blur-sm bg-background/40 transition-opacity duration-200",
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
-        )}
-        onClick={() => setOpen(false)}
-      />
-
-      <div
-        className={cn(
-          "absolute bg-background w-full min-h-50 border-b border-border z-20 md:hidden transition-all duration-200 overflow-hidden",
-          open ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-2 pointer-events-none"
-        )}
-      >
-        {NAV_LINKS.map((nav) => {
-          const isActive = pathname === nav.href;
-          return (
-            <Link
-              key={nav.href}
-              to={nav.href}
-              onClick={() => setOpen(false)}
-              className={cn(
-                "block px-8 py-4 text-sm tracking-wide transition-colors duration-150",
-                isActive ? "text-text-primary" : "text-text-secondary hover:text-text-primary"
-              )}
-              viewTransition
-            >
-              {nav.label}
-            </Link>
-          );
-        })}
-      </div>
+      {createPortal(
+        <MobileMenu open={open} setOpen={setOpen} pathname={pathname}/>,
+        document.body
+      )}
     </nav>
   );
 }
